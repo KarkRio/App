@@ -303,6 +303,7 @@ select{cursor:pointer}
       <div class="hbtns">
         <div class="ib" id="themeBtn" title="Tema">🌙</div>
         <div class="ib" onclick="openSearch()" title="Buscar">🔍</div>
+        <div class="ib" onclick="openTutorial()" title="Tutorial">❓</div>
         <div class="ib" onclick="go('stats')" title="Estatísticas">📊</div>
         <div class="ib" onclick="go('settings')" title="Configurações">⚙️</div>
       </div>
@@ -572,7 +573,8 @@ if(S.customHabits?.length){h+=`<div class="card fu"><div class="ct2">Hábitos pe
 // Goals today
 if(S.goals_data?.filter(g=>!g.done).length>0){h+=`<div class="card fu"><div class="ct2">🎯 Objetivos ativos</div>`;S.goals_data.filter(g=>!g.done).slice(0,3).forEach((g,i)=>{const prog=Math.min(100,Math.round((g.current||0)/g.target*100));h+=`<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:.82em;margin-bottom:3px"><span>${g.name}</span><span style="color:var(--tx3)">${g.current||0}/${g.target} ${g.unit}</span></div><div class="goal-bar-bg"><div class="goal-bar-fill" style="width:${prog}%;background:var(--ac)"></div></div></div>`});h+=`<button class="btn" style="font-size:.7em" onclick="go('stats')">Ver todos →</button></div>`}
 
-h+=`<div class="card fu"><div class="ct2">Como estás hoje?</div><div class="moods">${MOODS.map((m,i)=>`<span class="mbtn ${dm===i?'sel':''}" onclick="setMood(${i})">${m}</span>`).join('')}</div>${dm!==undefined?`<div style="text-align:center;font-size:.75em;color:var(--tx3);margin-top:3px">${MLBL[dm]}</div>`:''}${dm!==undefined?`<input placeholder="Nota sobre o humor (opcional)..." value="${S.moodNotes?.[tk]||''}" style="margin-top:7px;font-size:.8em" oninput="S.moodNotes['${tk}']=this.value;save()"/>`:''}
+const moodFbHtml=dm!==undefined?`<div class="ibox tip" style="margin-top:8px"><strong>${['😩 Dia difícil...','😕 Não está fácil.','😐 Dia neutro.','🙂 Que bom!','😄 Excelente!'][dm]}</strong></div>`:'';
+h+=`<div class="card fu"><div class="ct2">Como estás hoje?</div><div class="moods">${MOODS.map((m,i)=>`<span class="mbtn ${dm===i?'sel':''}" onclick="setMood(${i})">${m}</span>`).join('')}</div>${dm!==undefined?`<div style="text-align:center;font-size:.75em;color:var(--tx3);margin-top:3px">${MLBL[dm]}</div>`:''}${moodFbHtml}<div id="mood-fb" style="display:none"></div>${dm!==undefined?`<input placeholder="Nota sobre o humor (opcional)..." value="${S.moodNotes?.[tk]||''}" style="margin-top:7px;font-size:.8em" oninput="S.moodNotes['${tk}']=this.value;save()"/>`:''}
 </div>`;
 
 // Study subject tracker
@@ -591,7 +593,21 @@ document.getElementById('ct').innerHTML=h}
 function renderSubjects(tk){const ss=S.studySubjects?.[tk]||[];if(!ss.length)return`<div style="font-size:.72em;color:var(--tx3)">Nenhuma matéria hoje</div>`;return ss.map((s,i)=>`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--bd);font-size:.82em;color:var(--tx2)"><span>${s.name}</span><span style="color:var(--tx3)">${s.pages}p · ${s.time}</span></div>`).join('')}
 function addSubject(){const s=document.getElementById('subjSel')?.value;const p=parseInt(document.getElementById('subjPages')?.value)||0;if(!s)return;const tk=tkey();S.studySubjects=S.studySubjects||{};S.studySubjects[tk]=S.studySubjects[tk]||[];S.studySubjects[tk].push({name:s,pages:p,time:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})});save();addXP(5);const sl=document.getElementById('subjList');if(sl)sl.innerHTML=renderSubjects(tk);toast('📚 '+s+' registado!')}
 function openGuide(wi){const g=WK_GUIDES[wi];if(!g)return;let html=`<div class="ibox sci" style="margin-bottom:12px"><strong>🔬 A ciência:</strong><br>${g.sci}</div>`;if(g.phone)html+=`<div class="ibox warn" style="margin-bottom:12px">${g.phone}</div>`;html+=`<strong style="font-size:.85em">Como fazer — passo a passo:</strong>`;g.how.forEach(step=>{html+=`<div class="guide-step"><div class="guide-num">${step.n}</div><div class="guide-txt"><strong>${step.t}</strong><br>${step.txt}</div></div>`});openModal(`📖 Semana ${wi+1}: ${g.title}`,html)}
-function setMood(i){S.mood[tkey()]=i;save();checkAch();updateUI();document.querySelectorAll('.mbtn').forEach((b,idx)=>b.classList.toggle('sel',idx===i));toast('Humor: '+MLBL[i]);addXP(10)}
+function setMood(i){
+  const tk=tkey();S.mood[tk]=i;save();checkAch();updateUI();
+  document.querySelectorAll('.mbtn').forEach((b,idx)=>b.classList.toggle('sel',idx===i));
+  const MOOD_MSGS=[
+    ['😩 Dia difícil...','Tudo bem. Dias difíceis existem. O que podes fazer por ti agora?'],
+    ['😕 Não está a ser fácil.','Nota como te sentes. Água, ar fresco e uma tarefa pequena podem ajudar.'],
+    ['😐 Dia neutro.','Neutro também é válido. Pequenas acções hoje constroem o amanhã.'],
+    ['🙂 Que bom!','Estás num bom momento. Aproveitao para o que importa.'],
+    ['😄 Excelente energia!','Usa essa energia hoje. É um dia para avançar nos teus objetivos!']
+  ];
+  const[title,msg]=MOOD_MSGS[i];
+  const mbox=document.getElementById('mood-fb');
+  if(mbox){mbox.innerHTML=`<div class="ibox tip fu" style="margin-top:8px"><strong>${title}</strong><br><span style="font-size:.85em">${msg}</span></div>`;mbox.style.display='block'}
+  if(navigator.vibrate)navigator.vibrate(20);snd(400+i*60,500+i*80,.2);addXP(10);
+}
 function saveJ(){const v=document.getElementById('jarea')?.value||'';if(!v.trim()){toast('⚠️ Escreve algo!');return}S.journal[tkey()]=v;save();checkAch();addXP(15);toast('📝 Salvo!')}
 function renderMaint(){const ok=WKS.every((_,i)=>wDn(S,i).p===100);let h=`<div class="card fu" style="border-left:3px solid var(--ac)"><h2 style="font-family:Fraunces,serif;font-size:1.05em;font-weight:300;margin-bottom:6px">A partir da semana 7</h2><p style="font-size:.82em;color:var(--tx3);line-height:1.7">Novos padrões instalados. Objetivo: consistência.</p></div>`;if(ok)h+=`<div class="cert fu"><div style="font-size:.6em;letter-spacing:4px;color:var(--ac);text-transform:uppercase;margin-bottom:8px">Certificado de Conclusão</div><h2 style="font-family:Fraunces,serif;font-size:1.3em;font-style:italic;margin-bottom:6px">${S.name}</h2><p style="font-size:.75em;color:var(--tx2);line-height:1.7">Completou o Protocolo Cérebro Saudável<br>6 semanas · ${totalT()} tarefas · 🔥 ${S.bestStreak} dias</p><button class="sav" style="margin-top:12px" onclick="shareCert()">🏆 Partilhar</button></div>`;h+=`<div class="card fu"><p style="font-size:.87em;color:var(--tx3);line-height:1.8">Saúde cerebral não é sorte — <strong style="color:var(--tx)">é escolha diária.</strong></p></div>`;document.getElementById('ct').innerHTML=h}
 function shareCert(){const msg=`🧠 Completei o Protocolo Cérebro Saudável!\n${S.name} — 6 semanas · 🔥 ${S.bestStreak} dias`;if(navigator.share)navigator.share({title:'Cérebro Saudável',text:msg}).catch(()=>{});else window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank')}
@@ -779,33 +795,31 @@ function mkBrown(ctx,dur=4){const b=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sa
 function mkWhite(ctx,dur=4){const b=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate);const d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;return b}
 
 const AMB={
-// RAIN: highpass hiss + individual drops (not periodic LFO - that was the snake sound!)
+// RAIN: multi-layer white noise filtered to rain frequencies + random drops
 rain:(ctx,vol)=>{
   const n={srcs:[],oscs:[],gain:null,_ivs:[]};
-  // Hiss layer: pink noise highpassed above 3000Hz removes low snake-like frequencies
-  const hiss=ctx.createBufferSource();hiss.buffer=mkPink(ctx,4);hiss.loop=true;
-  const hp=ctx.createBiquadFilter();hp.type='highpass';hp.frequency.value=3000;
-  const hp2=ctx.createBiquadFilter();hp2.type='highpass';hp2.frequency.value=4000;
-  const hg=ctx.createGain();hg.gain.value=vol*0.75;
-  hiss.connect(hp);hp.connect(hp2);hp2.connect(hg);hg.connect(ctx.destination);hiss.start();
-  n.srcs=[hiss];n.gain=hg;
-  // Individual drops: short white noise bursts at random intervals — NOT periodic
-  const drop=()=>{
-    if(!ambNodes.rain)return;
-    try{
-      const dbuf=ctx.createBuffer(1,Math.floor(ctx.sampleRate*0.04),ctx.sampleRate);
-      const dd=dbuf.getChannelData(0);for(let i=0;i<dd.length;i++)dd[i]=Math.random()*2-1;
-      const dsrc=ctx.createBufferSource();dsrc.buffer=dbuf;
-      const dbp=ctx.createBiquadFilter();dbp.type='bandpass';dbp.frequency.value=1500+Math.random()*3000;dbp.Q.value=1.5;
-      const dg=ctx.createGain();dg.gain.setValueAtTime(vol*0.12,ctx.currentTime);dg.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.04);
-      dsrc.connect(dbp);dbp.connect(dg);dg.connect(ctx.destination);dsrc.start();
-    }catch(e){}
-    setTimeout(drop,15+Math.random()*60);
-  };
-  setTimeout(drop,200);
-  n._ivs=[];return n;
+  const masterG=ctx.createGain();masterG.gain.value=vol*0.6;masterG.connect(ctx.destination);
+  // Layer 1: broad rain hiss (2-8kHz)
+  const src1=ctx.createBufferSource();src1.buffer=mkWhite(ctx,3);src1.loop=true;
+  const bp1=ctx.createBiquadFilter();bp1.type='bandpass';bp1.frequency.value=4000;bp1.Q.value=0.4;
+  const g1=ctx.createGain();g1.gain.value=0.5;src1.connect(bp1);bp1.connect(g1);g1.connect(masterG);src1.start();
+  // Layer 2: higher frequency shimmer
+  const src2=ctx.createBufferSource();src2.buffer=mkWhite(ctx,4);src2.loop=true;
+  const bp2=ctx.createBiquadFilter();bp2.type='highpass';bp2.frequency.value=6000;
+  const g2=ctx.createGain();g2.gain.value=0.3;src2.connect(bp2);bp2.connect(g2);g2.connect(masterG);src2.start();
+  n.srcs=[src1,src2];n.gain=masterG;
+  // Random drops: very short broadband bursts
+  const drop=()=>{if(!ambNodes.rain)return;try{
+    const dbuf=ctx.createBuffer(1,Math.floor(ctx.sampleRate*0.025),ctx.sampleRate);
+    const dd=dbuf.getChannelData(0);for(let i=0;i<dd.length;i++)dd[i]=Math.random()*2-1;
+    const dsrc=ctx.createBufferSource();dsrc.buffer=dbuf;
+    const dhp=ctx.createBiquadFilter();dhp.type='highpass';dhp.frequency.value=2000+Math.random()*4000;
+    const dg=ctx.createGain();dg.gain.setValueAtTime(vol*0.08,ctx.currentTime);dg.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.025);
+    dsrc.connect(dhp);dhp.connect(dg);dg.connect(ctx.destination);dsrc.start();
+  }catch(e){}setTimeout(drop,20+Math.random()*80)};
+  setTimeout(drop,100);n.oscs=[];n._ivs=[];return n;
 },
-// OCEAN: brown noise with VERY slow wave LFO (0.07Hz = 1 wave per 14s)
+// OCEAN:// OCEAN: brown noise with VERY slow wave LFO (0.07Hz = 1 wave per 14s)
 ocean:(ctx,vol)=>{
   const n={srcs:[],oscs:[],gain:null,_ivs:[]};
   const src=ctx.createBufferSource();src.buffer=mkBrown(ctx,4);src.loop=true;
@@ -855,27 +869,34 @@ cafe:(ctx,vol)=>{
     try{const o=ctx.createOscillator(),og=ctx.createGain();o.frequency.value=750+Math.random()*400;o.type='sine';o.connect(og);og.connect(ctx.destination);og.gain.setValueAtTime(vol*0.03,ctx.currentTime);og.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.3);o.start();o.stop(ctx.currentTime+0.3)}catch(e){}
   },7000+Math.random()*12000);n._ivs=[iv];return n;
 },
-// FIRE: multiple brown noise layers at very low freq + irregular crackle
+// FIRE: deep brown noise rumble + wood crackle pops (no oscillators)
 fire:(ctx,vol)=>{
   const n={srcs:[],oscs:[],gain:null,_ivs:[]};
-  const g=ctx.createGain();g.gain.value=vol*0.5;g.connect(ctx.destination);
-  [50,80,120].forEach((freq,i)=>{
-    const src=ctx.createBufferSource();src.buffer=mkBrown(ctx,3+i);src.loop=true;
-    const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=freq;
-    const sg=ctx.createGain();sg.gain.value=0.9/(i+1);
-    src.connect(lp);lp.connect(sg);sg.connect(g);src.start(ctx.currentTime+i*0.15);n.srcs.push(src);
-  });
-  n.oscs=[];n.gain=g;
-  const iv=setInterval(()=>{
-    if(!ambNodes.fire)return clearInterval(iv);
-    if(Math.random()<0.6)try{
-      const dur=0.03+Math.random()*0.08;const o=ctx.createOscillator(),og=ctx.createGain();
-      o.frequency.value=100+Math.random()*400;o.type='sawtooth';o.connect(og);og.connect(ctx.destination);
-      og.gain.setValueAtTime(vol*0.025,ctx.currentTime);og.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+dur);o.start();o.stop(ctx.currentTime+dur);
-    }catch(e){}
-  },60+Math.random()*120);n._ivs=[iv];return n;
+  const masterG=ctx.createGain();masterG.gain.value=vol*0.55;masterG.connect(ctx.destination);
+  // Deep rumble: brown noise very low freq
+  const src1=ctx.createBufferSource();src1.buffer=mkBrown(ctx,4);src1.loop=true;
+  const lp1=ctx.createBiquadFilter();lp1.type='lowpass';lp1.frequency.value=200;
+  const g1=ctx.createGain();g1.gain.value=0.7;src1.connect(lp1);lp1.connect(g1);g1.connect(masterG);src1.start();
+  // Mid warmth
+  const src2=ctx.createBufferSource();src2.buffer=mkBrown(ctx,3);src2.loop=true;
+  const bp2=ctx.createBiquadFilter();bp2.type='bandpass';bp2.frequency.value=300;bp2.Q.value=1.5;
+  const g2=ctx.createGain();g2.gain.value=0.4;src2.connect(bp2);bp2.connect(g2);g2.connect(masterG);src2.start();
+  n.srcs=[src1,src2];n.gain=masterG;n.oscs=[];
+  // Crackle: white noise bursts shaped as pops
+  const crackle=()=>{if(!ambNodes.fire)return;
+    if(Math.random()<0.7){try{
+      const dur=0.015+Math.random()*0.04;
+      const buf=ctx.createBuffer(1,Math.floor(ctx.sampleRate*dur),ctx.sampleRate);
+      const dd=buf.getChannelData(0);for(let i=0;i<dd.length;i++)dd[i]=(Math.random()*2-1)*Math.exp(-i/(dd.length*0.3));
+      const csrc=ctx.createBufferSource();csrc.buffer=buf;
+      const hp=ctx.createBiquadFilter();hp.type='bandpass';hp.frequency.value=800+Math.random()*1200;hp.Q.value=3;
+      const cg=ctx.createGain();cg.gain.setValueAtTime(vol*0.15,ctx.currentTime);cg.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+dur);
+      csrc.connect(hp);hp.connect(cg);cg.connect(ctx.destination);csrc.start();
+    }catch(e){}}
+    setTimeout(crackle,40+Math.random()*180);
+  };setTimeout(crackle,200);n._ivs=[];return n;
 },
-// COSMOS: loud ethereal pad — fixed volume issue
+// COSMOS:// COSMOS: loud ethereal pad — fixed volume issue
 cosmos:(ctx,vol)=>{
   const n={srcs:[],oscs:[],gain:null,_ivs:[]};
   const masterG=ctx.createGain();masterG.gain.value=vol*0.55;masterG.connect(ctx.destination);
@@ -950,7 +971,7 @@ document.getElementById('ct').innerHTML=`
 <div class="card fu"><div class="ct2">😴 Sono</div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0">
 <div><label style="font-size:.68em;color:var(--tx3);display:block;margin-bottom:4px">Horas dormidas</label><input type="number" min="0" max="12" step=".5" value="${sl.h}" oninput="setSleep('h',parseFloat(this.value)||0,'${tk}')"/></div>
-<div><label style="font-size:.68em;color:var(--tx3);display:block;margin-bottom:4px">Qualidade (1-5 ⭐)</label><div style="display:flex;gap:3px;margin-top:7px">${[1,2,3,4,5].map(i=>`<span style="font-size:1.2em;cursor:pointer;opacity:${sl.q>=i?1:.22}" onclick="setSleep('q',${i},'${tk}')">⭐</span>`).join('')}</div></div>
+<div><label style="font-size:.68em;color:var(--tx3);display:block;margin-bottom:4px">Qualidade (1-5 ⭐)</label><div style="display:flex;gap:3px;margin-top:7px">${[1,2,3,4,5].map(i=>`<span id="star-${i}" style="font-size:1.2em;cursor:pointer;opacity:${sl.q>=i?1:.22};transition:opacity .2s" onclick="setSleep('q',${i},'${tk}')">⭐</span>`).join('')}</div></div>
 </div>
 <div style="font-size:.72em;color:${sl.h>=7?'var(--ac)':'var(--tx3)'}">${sl.h>0?sl.h+'h · '+(sl.h>=7?'✓ Na meta':'⚠️ Abaixo das 7h'):''}</div></div>
 
@@ -993,7 +1014,18 @@ ${[0,1,2].map(i=>`<input placeholder="${i+1}. Sou grato por..." value="${gr[i]||
 ${(S.customHabits||[]).map((h,i)=>{const streak=S.habitStreak?.[h]||0;return`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd)"><span style="flex:1;font-size:.82em">${h}</span>${streak>0?`<span style="font-size:.68em;color:var(--gold)">🔥${streak}</span>`:''}<button onclick="delHabit(${i})" style="color:var(--rose);font-size:.9em;cursor:pointer;background:none">✕</button></div>`}).join('')}
 <div style="display:flex;gap:6px;margin-top:9px"><input id="habIn" placeholder="Nome do hábito" style="margin:0"/><button class="btn ac" style="padding:7px 11px;white-space:nowrap;flex-shrink:0" onclick="addHabit()">+</button></div></div>`}
 
-function setSleep(f,v,tk){S.sleep[tk]=S.sleep[tk]||{h:0,q:0};S.sleep[tk][f]=v;save();checkAch();updateUI();addXP(5)}
+function setSleep(f,v,tk){
+  S.sleep[tk]=S.sleep[tk]||{h:0,q:0};
+  S.sleep[tk][f]=v;save();checkAch();updateUI();addXP(5);
+  // Update stars visually immediately without full re-render
+  if(f==='q'){
+    document.querySelectorAll('[id^=star-]').forEach(s=>{
+      const si=parseInt(s.id.split('-')[1]);
+      s.style.opacity=si<=v?'1':'.22';
+    });
+  }
+  toast(f==='h'?`😴 ${v}h de sono`:`⭐ Qualidade ${v}/5`);
+}
 function setWater(n,tk){S.water[tk]=n;save();checkAch();updateUI();document.querySelectorAll('[onclick^="setWater"]').forEach((c,i)=>c.style.opacity=i<n?1:.2)}
 function toggleBF(i,tk){S.brainFood[tk]=S.brainFood[tk]||{};S.brainFood[tk][i]=!S.brainFood[tk][i];save();checkAch();updateUI();if(S.brainFood[tk][i])addXP(3);renderHealth()}
 function nextConv(){convIdx=(convIdx+1)%CONV.length;renderHealth();snd(400,500,.1)}
@@ -1010,7 +1042,7 @@ function delHabit(i){S.customHabits.splice(i,1);save();renderHealth()}
 // ════ AI COACH — Multi-provider ════
 const PROVIDERS={
   anthropic:{name:'Anthropic Claude',model:'claude-sonnet-4-20250514',url:'https://api.anthropic.com/v1/messages',color:'#d4a853'},
-  gemini:{name:'Google Gemini',model:'gemini-1.5-flash-latest',url:'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent',color:'#4FC3A1'},
+  gemini:{name:'Google Gemini',model:'gemini-2.0-flash',url:'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',color:'#4FC3A1'},
   openai:{name:'OpenAI GPT-4',model:'gpt-4o-mini',url:'https://api.openai.com/v1/chat/completions',color:'#5B8DEF'}
 };
 
@@ -1046,8 +1078,10 @@ try{let reply='';
 if(p==='anthropic'){
   const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:PROVIDERS.anthropic.model,max_tokens:600,system:getSysPr(),messages:S.aiHistory.map(m=>({role:m.role,content:m.content}))})});const d=await resp.json();if(d.error)throw new Error(d.error.message);reply=d.content?.[0]?.text||'Sem resposta.'
 }else if(p==='gemini'){
-  const msgs=[{role:'user',parts:[{text:getSysPr()+'\n\n'+S.aiHistory.map(m=>`${m.role==='user'?'Utilizador':'Coach'}: ${m.content}`).join('\n')}]},{role:'model',parts:[{text:'Entendido. Estou pronto para ajudar.'}]},...S.aiHistory.slice(-4).map(m=>({role:m.role==='user'?'user':'model',parts:[{text:m.content}]}))];
-  const resp=await fetch(`${PROVIDERS.gemini.url}?key=${key}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:msgs,generationConfig:{maxOutputTokens:600,temperature:.7}})});const d=await resp.json();if(d.error)throw new Error(d.error.message);reply=d.candidates?.[0]?.content?.parts?.[0]?.text||'Sem resposta.'
+  const sysMsg=getSysPr();
+  const gemContents=[{role:'user',parts:[{text:sysMsg}]},{role:'model',parts:[{text:'Entendido! Sou o teu Coach IA. Estou pronto.'}]}];
+  S.aiHistory.slice(-6).forEach(m=>{gemContents.push({role:m.role==='user'?'user':'model',parts:[{text:m.content}]})});
+  const resp=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:gemContents,generationConfig:{maxOutputTokens:600,temperature:0.7,candidateCount:1}})});const d=await resp.json();if(d.error)throw new Error(d.error.message||JSON.stringify(d.error));reply=d.candidates?.[0]?.content?.parts?.[0]?.text||'Sem resposta.'
 }else if(p==='openai'){
   const resp=await fetch(PROVIDERS.openai.url,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:PROVIDERS.openai.model,max_tokens:600,messages:[{role:'system',content:getSysPr()},...S.aiHistory.map(m=>({role:m.role,content:m.content}))]})});const d=await resp.json();if(d.error)throw new Error(d.error.message);reply=d.choices?.[0]?.message?.content||'Sem resposta.'
 }
@@ -1122,7 +1156,9 @@ function renderSettings(){document.getElementById('ct').innerHTML=`
 <div class="card fu"><div class="ct2">🎨 Aparência</div>
 <div class="srow"><div><div class="srow-title">Tema</div></div><div style="display:flex;gap:5px">${['dark','light','sepia','forest'].map(t=>`<button class="btn ${S.theme===t?'ac':''}" style="font-size:.65em;padding:4px 8px" onclick="setTheme('${t}')">${{dark:'🌙',light:'☀️',sepia:'📜',forest:'🌿'}[t]}</button>`).join('')}</div></div>
 <div class="srow"><div><div class="srow-title">Tamanho de fonte</div></div><div style="display:flex;gap:5px">${[['small','A−'],['normal','A'],['big','A+']].map(([k,lb])=>`<button class="btn ${S.fontSize===k?'ac':''}" style="font-size:.65em;padding:4px 8px" onclick="setFontSize('${k}')">${lb}</button>`).join('')}</div></div>
-<div class="srow"><div class="srow-title">Sons de UI</div><div class="tgl ${S.soundOn?'on':''}" onclick="toggleSound()"></div></div></div>
+<div class="srow"><div class="srow-title">Sons de UI</div><div class="tgl ${S.soundOn?'on':''}" onclick="toggleSound()"></div></div>
+<div class="srow"><div><div class="srow-title">Lembretes</div><div class="srow-sub">Notificações para beber água e tarefas</div></div><div class="tgl ${S.notifOn?'on':''}" onclick="toggleNotif()"></div></div>
+<div class="srow"><div class="srow-title">Horário do lembrete</div><input type="time" value="${S.notifTime||'08:00'}" style="margin:0;width:100px" oninput="S.notifTime=this.value;save()"/></div></div>
 
 <div class="card fu"><div class="ct2">⏰ Digital Sunset</div>
 <div class="srow"><div class="srow-title">Ativar sunset</div><div class="tgl ${S.sunsetOn?'on':''}" onclick="S.sunsetOn=!S.sunsetOn;save();renderSettings()"></div></div>
@@ -1163,9 +1199,29 @@ function saveName(){const n=document.getElementById('sName')?.value?.trim();if(!
 function setTheme(t){S.theme=t;save();applyTheme();renderSettings()}
 function setFontSize(s){S.fontSize=s;save();applyFont();renderSettings()}
 function toggleSound(){S.soundOn=!S.soundOn;save();renderSettings();toast(S.soundOn?'Sons: on':'Sons: off')}
+function toggleNotif(){
+  if(!S.notifOn){
+    if(!('Notification' in window)){toast('⚠️ Browser não suporta notificações');return}
+    Notification.requestPermission().then(p=>{
+      if(p==='granted'){S.notifOn=true;save();renderSettings();toast('✅ Lembretes activados!');scheduleNotif()}
+      else if(p==='denied'){toast('⚠️ Permissão negada. Activa nas configurações do browser.');return}
+      else{S.notifOn=true;save();renderSettings()}
+    })
+  }else{S.notifOn=false;save();renderSettings();toast('Lembretes desactivados')}
+}
+function scheduleNotif(){
+  if(!S.notifOn||Notification.permission!=='granted')return;
+  const[h,m]=(S.notifTime||'08:00').split(':').map(Number);
+  const now=new Date(),tgt=new Date();tgt.setHours(h,m,0,0);if(tgt<now)tgt.setDate(tgt.getDate()+1);
+  const diff=tgt-now;
+  setTimeout(()=>{
+    try{new Notification('🧠 Cérebro Saudável',{body:`Bom dia ${S.name||''}! Bebe água e verifica as tuas tarefas.`,icon:'./icon-192.png',tag:'daily'})}catch(e){}
+    setInterval(()=>{try{new Notification('💧 Hidratação',{body:'Já bebeste água hoje? Meta: 8 copos.',icon:'./icon-192.png',tag:'water'})}catch(e){}},3600000);
+  },diff);
+}
 function toggleChal(c){S.challenges=S.challenges||[];const i=S.challenges.indexOf(c);if(i>=0)S.challenges.splice(i,1);else S.challenges.push(c);save();renderSettings()}
 function toggleGoal(g){S.goals=S.goals||[];const i=S.goals.indexOf(g);if(i>=0)S.goals.splice(i,1);else S.goals.push(g);save();renderSettings()}
-function addFreeze(){S.freezes=(S.freezes||0)+1;addXP(5);save();renderSettings();toast('❄️ Freeze comprado!')}
+function addFreeze(){if((S.xp||0)<100){toast('⚠️ Precisas de 100 XP!');return}S.xp-=100;S.freezes=(S.freezes||0)+1;save();renderSettings();toast('❄️ Freeze comprado! (-100 XP)')}
 function exportData(){const b=JSON.stringify(S,null,2),a=document.createElement('a');a.href='data:application/json;charset=utf-8,'+encodeURIComponent(b);a.download='cerebro-backup-'+tkey()+'.json';a.click();toast('✅ Exportado!')}
 function importData(input){const file=input.files[0];if(!file)return;const r=new FileReader();r.onload=e=>{try{const d=JSON.parse(e.target.result);Object.assign(S,d);save();location.reload()}catch(err){toast('⚠️ Ficheiro inválido!')}};r.readAsText(file)}
 function resetApp(){if(confirm('Apagar tudo? Esta ação é irreversível!')){localStorage.removeItem('cb10');location.reload()}}
@@ -1187,6 +1243,33 @@ function addEx(day){const wo=S.workoutPlan?JSON.parse(JSON.stringify(S.workoutPl
 function delEx(day,ei){const wo=S.workoutPlan?JSON.parse(JSON.stringify(S.workoutPlan)):JSON.parse(JSON.stringify(DEF_WO));_editWO=wo;wo[day].exercises.splice(ei,1);_editWO=wo;openWOEditor()}
 function saveWO(){if(_editWO){S.workoutPlan=_editWO;save();closeModal();toast('✅ Treino guardado!');renderWorkout()}}
 
+// ════ TUTORIAL ════
+const TUTORIAL_PAGES=[
+{i:'🧠',t:'Bem-vindo ao Protocolo!',d:'Este app é um sistema completo de neurociência aplicada. 6 semanas de hábitos baseados em ciência para transformar o teu cérebro. Desliza para navegar entre abas.'},
+{i:'📅',t:'Aba: Início',d:'O teu painel diário. Vês o Brain Score (0-100), streak de dias consecutivos e intenção do dia. Semanas S1-S6 contêm as tarefas do protocolo. Clica nos emojis de humor para registar o teu estado.'},
+{i:'📋',t:'Aba: Rotina',d:'💪 Treino: Plano de calistenia diário com timer por exercício.\n📋 Agenda: A tua rotina diária. Marca cada item ao longo do dia. Podes editar com o botão ✏️.'},
+{i:'🛠',t:'Aba: Foco',d:'⏱ Pomodoro: 15/25/50/90min + pote de distrações\n🌊 Foco Profundo: Blocos de 90min (ritmo ultradiano)\n🌬 Respiração: 6 técnicas\n✅ Tarefas da sessão\n⚡ Energia\n🎮 Jogos cognitivos'},
+{i:'💊',t:'Aba: Saúde',d:'Regista sono, hidratação (10 gotinhas), brain food (12 alimentos), sons ambiente, wind-down, log de aprendizados com revisão espaçada (Ebbinghaus) e gratidão.'},
+{i:'🤖',t:'Coach IA — Multi-provider',d:'Chat com IA usando Anthropic Claude, Google Gemini (gratuito!) ou OpenAI. Cola a tua API Key na aba. Gemini Flash 2.0 é gratuito sem cartão — começa por aí!'},
+{i:'🔑',t:'Como obter API Key Gemini',d:'1. Vai a aistudio.google.com/app/apikey\n2. Faz login com Google\n3. Clica "Create API Key"\n4. Copia e cola na aba Coach IA\n✓ Gratuito, sem cartão de crédito.'},
+{i:'⚙️',t:'Configurações',d:'Edita treino e agenda sem código. Muda tema (dark/light/sépia/floresta), tamanho de fonte. Exporta/importa backup JSON. Os teus dados ficam no telemóvel — funciona offline.'},
+{i:'📊',t:'Estatísticas',d:'Heatmap 42 dias, progresso por semana, recordes dos jogos, objetivos pessoais com barra de progresso e relatório semanal com nota A+-E.'},
+{i:'💡',t:'Dicas essenciais',d:'• Desliza ← → para mudar de aba\n• Compra freezes (100 XP) para proteger o streak\n• Brain Score sobe com: sono 7h+, 8 copos de água, humor e tarefas\n• Tutorial: toca em ❓ a qualquer momento'}
+];
+let tutPage=0;
+function openTutorial(){tutPage=0;showTutPage()}
+function showTutPage(){const p=TUTORIAL_PAGES[tutPage];openModal(`${p.i} ${p.t}`,`
+<p style="font-size:.83em;color:var(--tx2);line-height:1.8;white-space:pre-line;margin-bottom:14px">${p.d}</p>
+<div style="display:flex;align-items:center;justify-content:space-between">
+<span style="font-size:.68em;color:var(--tx3)">${tutPage+1}/${TUTORIAL_PAGES.length}</span>
+<div style="display:flex;gap:8px">
+${tutPage>0?`<button class="btn" onclick="tutPage--;showTutPage()">← Anterior</button>`:''}
+${tutPage<TUTORIAL_PAGES.length-1?`<button class="btn ac" onclick="tutPage++;showTutPage()">Próximo →</button>`:`<button class="btn ac" onclick="closeModal();toast('Tudo claro! Bons estudos 🧠')">Concluir ✓</button>`}
+</div></div>
+<div style="display:flex;gap:3px;justify-content:center;margin-top:10px">
+${TUTORIAL_PAGES.map((_,i)=>`<div style="width:6px;height:6px;border-radius:50%;background:${i===tutPage?'var(--ac)':'var(--bd)'};transition:background .2s"></div>`).join('')}
+</div>`)}
+
 // ════ GREETING ════
 function updateGreeting(){const h=new Date().getHours();const g=h<5?'Boa madrugada':h<12?'Bom dia':h<18?'Boa tarde':'Boa noite';const d=document.getElementById('greetLbl');if(d)d.textContent=(S.name?g+', '+S.name:g)}
 
@@ -1197,9 +1280,50 @@ document.getElementById('ibbtn').addEventListener('click',()=>{if(_deferredPromp
 document.getElementById('ibclose').addEventListener('click',()=>{document.getElementById('ibanner').classList.remove('show');localStorage.setItem('ib_dismissed','1')});
 let _newWorker=null;
 if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').then(reg=>{reg.addEventListener('updatefound',()=>{_newWorker=reg.installing;_newWorker?.addEventListener('statechange',()=>{if(_newWorker?.state==='installed'&&navigator.serviceWorker.controller){document.getElementById('updBar').classList.add('show')}})})}).catch(()=>{})}
+
+// WAKE LOCK - prevent screen from dimming during active use
+let _wl=null;
+async function reqWakeLock(){try{if('wakeLock' in navigator){_wl=await navigator.wakeLock.request('screen')}}catch(e){}}
+document.addEventListener('visibilitychange',async()=>{
+  if(document.visibilityState==='visible'){
+    // App came back to foreground - restore state
+    S=JSON.parse(localStorage.getItem('cb10')||'{}');
+    updateUI();updateSunset();
+    // Re-request wake lock
+    if(_wl&&_wl.released){try{if('wakeLock' in navigator)_wl=await navigator.wakeLock.request('screen')}catch(e){}}
+  }else{
+    // Going to background - save everything
+    save();
+    if(_wl){try{_wl.release()}catch(e){}_wl=null}
+  }
+});
+// Save on page hide (most reliable)
+window.addEventListener('pagehide',()=>save());
+window.addEventListener('beforeunload',()=>save());
 function applyUpd(){_newWorker?.postMessage('skipWaiting');navigator.serviceWorker.addEventListener('controllerchange',()=>location.reload())}
 
-function boot(){applyTheme();updateGreeting();updateStreak();checkAch();updateUI();updateSunset();setInterval(updateSunset,30000);setInterval(updateGreeting,60000);go(S.page||'home')}
+function boot(){applyTheme();updateGreeting();updateStreak();checkAch();updateUI();updateSunset();setInterval(updateSunset,30000);setInterval(updateGreeting,60000);scheduleNotif();reqWakeLock();
+// Show tutorial on first boot
+if(!S.tutorialSeen){S.tutorialSeen=true;save();setTimeout(openTutorial,800)}
+go(S.page||'home')}
+
+
+// ════ SWIPE NAVIGATION ════
+(()=>{
+  let tx=0,ty=0,tEl=null;
+  const PAGES=['home','rotina','tools','health','coach'];
+  document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;tEl=e.target},{ passive:true});
+  document.addEventListener('touchend',e=>{
+    // Don't swipe if on interactive elements
+    if(tEl&&(tEl.closest('input,textarea,select,.tabs,.nav,.modal,.modal-bg,button')))return;
+    const dx=e.changedTouches[0].clientX-tx;
+    const dy=e.changedTouches[0].clientY-ty;
+    if(Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.5)return;
+    const idx=PAGES.indexOf(S.page||'home');
+    if(dx<0&&idx<PAGES.length-1){go(PAGES[idx+1]);snd(500,600,.1)}
+    else if(dx>0&&idx>0){go(PAGES[idx-1]);snd(600,500,.1)}
+  },{passive:true});
+})();
 
 window.addEventListener('load',()=>{if(!S.startDate){document.getElementById('obScreen').style.display='flex'}else{document.getElementById('app').style.display='block';boot()}});
 </script></body></html>
