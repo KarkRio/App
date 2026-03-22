@@ -1,654 +1,680 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <meta name="theme-color" content="#4FC3A1"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-  <meta name="apple-mobile-web-app-title" content="Cérebro Saudável"/>
-  <title>Cérebro Saudável — 6 Semanas</title>
-  <link rel="manifest" href="manifest.json"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    html { font-size: 16px; }
-    body {
-      font-family: Georgia, 'Times New Roman', serif;
-      background: #0f0f13;
-      color: #e8e4d9;
-      min-height: 100vh;
-      min-height: 100dvh;
-      overscroll-behavior: none;
-    }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#4FC3A1"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Cérebro Saudável"/>
+<title>Cérebro Saudável</title>
+<link rel="manifest" href="manifest.json"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0f0f13;--bg2:#1a1a22;--bg3:#22222e;--border:#2a2a35;
+  --text:#e8e4d9;--text2:#aaa;--text3:#666;
+  --accent:#4FC3A1;--accent2:#3da880;
+}
+.light{
+  --bg:#f5f4f0;--bg2:#ffffff;--bg3:#ededea;--border:#ddd;
+  --text:#1a1a22;--text2:#555;--text3:#999;
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:Georgia,'Times New Roman',serif;background:var(--bg);color:var(--text);min-height:100dvh;overscroll-behavior:none;transition:background 0.3s,color 0.3s}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 
-    /* HEADER */
-    .header {
-      background: linear-gradient(135deg, #1a1a22 0%, #0f0f13 100%);
-      border-bottom: 1px solid #2a2a35;
-      padding: env(safe-area-inset-top, 20px) 20px 20px;
-      padding-top: calc(env(safe-area-inset-top, 0px) + 24px);
-    }
-    .header-label {
-      font-size: 10px;
-      letter-spacing: 4px;
-      color: #555;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-      font-family: sans-serif;
-    }
-    .header h1 {
-      font-size: clamp(20px, 6vw, 34px);
-      font-weight: normal;
-      letter-spacing: -0.5px;
-      line-height: 1.15;
-      margin-bottom: 6px;
-    }
-    .header h1 em { font-style: italic; color: #4FC3A1; }
-    .header-sub { font-size: 13px; color: #666; font-family: sans-serif; }
+/* LAYOUT */
+.header{background:var(--bg2);border-bottom:1px solid var(--border);padding:calc(env(safe-area-inset-top,0px) + 20px) 20px 18px;position:sticky;top:0;z-index:50}
+.header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.header-label{font-size:10px;letter-spacing:4px;color:var(--text3);text-transform:uppercase;font-family:sans-serif;margin-bottom:5px}
+.header h1{font-size:clamp(18px,5vw,28px);font-weight:normal;letter-spacing:-0.5px;line-height:1.2}
+.header h1 em{font-style:italic;color:var(--accent)}
+.header-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;margin-top:4px}
+.icon-btn{background:var(--bg3);border:1px solid var(--border);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text2);transition:all 0.2s}
+.icon-btn:active{transform:scale(0.92)}
 
-    /* PROGRESS BAR */
-    .progress-wrap {
-      padding: 14px 20px;
-      background: #1a1a22;
-      border-bottom: 1px solid #2a2a35;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .progress-bar-bg {
-      flex: 1;
-      height: 5px;
-      background: #2a2a35;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    .progress-bar-fill {
-      height: 100%;
-      background: #4FC3A1;
-      border-radius: 10px;
-      transition: width 0.4s ease;
-    }
-    .progress-label {
-      font-size: 11px;
-      color: #4FC3A1;
-      font-family: sans-serif;
-      white-space: nowrap;
-    }
+/* PROGRESS */
+.progress-wrap{padding:12px 20px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.progress-bar-bg{flex:1;height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),#5BE0C0);border-radius:10px;transition:width 0.5s cubic-bezier(.34,1.56,.64,1)}
+.progress-label{font-size:11px;color:var(--accent);font-family:sans-serif;white-space:nowrap;min-width:32px;text-align:right}
+.streak-badge{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:11px;color:#F0C040;font-family:sans-serif;white-space:nowrap}
 
-    /* WEEK TABS */
-    .tabs-scroll {
-      overflow-x: auto;
-      padding: 16px 20px 0;
-      display: flex;
-      gap: 8px;
-      scrollbar-width: none;
-    }
-    .tabs-scroll::-webkit-scrollbar { display: none; }
-    .tab-btn {
-      flex-shrink: 0;
-      border: 2px solid #2a2a35;
-      background: transparent;
-      color: #555;
-      padding: 7px 14px;
-      border-radius: 40px;
-      font-size: 13px;
-      font-family: Georgia, serif;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-    .tab-btn.active {
-      font-weight: bold;
-    }
+/* TABS */
+.tabs-scroll{overflow-x:auto;padding:14px 20px 0;display:flex;gap:8px;scrollbar-width:none;background:var(--bg2);border-bottom:1px solid var(--border)}
+.tabs-scroll::-webkit-scrollbar{display:none}
+.tab-btn{flex-shrink:0;border:2px solid var(--border);background:transparent;color:var(--text3);padding:7px 14px;border-radius:40px;font-size:13px;font-family:Georgia,serif;cursor:pointer;transition:all 0.2s;white-space:nowrap;margin-bottom:12px}
+.tab-btn.active{font-weight:bold}
 
-    /* CONTENT */
-    .content { padding: 20px; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); }
+/* NAV BAR */
+.nav-bar{display:flex;background:var(--bg2);border-top:1px solid var(--border);position:fixed;bottom:0;left:0;right:0;z-index:50;padding-bottom:env(safe-area-inset-bottom,0px)}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 4px 8px;cursor:pointer;color:var(--text3);font-size:10px;font-family:sans-serif;gap:4px;transition:color 0.2s}
+.nav-item.active{color:var(--accent)}
+.nav-item span:first-child{font-size:20px}
 
-    /* WEEK HEADER CARD */
-    .week-card {
-      border-radius: 14px;
-      padding: 18px 20px;
-      margin-bottom: 20px;
-      display: flex;
-      gap: 16px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .week-icon { font-size: 36px; line-height: 1; }
-    .week-info { flex: 1; min-width: 140px; }
-    .week-focus {
-      font-size: 10px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-      font-family: sans-serif;
-    }
-    .week-title { font-size: 20px; font-weight: normal; }
-    .week-meta-wrap { text-align: right; }
-    .week-meta-label { font-size: 10px; color: #666; font-family: sans-serif; margin-bottom: 4px; }
-    .week-meta-badge {
-      font-size: 12px;
-      border-radius: 20px;
-      padding: 4px 12px;
-      font-family: sans-serif;
-      display: inline-block;
-    }
+/* CONTENT */
+.content{padding:16px 16px calc(env(safe-area-inset-bottom,0px) + 80px)}
 
-    /* DAYS */
-    .days-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-    @media (min-width: 480px) {
-      .days-grid { grid-template-columns: repeat(3, 1fr); }
-    }
-    @media (min-width: 680px) {
-      .days-grid { grid-template-columns: repeat(4, 1fr); }
-    }
-    .day-card {
-      background: #1a1a22;
-      border-radius: 12px;
-      padding: 14px;
-      border-left: 3px solid;
-    }
-    .day-label {
-      font-size: 10px;
-      font-weight: bold;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-      font-family: sans-serif;
-    }
-    .task-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 9px;
-      padding: 5px 0;
-      cursor: pointer;
-      user-select: none;
-    }
-    .checkbox {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      border: 2px solid #444;
-      flex-shrink: 0;
-      margin-top: 2px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.18s;
-      font-size: 10px;
-    }
-    .checkbox.done { border-color: transparent; }
-    .task-text {
-      font-size: 12px;
-      line-height: 1.5;
-      color: #bbb;
-      transition: all 0.18s;
-      font-family: sans-serif;
-    }
-    .task-text.done { color: #444; text-decoration: line-through; }
+/* WEEK CARD */
+.week-header-card{border-radius:14px;padding:16px 18px;margin-bottom:16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.week-icon{font-size:34px;line-height:1}
+.week-info{flex:1;min-width:120px}
+.week-focus{font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-bottom:3px;font-family:sans-serif}
+.week-title{font-size:19px;font-weight:normal}
+.week-meta-badge{font-size:11px;border-radius:20px;padding:3px 10px;font-family:sans-serif;display:inline-block;margin-top:5px}
 
-    /* TIP BOX */
-    .tip-box {
-      background: #1a1a22;
-      border-radius: 10px;
-      padding: 14px 16px;
-      font-size: 13px;
-      color: #666;
-      line-height: 1.7;
-      font-family: sans-serif;
-    }
-    .tip-box strong { color: #888; }
-    .tip-box em { font-style: italic; }
+/* DAYS */
+.days-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+@media(min-width:480px){.days-grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:680px){.days-grid{grid-template-columns:repeat(4,1fr)}}
+.day-card{background:var(--bg2);border-radius:12px;padding:13px;border-left:3px solid}
+.day-label{font-size:10px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;margin-bottom:9px;font-family:sans-serif}
+.task-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;cursor:pointer;user-select:none}
+.checkbox{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all 0.18s;font-size:10px}
+.task-text{font-size:12px;line-height:1.5;color:var(--text2);font-family:sans-serif;transition:all 0.18s}
+.task-text.done{color:var(--text3);text-decoration:line-through}
 
-    /* MAINTENANCE */
-    .maint-header {
-      background: #1a1a22;
-      border: 1px solid #2a2a35;
-      border-radius: 14px;
-      padding: 18px 20px;
-      margin-bottom: 16px;
-    }
-    .maint-header-label {
-      font-size: 10px;
-      color: #aaa;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      font-family: sans-serif;
-      margin-bottom: 4px;
-    }
-    .maint-header-title { font-size: 20px; font-weight: normal; margin-bottom: 8px; }
-    .maint-header-desc { font-size: 13px; color: #666; line-height: 1.7; font-family: sans-serif; }
-    .maint-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-    @media (min-width: 480px) { .maint-grid { grid-template-columns: repeat(3, 1fr); } }
-    .maint-card {
-      background: #1a1a22;
-      border-radius: 10px;
-      padding: 14px;
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-    }
-    .maint-card-icon { font-size: 24px; }
-    .maint-card-name { font-size: 13px; margin-bottom: 5px; font-family: sans-serif; }
-    .maint-badge {
-      font-size: 11px;
-      border-radius: 20px;
-      padding: 2px 10px;
-      background: #4FC3A120;
-      color: #4FC3A1;
-      display: inline-block;
-      font-family: sans-serif;
-    }
-    .final-quote {
-      background: #1a1a22;
-      border-left: 3px solid #4FC3A1;
-      border-radius: 10px;
-      padding: 16px 18px;
-      font-size: 14px;
-      color: #777;
-      line-height: 1.8;
-      font-family: sans-serif;
-    }
-    .final-quote strong { color: #ccc; }
+/* TIP */
+.tip-box{background:var(--bg2);border-radius:10px;padding:13px 15px;font-size:13px;color:var(--text3);line-height:1.7;font-family:sans-serif}
 
-    /* RESET BTN */
-    .reset-wrap { padding: 0 20px 16px; }
-    .reset-btn {
-      background: none;
-      border: 1px solid #2a2a35;
-      color: #444;
-      font-size: 11px;
-      font-family: sans-serif;
-      padding: 6px 14px;
-      border-radius: 20px;
-      cursor: pointer;
-      letter-spacing: 1px;
-    }
-    .reset-btn:active { color: #e05050; border-color: #e05050; }
+/* STATS */
+.stats-section{margin-bottom:20px}
+.stats-title{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);font-family:sans-serif;margin-bottom:12px}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat-card{background:var(--bg2);border-radius:12px;padding:16px;border:1px solid var(--border)}
+.stat-number{font-size:28px;font-weight:normal;color:var(--accent);margin-bottom:2px}
+.stat-label{font-size:12px;color:var(--text3);font-family:sans-serif}
+.week-bars{display:flex;flex-direction:column;gap:10px}
+.week-bar-row{display:flex;align-items:center;gap:10px}
+.week-bar-label{font-size:12px;font-family:sans-serif;color:var(--text2);width:60px;flex-shrink:0}
+.week-bar-track{flex:1;height:10px;background:var(--border);border-radius:10px;overflow:hidden}
+.week-bar-fill{height:100%;border-radius:10px;transition:width 0.6s cubic-bezier(.34,1.56,.64,1)}
+.week-bar-pct{font-size:11px;font-family:sans-serif;color:var(--text3);width:32px;text-align:right}
+.heatmap{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:8px}
+.heat-cell{aspect-ratio:1;border-radius:4px;background:var(--border);transition:background 0.3s}
 
-    /* INSTALL BANNER */
-    .install-banner {
-      position: fixed;
-      bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
-      left: 16px;
-      right: 16px;
-      background: #1e2a28;
-      border: 1px solid #4FC3A140;
-      border-radius: 14px;
-      padding: 14px 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      box-shadow: 0 8px 32px #00000060;
-      z-index: 100;
-      transform: translateY(100px);
-      opacity: 0;
-      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .install-banner.show { transform: translateY(0); opacity: 1; }
-    .install-banner-text { flex: 1; font-size: 13px; color: #aaa; font-family: sans-serif; line-height: 1.4; }
-    .install-banner-text strong { color: #e8e4d9; display: block; margin-bottom: 2px; }
-    .install-btn {
-      background: #4FC3A1;
-      color: #0f0f13;
-      border: none;
-      border-radius: 20px;
-      padding: 8px 16px;
-      font-size: 13px;
-      font-weight: bold;
-      font-family: sans-serif;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    .close-banner {
-      background: none;
-      border: none;
-      color: #444;
-      font-size: 18px;
-      cursor: pointer;
-      padding: 0 4px;
-      line-height: 1;
-    }
+/* SETTINGS */
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:15px 0;border-bottom:1px solid var(--border)}
+.setting-row:last-child{border-bottom:none}
+.setting-label{font-size:15px}
+.setting-desc{font-size:12px;color:var(--text3);font-family:sans-serif;margin-top:2px}
+.toggle{width:46px;height:26px;background:var(--border);border-radius:13px;position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0}
+.toggle.on{background:var(--accent)}
+.toggle::after{content:'';position:absolute;width:20px;height:20px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform 0.2s;box-shadow:0 1px 4px #0004}
+.toggle.on::after{transform:translateX(20px)}
+.time-input{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:14px;color:var(--text);font-family:sans-serif;cursor:pointer}
+.danger-btn{background:none;border:1px solid #e05050;color:#e05050;border-radius:8px;padding:10px 18px;font-size:14px;font-family:sans-serif;cursor:pointer;width:100%;margin-top:8px;transition:all 0.2s}
+.danger-btn:active{background:#e0505020}
+.section-card{background:var(--bg2);border-radius:14px;padding:16px 18px;margin-bottom:16px;border:1px solid var(--border)}
+.section-card-title{font-size:13px;font-weight:bold;color:var(--text2);font-family:sans-serif;margin-bottom:2px}
+.section-card-desc{font-size:12px;color:var(--text3);font-family:sans-serif;margin-bottom:12px}
+.share-btn{background:var(--accent);color:#0f0f13;border:none;border-radius:10px;padding:12px;font-size:14px;font-family:sans-serif;font-weight:bold;cursor:pointer;width:100%;transition:all 0.2s;margin-bottom:8px}
+.share-btn:active{transform:scale(0.97)}
+.share-btn.secondary{background:var(--bg3);color:var(--text);border:1px solid var(--border)}
+.share-link-box{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--text3);font-family:monospace;word-break:break-all;margin-top:8px;display:none}
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .fade-up { animation: fadeUp 0.3s ease forwards; }
-  </style>
+/* MAINTENANCE */
+.maint-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+@media(min-width:480px){.maint-grid{grid-template-columns:repeat(3,1fr)}}
+.maint-card{background:var(--bg2);border-radius:10px;padding:14px;display:flex;gap:10px;align-items:flex-start}
+.maint-badge{font-size:11px;border-radius:20px;padding:2px 10px;background:#4FC3A120;color:#4FC3A1;display:inline-block;font-family:sans-serif;margin-top:4px}
+.final-quote{background:var(--bg2);border-left:3px solid var(--accent);border-radius:10px;padding:15px 17px;font-size:14px;color:var(--text3);line-height:1.8;font-family:sans-serif}
+
+/* CONFETTI */
+.confetti-piece{position:fixed;width:8px;height:8px;top:-10px;border-radius:2px;pointer-events:none;z-index:999;animation:confettiFall linear forwards}
+@keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+/* TOAST */
+.toast{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 90px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:10px 18px;font-size:13px;font-family:sans-serif;color:var(--text);box-shadow:0 8px 30px #0006;z-index:200;opacity:0;transition:all 0.3s;white-space:nowrap;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* INSTALL BANNER */
+.install-banner{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 80px);left:12px;right:12px;background:var(--bg2);border:1px solid #4FC3A140;border-radius:14px;padding:13px 15px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px #00000060;z-index:100;transform:translateY(120px);opacity:0;transition:all 0.4s cubic-bezier(.34,1.56,.64,1)}
+.install-banner.show{transform:translateY(0);opacity:1}
+.install-btn{background:var(--accent);color:#0f0f13;border:none;border-radius:20px;padding:8px 14px;font-size:13px;font-weight:bold;font-family:sans-serif;cursor:pointer;white-space:nowrap}
+.close-banner{background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;padding:0 2px;line-height:1}
+.banner-text{flex:1;font-size:13px;color:var(--text2);font-family:sans-serif;line-height:1.4}
+.banner-text strong{color:var(--text);display:block;margin-bottom:1px}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp 0.3s ease forwards}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+.pop{animation:pop 0.2s ease}
+</style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-label">Protocolo de Saúde Cerebral</div>
-  <h1>6 Semanas para um<br><em>Cérebro mais Saudável</em></h1>
-  <div class="header-sub">Um hábito por vez. Uma semana de cada vez.</div>
+  <div class="header-top">
+    <div>
+      <div class="header-label">Protocolo de Saúde Cerebral</div>
+      <h1>Cérebro <em>Saudável</em></h1>
+    </div>
+    <div class="header-actions">
+      <div class="icon-btn" id="themeBtn" title="Tema">🌙</div>
+      <div class="icon-btn" id="notifBtn" title="Notificações">🔔</div>
+    </div>
+  </div>
 </div>
 
 <div class="progress-wrap">
-  <div class="progress-bar-bg">
-    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
-  </div>
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
   <div class="progress-label" id="progressLabel">0%</div>
+  <div class="streak-badge" id="streakBadge">🔥 0 dias</div>
 </div>
 
 <div class="tabs-scroll" id="tabs"></div>
 
-<div class="reset-wrap" style="padding-top:12px;">
-  <button class="reset-btn" onclick="confirmReset()">↺ Resetar progresso</button>
-</div>
-
 <div class="content" id="content"></div>
 
+<div class="nav-bar">
+  <div class="nav-item active" id="nav-cronograma" onclick="switchPage('cronograma')"><span>📅</span>Cronograma</div>
+  <div class="nav-item" id="nav-stats" onclick="switchPage('stats')"><span>📊</span>Progresso</div>
+  <div class="nav-item" id="nav-share" onclick="switchPage('share')"><span>🔗</span>Compartilhar</div>
+  <div class="nav-item" id="nav-settings" onclick="switchPage('settings')"><span>⚙️</span>Config</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <div class="install-banner" id="installBanner">
-  <div class="install-banner-text">
-    <strong>Instalar como app</strong>
-    Acesse offline, salvo na tela inicial
-  </div>
+  <div class="banner-text"><strong>Instalar como app</strong>Acesse offline, salvo na tela inicial</div>
   <button class="install-btn" id="installBtn">Instalar</button>
   <button class="close-banner" id="closeBanner">×</button>
 </div>
 
 <script>
-const DATA = {
-  weeks: [
-    {
-      n:1, title:"Sono Primeiro", color:"#4FC3A1", icon:"🌙", focus:"Base fisiológica",
-      meta:"7 noites com horário fixo",
-      days:[
-        {day:"Seg", tasks:["Definir horário fixo de dormir","Celular fora do quarto 30min antes"]},
-        {day:"Ter", tasks:["Manter horário","Substituir scroll por leitura física"]},
-        {day:"Qua", tasks:["Modo avião ao deitar","Observar qualidade do sono"]},
-        {day:"Qui", tasks:["Manter rotina","Anotar: dormiu bem?"]},
-        {day:"Sex", tasks:["Mesmos hábitos","Sem exceção no fim de semana"]},
-        {day:"Sáb", tasks:["Mesmo horário de acordar","Ócio físico: caminhar, conversar"]},
-        {day:"Dom", tasks:["Revisar semana","Preparar ambiente para semana 2"]},
-      ]
-    },
-    {
-      n:2, title:"Blocos de Foco", color:"#5B8DEF", icon:"🎯", focus:"Córtex pré-frontal",
-      meta:"5 dias com mínimo 3 blocos",
-      days:[
-        {day:"Seg", tasks:["3 blocos Pomodoro (25min)","Notificações desligadas"]},
-        {day:"Ter", tasks:["4 blocos","Cronometrar sem pausas"]},
-        {day:"Qua", tasks:["Identificar horário de maior foco","Proteger esse período"]},
-        {day:"Qui", tasks:["5 blocos","Anotar produtividade"]},
-        {day:"Sex", tasks:["Manter 5 blocos","Sem multitarefa"]},
-        {day:"Sáb", tasks:["Aplicar foco em hobbie ou leitura longa"]},
-        {day:"Dom", tasks:["Revisar dificuldades","Planejar semana 3"]},
-      ]
-    },
-    {
-      n:3, title:"Desintox. de Dopamina", color:"#E07B54", icon:"📵", focus:"Sistema de recompensa",
-      meta:"5 dias dentro do limite de tempo",
-      days:[
-        {day:"Seg", tasks:["Redes sociais só 12h e 19h (20min cada)"]},
-        {day:"Ter", tasks:["Substituir 1 scroll por leitura ou escrita"]},
-        {day:"Qua", tasks:["Desinstalar o app mais viciante por 24h"]},
-        {day:"Qui", tasks:["Manter horários fixos","Anotar como se sentiu"]},
-        {day:"Sex", tasks:["Tempo de tela de lazer: < 2h"]},
-        {day:"Sáb", tasks:["Dia analógico: sem redes sociais"]},
-        {day:"Dom", tasks:["Avaliar: ansiedade diminuiu? Foco melhorou?"]},
-      ]
-    },
-    {
-      n:4, title:"Resgatar o Ócio", color:"#B07FE8", icon:"🌿", focus:"Default Mode Network",
-      meta:"7 dias com ao menos 1 momento de ócio",
-      days:[
-        {day:"Seg", tasks:["Refeições sem celular","Observar os pensamentos"]},
-        {day:"Ter", tasks:["Deslocamento sem fone","Mente vagar"]},
-        {day:"Qua", tasks:["10min de ócio antes de dormir"]},
-        {day:"Qui", tasks:["Fila, elevador: celular no bolso"]},
-        {day:"Sex", tasks:["Banho sem música ou podcast"]},
-        {day:"Sáb", tasks:["1h ao ar livre sem tecnologia"]},
-        {day:"Dom", tasks:["Registrar: que ideias surgiram no ócio?"]},
-      ]
-    },
-    {
-      n:5, title:"Exercício Cognitivo", color:"#F0C040", icon:"🧩", focus:"Neuroplasticidade",
-      meta:"5 dias com desafio cognitivo ativo",
-      days:[
-        {day:"Seg", tasks:["Conta simples mentalmente","15 páginas de livro"]},
-        {day:"Ter", tasks:["Memorizar lista sem anotar","Leitura 15p"]},
-        {day:"Qua", tasks:["Navegar sem GPS em rota conhecida"]},
-        {day:"Qui", tasks:["Aprender algo novo (palavra, conceito)"]},
-        {day:"Sex", tasks:["Escrever à mão por 10min"]},
-        {day:"Sáb", tasks:["Jogo de estratégia ou leitura longa (1h)"]},
-        {day:"Dom", tasks:["Revisão: o que memorizou sem tecnologia?"]},
-      ]
-    },
-    {
-      n:6, title:"Investimento Social", color:"#F07EB0", icon:"🤝", focus:"Redes neurais sociais",
-      meta:"1–2 interações presenciais de qualidade",
-      days:[
-        {day:"Seg", tasks:["Substituir 1 mensagem por ligação"]},
-        {day:"Ter", tasks:["Conversa real sem celular na mesa"]},
-        {day:"Qua", tasks:["Agendar encontro presencial"]},
-        {day:"Qui", tasks:["Fazer pergunta genuína a alguém","Ouvir de verdade"]},
-        {day:"Sex", tasks:["Realizar encontro presencial"]},
-        {day:"Sáb", tasks:["Atividade social em grupo"]},
-        {day:"Dom", tasks:["Reflexão: como está o cérebro vs semana 1?"]},
-      ]
-    }
-  ],
-  maintenance: [
-    {icon:"🌙", habit:"Sono regular", meta:"7 noites/semana"},
-    {icon:"🎯", habit:"Blocos de foco", meta:"5 dias/semana"},
-    {icon:"📵", habit:"Limite de redes sociais", meta:"5 dias/semana"},
-    {icon:"🌿", habit:"Momento sem celular", meta:"Diário"},
-    {icon:"📖", habit:"Leitura", meta:"5 dias/semana"},
-    {icon:"🤝", habit:"Interação presencial", meta:"1–2x/semana"},
-  ]
+// ─── DATA ───────────────────────────────────────────────
+const WEEKS = [
+  {n:1,title:"Sono Primeiro",color:"#4FC3A1",icon:"🌙",focus:"Base fisiológica",meta:"7 noites com horário fixo",
+   days:[
+    {day:"Seg",tasks:["Definir horário fixo de dormir","Celular fora do quarto 30min antes"]},
+    {day:"Ter",tasks:["Manter horário","Substituir scroll por leitura física"]},
+    {day:"Qua",tasks:["Modo avião ao deitar","Observar qualidade do sono"]},
+    {day:"Qui",tasks:["Manter rotina","Anotar: dormiu bem?"]},
+    {day:"Sex",tasks:["Mesmos hábitos","Sem exceção no fim de semana"]},
+    {day:"Sáb",tasks:["Mesmo horário de acordar","Ócio físico: caminhar, conversar"]},
+    {day:"Dom",tasks:["Revisar semana","Preparar ambiente para semana 2"]},
+  ]},
+  {n:2,title:"Blocos de Foco",color:"#5B8DEF",icon:"🎯",focus:"Córtex pré-frontal",meta:"5 dias com mínimo 3 blocos",
+   days:[
+    {day:"Seg",tasks:["3 blocos Pomodoro (25min)","Notificações desligadas"]},
+    {day:"Ter",tasks:["4 blocos","Cronometrar sem pausas"]},
+    {day:"Qua",tasks:["Identificar horário de maior foco","Proteger esse período"]},
+    {day:"Qui",tasks:["5 blocos","Anotar produtividade"]},
+    {day:"Sex",tasks:["Manter 5 blocos","Sem multitarefa"]},
+    {day:"Sáb",tasks:["Aplicar foco em hobbie ou leitura longa"]},
+    {day:"Dom",tasks:["Revisar dificuldades","Planejar semana 3"]},
+  ]},
+  {n:3,title:"Desintox. de Dopamina",color:"#E07B54",icon:"📵",focus:"Sistema de recompensa",meta:"5 dias dentro do limite",
+   days:[
+    {day:"Seg",tasks:["Redes sociais só 12h e 19h (20min cada)"]},
+    {day:"Ter",tasks:["Substituir 1 scroll por leitura ou escrita"]},
+    {day:"Qua",tasks:["Desinstalar o app mais viciante por 24h"]},
+    {day:"Qui",tasks:["Manter horários fixos","Anotar como se sentiu"]},
+    {day:"Sex",tasks:["Tempo de tela de lazer: < 2h"]},
+    {day:"Sáb",tasks:["Dia analógico: sem redes sociais"]},
+    {day:"Dom",tasks:["Avaliar: ansiedade diminuiu? Foco melhorou?"]},
+  ]},
+  {n:4,title:"Resgatar o Ócio",color:"#B07FE8",icon:"🌿",focus:"Default Mode Network",meta:"7 dias com 1 momento de ócio",
+   days:[
+    {day:"Seg",tasks:["Refeições sem celular","Observar os pensamentos"]},
+    {day:"Ter",tasks:["Deslocamento sem fone","Deixar a mente vagar"]},
+    {day:"Qua",tasks:["10min de ócio intencional antes de dormir"]},
+    {day:"Qui",tasks:["Fila, elevador: celular no bolso"]},
+    {day:"Sex",tasks:["Banho sem música ou podcast"]},
+    {day:"Sáb",tasks:["1h ao ar livre sem tecnologia"]},
+    {day:"Dom",tasks:["Registrar: que ideias surgiram no ócio?"]},
+  ]},
+  {n:5,title:"Exercício Cognitivo",color:"#F0C040",icon:"🧩",focus:"Neuroplasticidade",meta:"5 dias com desafio cognitivo",
+   days:[
+    {day:"Seg",tasks:["Conta simples mentalmente","15 páginas de livro"]},
+    {day:"Ter",tasks:["Memorizar lista sem anotar","Leitura 15p"]},
+    {day:"Qua",tasks:["Navegar sem GPS em rota conhecida"]},
+    {day:"Qui",tasks:["Aprender algo novo (palavra, conceito)"]},
+    {day:"Sex",tasks:["Escrever à mão por 10min"]},
+    {day:"Sáb",tasks:["Jogo de estratégia ou leitura longa (1h)"]},
+    {day:"Dom",tasks:["Revisão: o que memorizou sem tecnologia?"]},
+  ]},
+  {n:6,title:"Investimento Social",color:"#F07EB0",icon:"🤝",focus:"Redes neurais sociais",meta:"1–2 interações presenciais",
+   days:[
+    {day:"Seg",tasks:["Substituir 1 mensagem por ligação"]},
+    {day:"Ter",tasks:["Conversa real sem celular na mesa"]},
+    {day:"Qua",tasks:["Agendar encontro presencial"]},
+    {day:"Qui",tasks:["Fazer pergunta genuína a alguém","Ouvir de verdade"]},
+    {day:"Sex",tasks:["Realizar encontro presencial"]},
+    {day:"Sáb",tasks:["Atividade social em grupo"]},
+    {day:"Dom",tasks:["Reflexão: como está o cérebro vs semana 1?"]},
+  ]}
+];
+
+const MAINTENANCE = [
+  {icon:"🌙",habit:"Sono regular",meta:"7 noites/semana"},
+  {icon:"🎯",habit:"Blocos de foco",meta:"5 dias/semana"},
+  {icon:"📵",habit:"Limite de redes sociais",meta:"5 dias/semana"},
+  {icon:"🌿",habit:"Momento sem celular",meta:"Diário"},
+  {icon:"📖",habit:"Leitura",meta:"5 dias/semana"},
+  {icon:"🤝",habit:"Interação presencial",meta:"1–2x/semana"},
+];
+
+const QUOTES = [
+  "O cérebro não descansa — ele processa. Dê a ele o silêncio que merece.",
+  "Cada tarefa marcada é um neurônio fortalecido.",
+  "Consistência > Perfeição. Sempre.",
+  "O sono profundo é a manutenção do hardware.",
+  "Atenção é o recurso mais valioso do século XXI.",
+  "Não é falta de disciplina — é falta de hábito. E hábito se constrói.",
+  "Seu cérebro de daqui a 6 semanas vai agradecer.",
+  "O ócio criativo não é perda de tempo — é recarga de sistema.",
+];
+
+// ─── STATE ──────────────────────────────────────────────
+let S = JSON.parse(localStorage.getItem('cerebro-v2') || '{}');
+S.tasks = S.tasks || {};
+S.view = S.view || 0;
+S.page = S.page || 'cronograma';
+S.notifTime = S.notifTime || '08:00';
+S.notifOn = S.notifOn || false;
+S.theme = S.theme || 'dark';
+S.lastActive = S.lastActive || null;
+S.streak = S.streak || 0;
+S.completedWeeks = S.completedWeeks || [];
+
+function save(){localStorage.setItem('cerebro-v2',JSON.stringify(S))}
+
+// ─── THEME ──────────────────────────────────────────────
+function applyTheme(){
+  document.body.classList.toggle('light', S.theme==='light');
+  document.getElementById('themeBtn').textContent = S.theme==='light'?'🌙':'☀️';
+}
+document.getElementById('themeBtn').onclick=()=>{
+  S.theme = S.theme==='light'?'dark':'light';
+  save(); applyTheme();
 };
+applyTheme();
 
-let state = JSON.parse(localStorage.getItem('cerebro-state') || '{}');
-let currentView = state.currentView || 0;
-
-function save() {
-  state.currentView = currentView;
-  localStorage.setItem('cerebro-state', JSON.stringify(state));
+// ─── STREAK ─────────────────────────────────────────────
+function updateStreak(){
+  const today = new Date().toDateString();
+  if(S.lastActive !== today){
+    const yesterday = new Date(Date.now()-86400000).toDateString();
+    if(S.lastActive === yesterday) S.streak++;
+    else if(S.lastActive !== today) S.streak = doneTasks()>0?1:0;
+    S.lastActive = today;
+    save();
+  }
+  document.getElementById('streakBadge').textContent = `🔥 ${S.streak} dia${S.streak!==1?'s':''}`;
 }
 
-function totalTasks() {
-  return DATA.weeks.reduce((a, w) => a + w.days.reduce((b, d) => b + d.tasks.length, 0), 0);
+// ─── PROGRESS ───────────────────────────────────────────
+function totalTasks(){return WEEKS.reduce((a,w)=>a+w.days.reduce((b,d)=>b+d.tasks.length,0),0)}
+function doneTasks(){return Object.values(S.tasks).filter(Boolean).length}
+function weekDone(wi){
+  const w=WEEKS[wi];
+  const total=w.days.reduce((a,d)=>a+d.tasks.length,0);
+  const done=w.days.reduce((a,d,di)=>a+d.tasks.filter((_,ti)=>S.tasks[`${wi}-${di}-${ti}`]).length,0);
+  return{total,done,pct:total?Math.round(done/total*100):0};
 }
-function doneTasks() {
-  return Object.values(state).filter(v => v === true).length;
-}
-function updateProgress() {
-  const pct = Math.round(doneTasks() / totalTasks() * 100);
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressLabel').textContent = pct + '%';
+function updateProgress(){
+  const pct=Math.round(doneTasks()/totalTasks()*100);
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressLabel').textContent=pct+'%';
+  updateStreak();
 }
 
-function renderTabs() {
-  const tabs = document.getElementById('tabs');
-  tabs.innerHTML = '';
-  DATA.weeks.forEach((w, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'tab-btn' + (currentView === i ? ' active' : '');
-    btn.textContent = w.icon + ' Sem. ' + w.n;
-    btn.style.borderColor = currentView === i ? w.color : '#2a2a35';
-    btn.style.color = currentView === i ? w.color : '#555';
-    btn.style.background = currentView === i ? w.color + '20' : 'transparent';
-    btn.onclick = () => { currentView = i; save(); render(); };
+// ─── CONFETTI ───────────────────────────────────────────
+function confetti(){
+  const colors=['#4FC3A1','#5B8DEF','#F0C040','#F07EB0','#B07FE8','#E07B54'];
+  for(let i=0;i<60;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div');
+      el.className='confetti-piece';
+      el.style.cssText=`left:${Math.random()*100}vw;background:${colors[~~(Math.random()*colors.length)]};animation-duration:${0.8+Math.random()*1.2}s;animation-delay:${Math.random()*0.3}s;transform:rotate(${Math.random()*360}deg)`;
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),2500);
+    },i*20);
+  }
+}
+
+// ─── TOAST ──────────────────────────────────────────────
+let toastTimer;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ─── SOUND ──────────────────────────────────────────────
+function playCheck(){
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);
+    o.frequency.setValueAtTime(880,ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(1100,ctx.currentTime+0.08);
+    g.gain.setValueAtTime(0.15,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.2);
+    o.start();o.stop(ctx.currentTime+0.2);
+  }catch(e){}
+}
+function playUncheck(){
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);
+    o.frequency.setValueAtTime(600,ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(400,ctx.currentTime+0.1);
+    g.gain.setValueAtTime(0.1,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.15);
+    o.start();o.stop(ctx.currentTime+0.15);
+  }catch(e){}
+}
+
+// ─── TOGGLE TASK ────────────────────────────────────────
+function toggle(key,color){
+  S.tasks[key]=!S.tasks[key];
+  save();
+  const cb=document.getElementById('cb-'+key);
+  const tt=document.getElementById('tt-'+key);
+  if(S.tasks[key]){
+    cb.style.background=color;cb.style.borderColor='transparent';cb.innerHTML='<span style="color:#000">✓</span>';
+    tt.classList.add('done');
+    cb.classList.add('pop');setTimeout(()=>cb.classList.remove('pop'),200);
+    playCheck();
+    // Check if week complete
+    const wi=parseInt(key.split('-')[0]);
+    const {pct}=weekDone(wi);
+    if(pct===100 && !S.completedWeeks.includes(wi)){
+      S.completedWeeks.push(wi); save();
+      setTimeout(()=>{confetti();showToast('🎉 Semana '+WEEKS[wi].n+' concluída!');},300);
+    }
+  } else {
+    cb.style.background='';cb.style.borderColor='';cb.innerHTML='';
+    tt.classList.remove('done');
+    playUncheck();
+  }
+  updateProgress();
+}
+
+// ─── PAGES ──────────────────────────────────────────────
+function switchPage(page){
+  S.page=page; save();
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('nav-'+page).classList.add('active');
+  document.getElementById('tabs').style.display=page==='cronograma'?'flex':'none';
+  render();
+}
+
+// ─── TABS ───────────────────────────────────────────────
+function renderTabs(){
+  const tabs=document.getElementById('tabs');
+  tabs.innerHTML='';
+  WEEKS.forEach((w,i)=>{
+    const btn=document.createElement('button');
+    btn.className='tab-btn'+(S.view===i?' active':'');
+    const {pct}=weekDone(i);
+    btn.innerHTML=`${w.icon} Sem.${w.n}${pct===100?' ✓':''}`;
+    btn.style.borderColor=S.view===i?w.color:'';
+    btn.style.color=S.view===i?w.color:'';
+    btn.style.background=S.view===i?w.color+'20':'';
+    btn.onclick=()=>{S.view=i;save();render()};
     tabs.appendChild(btn);
   });
-  const mBtn = document.createElement('button');
-  mBtn.className = 'tab-btn' + (currentView === 6 ? ' active' : '');
-  mBtn.textContent = '♾ Manutenção';
-  mBtn.style.borderColor = currentView === 6 ? '#aaa' : '#2a2a35';
-  mBtn.style.color = currentView === 6 ? '#ddd' : '#555';
-  mBtn.style.background = currentView === 6 ? '#ffffff15' : 'transparent';
-  mBtn.onclick = () => { currentView = 6; save(); render(); };
-  tabs.appendChild(mBtn);
+  const mb=document.createElement('button');
+  mb.className='tab-btn'+(S.view===6?' active':'');
+  mb.textContent='♾ Manutenção';
+  mb.style.borderColor=S.view===6?'#aaa':'';
+  mb.style.color=S.view===6?'#ddd':'';
+  mb.style.background=S.view===6?'#ffffff15':'';
+  mb.onclick=()=>{S.view=6;save();render()};
+  tabs.appendChild(mb);
 }
 
-function renderWeek(w, wi) {
-  const content = document.getElementById('content');
-  let html = `
-    <div class="week-card fade-up" style="background:${w.color}18;border:1px solid ${w.color}40">
-      <div class="week-icon">${w.icon}</div>
-      <div class="week-info">
-        <div class="week-focus" style="color:${w.color}">Semana ${w.n} · ${w.focus}</div>
-        <div class="week-title">${w.title}</div>
-      </div>
-      <div class="week-meta-wrap">
-        <div class="week-meta-label">Meta da semana</div>
-        <div class="week-meta-badge" style="color:${w.color};background:${w.color}20">${w.meta}</div>
-      </div>
+// ─── RENDER WEEK ────────────────────────────────────────
+function renderWeek(){
+  const wi=S.view, w=WEEKS[wi];
+  const {done,total,pct}=weekDone(wi);
+  let html=`
+  <div class="week-header-card fade-up" style="background:${w.color}18;border:1px solid ${w.color}40">
+    <div class="week-icon">${w.icon}</div>
+    <div class="week-info">
+      <div class="week-focus" style="color:${w.color}">Semana ${w.n} · ${w.focus}</div>
+      <div class="week-title">${w.title}</div>
+      <div class="week-meta-badge" style="color:${w.color};background:${w.color}20">${done}/${total} tarefas · ${pct}%</div>
     </div>
-    <div class="days-grid fade-up">
-  `;
-  w.days.forEach((d, di) => {
-    html += `<div class="day-card" style="border-left-color:${w.color}">
+  </div>
+  <div class="days-grid fade-up">`;
+  w.days.forEach((d,di)=>{
+    html+=`<div class="day-card" style="border-left-color:${w.color}">
       <div class="day-label" style="color:${w.color}">${d.day}</div>`;
-    d.tasks.forEach((task, ti) => {
-      const key = `${wi}-${di}-${ti}`;
-      const done = state[key] === true;
-      html += `<div class="task-row" onclick="toggle('${key}')">
-        <div class="checkbox ${done ? 'done' : ''}" id="cb-${key}" style="${done ? 'background:'+w.color : ''}">
-          ${done ? '<span style="color:#000">✓</span>' : ''}
-        </div>
-        <span class="task-text ${done ? 'done' : ''}" id="tt-${key}">${task}</span>
+    d.tasks.forEach((task,ti)=>{
+      const key=`${wi}-${di}-${ti}`;
+      const isDone=S.tasks[key];
+      html+=`<div class="task-row" onclick="toggle('${key}','${w.color}')">
+        <div class="checkbox" id="cb-${key}" style="${isDone?`background:${w.color};border-color:transparent`:''}">${isDone?'<span style="color:#000">✓</span>':''}</div>
+        <span class="task-text ${isDone?'done':''}" id="tt-${key}">${task}</span>
       </div>`;
     });
-    html += `</div>`;
+    html+=`</div>`;
   });
-  html += `</div>`;
-  const nextWeek = DATA.weeks[wi + 1];
-  html += `<div class="tip-box fade-up">
-    💡 <strong>Dica:</strong> Marque as tarefas ao longo do dia. O objetivo não é perfeição — é consistência.
-    ${nextWeek ? `Na semana ${wi+2}: <em style="color:${nextWeek.color}">${nextWeek.title}</em>.` : 'Você está na última semana — incrível! Próximo: Manutenção.'}
-  </div>`;
-  content.innerHTML = html;
+  html+=`</div>
+  <div class="tip-box fade-up">💡 ${QUOTES[wi % QUOTES.length]}</div>`;
+  document.getElementById('content').innerHTML=html;
 }
 
-function renderMaintenance() {
-  const content = document.getElementById('content');
-  let html = `
-    <div class="maint-header fade-up">
-      <div class="maint-header-label">A partir da semana 7</div>
-      <div class="maint-header-title">Fase de Manutenção</div>
-      <div class="maint-header-desc">Você não está mais seguindo uma lista de regras — está com novos padrões instalados. O objetivo agora é consistência, não perfeição.</div>
+// ─── RENDER MAINTENANCE ─────────────────────────────────
+function renderMaintenance(){
+  let html=`
+  <div class="section-card fade-up">
+    <div class="section-card-title">A partir da semana 7</div>
+    <p style="font-size:13px;color:var(--text3);font-family:sans-serif;line-height:1.7;margin-top:4px">Você não está mais seguindo uma lista de regras — está com novos padrões instalados.</p>
+  </div>
+  <div class="maint-grid fade-up">`;
+  MAINTENANCE.forEach(m=>{
+    html+=`<div class="maint-card"><div style="font-size:24px">${m.icon}</div><div><div style="font-size:13px;font-family:sans-serif">${m.habit}</div><div class="maint-badge">${m.meta}</div></div></div>`;
+  });
+  html+=`</div><div class="final-quote fade-up">Saúde cerebral não é sorte — <strong style="color:var(--text)">é escolha diária.</strong></div>`;
+  document.getElementById('content').innerHTML=html;
+}
+
+// ─── RENDER STATS ───────────────────────────────────────
+function renderStats(){
+  const done=doneTasks(), total=totalTasks();
+  const pct=Math.round(done/total*100);
+  const weeksCompleted=WEEKS.filter((_,i)=>weekDone(i).pct===100).length;
+  let html=`
+  <div class="stats-section fade-up">
+    <div class="stats-title">Visão Geral</div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-number">${pct}%</div><div class="stat-label">Progresso total</div></div>
+      <div class="stat-card"><div class="stat-number">${S.streak}</div><div class="stat-label">Dias seguidos 🔥</div></div>
+      <div class="stat-card"><div class="stat-number">${done}</div><div class="stat-label">Tarefas feitas</div></div>
+      <div class="stat-card"><div class="stat-number">${weeksCompleted}</div><div class="stat-label">Semanas completas</div></div>
     </div>
-    <div class="maint-grid fade-up">
-  `;
-  DATA.maintenance.forEach(m => {
-    html += `<div class="maint-card">
-      <div class="maint-card-icon">${m.icon}</div>
-      <div>
-        <div class="maint-card-name">${m.habit}</div>
-        <div class="maint-badge">${m.meta}</div>
-      </div>
+  </div>
+  <div class="stats-section fade-up">
+    <div class="stats-title">Por Semana</div>
+    <div class="section-card"><div class="week-bars">`;
+  WEEKS.forEach((w,i)=>{
+    const {pct:wp}=weekDone(i);
+    html+=`<div class="week-bar-row">
+      <div class="week-bar-label">${w.icon} Sem.${w.n}</div>
+      <div class="week-bar-track"><div class="week-bar-fill" style="width:${wp}%;background:${w.color}"></div></div>
+      <div class="week-bar-pct">${wp}%</div>
     </div>`;
   });
-  html += `</div>
-    <div class="final-quote fade-up">
-      <strong>Lembre-se:</strong> O cérebro é plástico. Ele responde a mudanças em semanas.
-      Saúde cerebral não é sorte — é escolha diária.
-    </div>`;
-  content.innerHTML = html;
+  html+=`</div></div></div>
+  <div class="stats-section fade-up">
+    <div class="stats-title">Frase do Dia</div>
+    <div class="section-card" style="border-left:3px solid var(--accent)">
+      <p style="font-size:14px;color:var(--text2);font-family:sans-serif;line-height:1.7;font-style:italic">"${QUOTES[new Date().getDay()%QUOTES.length]}"</p>
+    </div>
+  </div>`;
+  document.getElementById('content').innerHTML=html;
 }
 
-function toggle(key) {
-  state[key] = !state[key];
-  save();
-  const cb = document.getElementById('cb-' + key);
-  const tt = document.getElementById('tt-' + key);
-  const wi = parseInt(key.split('-')[0]);
-  const color = DATA.weeks[wi].color;
-  if (state[key]) {
-    cb.className = 'checkbox done';
-    cb.style.background = color;
-    cb.style.borderColor = 'transparent';
-    cb.innerHTML = '<span style="color:#000">✓</span>';
-    tt.className = 'task-text done';
+// ─── RENDER SHARE ───────────────────────────────────────
+function renderShare(){
+  const pct=Math.round(doneTasks()/totalTasks()*100);
+  const msg=encodeURIComponent(`Estou no protocolo Cérebro Saudável 🧠\n${pct}% concluído — ${S.streak} dias seguidos 🔥\nExperimente também!`);
+  const currentUrl=window.location.href.split('?')[0];
+  let html=`
+  <div class="section-card fade-up">
+    <div class="section-card-title">Compartilhar progresso</div>
+    <div class="section-card-desc">Envie seu progresso para amigos ou redes sociais</div>
+    <button class="share-btn" onclick="shareWhatsApp(${encodeURIComponent(msg)})">💬 Compartilhar no WhatsApp</button>
+    <button class="share-btn secondary" onclick="copyLink()">🔗 Copiar link do app</button>
+    <div class="share-link-box" id="shareLinkBox">${currentUrl}</div>
+  </div>
+  <div class="section-card fade-up">
+    <div class="section-card-title">Resumo do progresso</div>
+    <div class="section-card-desc">Seu estado atual</div>
+    <div style="background:var(--bg3);border-radius:10px;padding:14px;font-family:sans-serif;font-size:13px;line-height:2;color:var(--text2)">
+      📊 Progresso geral: <strong style="color:var(--accent)">${pct}%</strong><br>
+      🔥 Sequência: <strong style="color:#F0C040">${S.streak} dias</strong><br>
+      ✅ Tarefas: <strong>${doneTasks()} de ${totalTasks()}</strong><br>
+      🏆 Semanas completas: <strong>${WEEKS.filter((_,i)=>weekDone(i).pct===100).length} de 6</strong>
+    </div>
+  </div>`;
+  document.getElementById('content').innerHTML=html;
+}
+function shareWhatsApp(msg){
+  window.open(`https://wa.me/?text=${msg}`,'_blank');
+}
+function copyLink(){
+  const url=window.location.href.split('?')[0];
+  navigator.clipboard.writeText(url).then(()=>{
+    showToast('✅ Link copiado!');
+    const box=document.getElementById('shareLinkBox');
+    if(box){box.style.display='block'}
+  });
+}
+
+// ─── RENDER SETTINGS ────────────────────────────────────
+function renderSettings(){
+  const notifSupported='Notification' in window;
+  let html=`
+  <div class="section-card fade-up">
+    <div class="section-card-title">Notificações</div>
+    <div class="section-card-desc">Lembrete diário para marcar suas tarefas</div>
+    <div class="setting-row">
+      <div><div class="setting-label">Ativar lembretes</div><div class="setting-desc">${notifSupported?'Notificação diária no horário escolhido':'Não suportado neste navegador'}</div></div>
+      <div class="toggle ${S.notifOn?'on':''}" id="notifToggle" onclick="toggleNotif()"></div>
+    </div>
+    <div class="setting-row">
+      <div><div class="setting-label">Horário</div><div class="setting-desc">Quando receber o lembrete</div></div>
+      <input type="time" class="time-input" value="${S.notifTime}" onchange="S.notifTime=this.value;save();showToast('Horário salvo: '+this.value)" />
+    </div>
+  </div>
+  <div class="section-card fade-up">
+    <div class="section-card-title">Aparência</div>
+    <div class="setting-row">
+      <div><div class="setting-label">Tema escuro</div><div class="setting-desc">Alternar entre claro e escuro</div></div>
+      <div class="toggle ${S.theme==='dark'?'on':''}" onclick="document.getElementById('themeBtn').click();setTimeout(renderSettings,50)"></div>
+    </div>
+  </div>
+  <div class="section-card fade-up">
+    <div class="section-card-title">Dados</div>
+    <div class="section-card-desc">Gerencie seu progresso salvo</div>
+    <div class="setting-row">
+      <div><div class="setting-label">Progresso salvo</div><div class="setting-desc">${doneTasks()} tarefas marcadas · ${S.streak} dias de sequência</div></div>
+    </div>
+    <button class="danger-btn" onclick="confirmReset()">🗑 Resetar todo o progresso</button>
+  </div>`;
+  document.getElementById('content').innerHTML=html;
+}
+
+async function toggleNotif(){
+  if(!('Notification' in window)){showToast('⚠️ Não suportado');return}
+  if(!S.notifOn){
+    const perm=await Notification.requestPermission();
+    if(perm==='granted'){
+      S.notifOn=true; save();
+      showToast('🔔 Lembretes ativados!');
+      scheduleNotif();
+    } else {
+      showToast('❌ Permissão negada');return;
+    }
   } else {
-    cb.className = 'checkbox';
-    cb.style.background = '';
-    cb.style.borderColor = '#444';
-    cb.innerHTML = '';
-    tt.className = 'task-text';
+    S.notifOn=false; save();
+    showToast('🔕 Lembretes desativados');
+  }
+  document.getElementById('notifToggle').classList.toggle('on',S.notifOn);
+}
+
+function scheduleNotif(){
+  if(!S.notifOn||!('Notification' in window)||Notification.permission!=='granted')return;
+  const [h,m]=S.notifTime.split(':').map(Number);
+  const now=new Date(), target=new Date();
+  target.setHours(h,m,0,0);
+  if(target<=now) target.setDate(target.getDate()+1);
+  const delay=target-now;
+  setTimeout(()=>{
+    new Notification('🧠 Cérebro Saudável',{
+      body:'Hora de marcar suas tarefas de hoje!',
+      icon:'./icon-192.png',
+      badge:'./icon-192.png'
+    });
+    scheduleNotif();
+  },delay);
+}
+
+document.getElementById('notifBtn').onclick=()=>switchPage('settings');
+
+// ─── RESET ──────────────────────────────────────────────
+function confirmReset(){
+  if(confirm('Resetar todo o progresso? Esta ação não pode ser desfeita.')){
+    S.tasks={};S.streak=0;S.completedWeeks=[];S.lastActive=null;save();
+    render();showToast('✅ Progresso resetado');
+  }
+}
+
+// ─── MAIN RENDER ────────────────────────────────────────
+function render(){
+  if(S.page==='cronograma'){
+    renderTabs();
+    if(S.view===6) renderMaintenance();
+    else renderWeek();
+  } else if(S.page==='stats'){
+    renderStats();
+  } else if(S.page==='share'){
+    renderShare();
+  } else if(S.page==='settings'){
+    renderSettings();
   }
   updateProgress();
 }
 
-function render() {
-  renderTabs();
-  if (currentView === 6) renderMaintenance();
-  else renderWeek(DATA.weeks[currentView], currentView);
-  updateProgress();
-}
+// ─── SERVICE WORKER ─────────────────────────────────────
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
 
-function confirmReset() {
-  if (confirm('Resetar todo o progresso?')) {
-    const view = state.currentView || 0;
-    state = { currentView: view };
-    save();
-    render();
-  }
-}
-
-// Service Worker
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js');
-}
-
-// PWA Install
+// ─── PWA INSTALL ────────────────────────────────────────
 let deferredPrompt;
-const banner = document.getElementById('installBanner');
-const installBtn = document.getElementById('installBtn');
-const closeBanner = document.getElementById('closeBanner');
-
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
-  if (!localStorage.getItem('install-dismissed')) {
-    setTimeout(() => banner.classList.add('show'), 1500);
-  }
+const banner=document.getElementById('installBanner');
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();deferredPrompt=e;
+  if(!localStorage.getItem('install-dismissed'))
+    setTimeout(()=>banner.classList.add('show'),2000);
 });
-
-installBtn.onclick = async () => {
+document.getElementById('installBtn').onclick=async()=>{
   banner.classList.remove('show');
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    deferredPrompt = null;
-    if (outcome === 'accepted') localStorage.setItem('install-dismissed', '1');
-  }
+  if(deferredPrompt){deferredPrompt.prompt();const r=await deferredPrompt.userChoice;deferredPrompt=null;if(r.outcome==='accepted')localStorage.setItem('install-dismissed','1');}
 };
-
-closeBanner.onclick = () => {
-  banner.classList.remove('show');
-  localStorage.setItem('install-dismissed', '1');
-};
-
-// iOS hint
-const isIos = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
-const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-if (isIos && !isStandalone && !localStorage.getItem('ios-hint')) {
-  setTimeout(() => {
-    banner.querySelector('.install-banner-text').innerHTML = `
-      <strong>Instalar no iPhone</strong>
-      Toque em <b>Compartilhar</b> → <b>"Adicionar à Tela de Início"</b>
-    `;
-    banner.classList.add('show');
-    localStorage.setItem('ios-hint', '1');
-  }, 2000);
+document.getElementById('closeBanner').onclick=()=>{banner.classList.remove('show');localStorage.setItem('install-dismissed','1')};
+const isIos=/iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+const isStandalone=window.matchMedia('(display-mode: standalone)').matches;
+if(isIos&&!isStandalone&&!localStorage.getItem('ios-hint')){
+  setTimeout(()=>{
+    banner.querySelector('.banner-text').innerHTML='<strong>Instalar no iPhone</strong>Toque em Compartilhar → "Adicionar à Tela de Início"';
+    banner.classList.add('show');localStorage.setItem('ios-hint','1');
+  },2000);
 }
 
-render();
+// ─── INIT ───────────────────────────────────────────────
+switchPage(S.page);
+if(S.notifOn) scheduleNotif();
 </script>
 </body>
 </html>
