@@ -1,4 +1,4 @@
-const CACHE = "cerebro-v11.0";
+const CACHE = "cerebro-v12.0";
 const ASSETS = ["./index.html","./manifest.json"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));

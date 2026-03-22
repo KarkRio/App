@@ -323,9 +323,10 @@ select{cursor:pointer}
       <div class="xp-bg" style="margin-top:4px"><div class="xp-fill" id="xpBar" style="width:0%"></div></div>
     </div>
     <div style="text-align:right;min-width:60px">
-      <div style="font-size:.7em;color:var(--gold);font-weight:600" id="stkEl">🔥 0</div>
+      <div style="display:flex;align-items:center;gap:4px"><div style="font-size:.7em;color:var(--gold);font-weight:600" id="stkEl">🔥 0</div><div style="font-size:.62em;background:var(--bd);border-radius:20px;padding:1px 6px;color:var(--tx2)" id="rcEl">—</div></div>
       <div style="font-size:.6em;color:var(--tx3);margin-top:2px" id="lvlEl">Nível 1</div>
-      <div style="font-size:.58em;color:var(--tx3)" id="xpLbl">0 XP</div>
+      <div style="font-size:.55em;color:var(--ac)" id="titleEl">Iniciante</div>
+      <div style="font-size:.55em;color:var(--tx3)" id="xpLbl">0 XP</div>
     </div>
   </div>
   <div class="sunset" id="sunsetBar">
@@ -408,7 +409,69 @@ const BPRESET=[
 {name:'2-1-4-1 Acelerador',d:[2,1,4,1],desc:'Versão rápida para momentos de tensão súbita.'}
 ];
 
-const ACH=[{id:'first',i:'⭐',n:'Primeira tarefa',c:S=>doneT(S)>=1},{id:'w1',i:'🌙',n:'Semana 1 completa',c:S=>wDn(S,0).p===100},{id:'w3',i:'🏅',n:'3 semanas',c:S=>[0,1,2].every(i=>wDn(S,i).p===100)},{id:'w6',i:'🏆',n:'6 semanas!',c:S=>WKS.every((_,i)=>wDn(S,i).p===100)},{id:'s3',i:'🌱',n:'3 dias seguidos',c:S=>S.streak>=3},{id:'s7',i:'🔥',n:'7 dias',c:S=>S.streak>=7},{id:'s14',i:'💪',n:'14 dias',c:S=>S.streak>=14},{id:'s30',i:'💎',n:'30 dias',c:S=>S.streak>=30},{id:'s100',i:'👑',n:'100 dias!',c:S=>S.streak>=100},{id:'p10',i:'⏱',n:'10 Pomodoros',c:S=>(S.pomT||0)>=10},{id:'p50',i:'🎯',n:'50 Pomodoros',c:S=>(S.pomT||0)>=50},{id:'p200',i:'🚀',n:'200 Pomodoros',c:S=>(S.pomT||0)>=200},{id:'ai3',i:'🤖',n:'3 chats IA',c:S=>(S.aiChats||0)>=3},{id:'j7',i:'📝',n:'7 notas',c:S=>Object.keys(S.journal||{}).length>=7},{id:'j30',i:'📖',n:'30 notas!',c:S=>Object.keys(S.journal||{}).length>=30},{id:'bf7',i:'🍓',n:'7 dias brain food',c:S=>Object.keys(S.brainFood||{}).length>=7},{id:'learn7',i:'🌱',n:'7 aprendizados',c:S=>(S.learnings||[]).length>=7},{id:'learn30',i:'🧬',n:'30 aprendizados',c:S=>(S.learnings||[]).length>=30},{id:'stroop10',i:'🎨',n:'10 Stroop',c:S=>(S.stroopR||0)>=10},{id:'mem5',i:'🧩',n:'Memória nível 5',c:S=>(S.memLv||0)>=5},{id:'mem10',i:'🧠',n:'Memória nível 10',c:S=>(S.memLv||0)>=10},{id:'react200',i:'⚡',n:'Reação < 200ms',c:S=>(S.reactBest||9999)<200},{id:'wm20',i:'🔤',n:'20 palavras',c:S=>(S.wmRight||0)>=20},{id:'workout7',i:'💪',n:'7 treinos',c:S=>(S.workoutDays||0)>=7},{id:'workout30',i:'🏋️',n:'30 treinos!',c:S=>(S.workoutDays||0)>=30},{id:'sch7',i:'📋',n:'7 rotinas',c:S=>(S.schDays||0)>=7},{id:'goals1',i:'🎯',n:'Primeiro objetivo',c:S=>(S.goals_data||[]).some(g=>g.done)},{id:'lv5',i:'🌟',n:'Nível 5',c:S=>(S.level||1)>=5},{id:'lv10',i:'💫',n:'Nível 10!',c:S=>(S.level||1)>=10},{id:'half',i:'🌗',n:'50% concluído',c:S=>Math.round(doneT(S)/totalT()*100)>=50},{id:'full',i:'🌟',n:'100% completo!',c:S=>Math.round(doneT(S)/totalT()*100)===100}];
+const ACH=[{id:'first',i:'⭐',n:'Primeira tarefa',c:S=>doneT(S)>=1},{id:'w1',i:'🌙',n:'Semana 1 completa',c:S=>wDn(S,0).p===100},{id:'w3',i:'🏅',n:'3 semanas',c:S=>[0,1,2].every(i=>wDn(S,i).p===100)},{id:'w6',i:'🏆',n:'6 semanas!',c:S=>WKS.every((_,i)=>wDn(S,i).p===100)},{id:'s3',i:'🌱',n:'3 dias seguidos',c:S=>S.streak>=3},{id:'s7',i:'🔥',n:'7 dias',c:S=>S.streak>=7},{id:'s14',i:'💪',n:'14 dias',c:S=>S.streak>=14},{id:'s30',i:'💎',n:'30 dias',c:S=>S.streak>=30},{id:'s100',i:'👑',n:'100 dias!',c:S=>S.streak>=100},{id:'p10',i:'⏱',n:'10 Pomodoros',c:S=>(S.pomT||0)>=10},{id:'p50',i:'🎯',n:'50 Pomodoros',c:S=>(S.pomT||0)>=50},{id:'p200',i:'🚀',n:'200 Pomodoros',c:S=>(S.pomT||0)>=200},{id:'ai3',i:'🤖',n:'3 chats IA',c:S=>(S.aiChats||0)>=3},{id:'j7',i:'📝',n:'7 notas',c:S=>Object.keys(S.journal||{}).length>=7},{id:'j30',i:'📖',n:'30 notas!',c:S=>Object.keys(S.journal||{}).length>=30},{id:'bf7',i:'🍓',n:'7 dias brain food',c:S=>Object.keys(S.brainFood||{}).length>=7},{id:'learn7',i:'🌱',n:'7 aprendizados',c:S=>(S.learnings||[]).length>=7},{id:'learn30',i:'🧬',n:'30 aprendizados',c:S=>(S.learnings||[]).length>=30},{id:'stroop10',i:'🎨',n:'10 Stroop',c:S=>(S.stroopR||0)>=10},{id:'mem5',i:'🧩',n:'Memória nível 5',c:S=>(S.memLv||0)>=5},{id:'mem10',i:'🧠',n:'Memória nível 10',c:S=>(S.memLv||0)>=10},{id:'react200',i:'⚡',n:'Reação < 200ms',c:S=>(S.reactBest||9999)<200},{id:'wm20',i:'🔤',n:'20 palavras',c:S=>(S.wmRight||0)>=20},
+{id:'nback5',i:'🔢',n:'N-Back nível 5',c:S=>(S.nbackLevel||0)>=5},
+{id:'med30',i:'🧘',n:'30min meditação',c:S=>(S.medTotal||0)>=30},
+{id:'med300',i:'🌸',n:'5h meditação',c:S=>(S.medTotal||0)>=300},
+{id:'nsdr5',i:'💫',n:'5 NSDR',c:S=>(S.nsdrCount||0)>=5},
+{id:'flow5',i:'🌊',n:'5 sessões flow',c:S=>(S.flowSessions||[]).length>=5},
+{id:'sun7',i:'☀️',n:'7 dias de sol',c:S=>Object.values(S.sunLog||{}).filter(v=>v>=10).length>=7},
+{id:'read100',i:'📚',n:'100 páginas',c:S=>Object.values(S.readingLog||{}).flat().reduce((a,x)=>a+x.pages,0)>=100},
+{id:'mission7',i:'🎯',n:'7 missões',c:S=>S.dailyMissions?.filter(m=>m.done).length>=3},
+{id:'perfect',i:'🌟',n:'Dia perfeito 100pts',c:S=>calcScore()===100},{id:'workout7',i:'💪',n:'7 treinos',c:S=>(S.workoutDays||0)>=7},{id:'workout30',i:'🏋️',n:'30 treinos!',c:S=>(S.workoutDays||0)>=30},{id:'sch7',i:'📋',n:'7 rotinas',c:S=>(S.schDays||0)>=7},{id:'goals1',i:'🎯',n:'Primeiro objetivo',c:S=>(S.goals_data||[]).some(g=>g.done)},{id:'lv5',i:'🌟',n:'Nível 5',c:S=>(S.level||1)>=5},{id:'lv10',i:'💫',n:'Nível 10!',c:S=>(S.level||1)>=10},{id:'half',i:'🌗',n:'50% concluído',c:S=>Math.round(doneT(S)/totalT()*100)>=50},{id:'full',i:'🌟',n:'100% completo!',c:S=>Math.round(doneT(S)/totalT()*100)===100}];
+
+
+// ── TITLES by level
+const TITLES=['Iniciante','Aprendiz Cognitivo','Explorador Mental','Engenheiro de Hábitos','Arquiteto da Mente','Guardião Neurológico','Mestre do Foco','Elite Cognitiva','Arquiteto Mental','Mestre Neurológico','Lenda Cerebral'];
+function getTitle(lv){return TITLES[Math.min(Math.floor(lv/5),TITLES.length-1)]}
+
+// ── DAILY PROMPTS by week
+const DPRPTS=[
+  ["O que te mantém acordado à noite? (literal e metaforicamente)","Como seria o dia perfeito de amanhã?","Qual hábito vales mais — e porque não o tens ainda?","O que o teu sono diz sobre o teu estado de espírito?","Em que hora do dia sentes mais clareza mental?","O que precisas de libertar para dormir melhor?","Que rotina matinal te faria sentir invencível?"],
+  ["O que te impede de te focar mais de 10 minutos?","Qual foi a tua melhor sessão de foco da vida? O que foi diferente?","Se pudesses remover uma distração da tua vida — qual seria?","O que a tua mente faz quando não lhe dás uma tarefa?","Quando foi a última vez que estiveste em flow total?","O que podes fazer hoje que valeria mais do que qualquer outra coisa?","Como será a tua capacidade de foco daqui a 6 meses?"],
+  ["O que te dá dopamina saudável vs dopamina viciante?","Que actividade te dá satisfação genuína sem ecrã?","Se o teu telemóvel desaparecesse por uma semana, o que mudaria?","Quais são as tuas 3 maiores fontes de procrastinação?","Como o scroll afecta o teu humor? Já reparaste?","Que actividade analógica sentes falta de fazer mais?","O que os teus momentos de tédio te dizem sobre ti?"],
+  ["Qual foi o teu último momento de ócio real — sem culpa?","O que surge na tua mente quando não tens distrações?","Que tipo de devaneio tens mais frequentemente?","Onde vais para pensar com clareza?","Qual foi a tua melhor ideia? Quando e onde surgiu?","Que problema carregas mentalmente que precisas de processar?","O que precisas de descansar — não só o corpo, mas a mente?"],
+  ["Qual foi a última coisa que aprendeste que te surpreendeu?","Se pudesses aprender qualquer coisa em 1 ano — o que seria?","Como memorias melhor — visual, auditivo ou cinestésico?","Qual habilidade queres dominar antes dos 30?","O que aprendes por prazer vs obrigação — qual é a diferença?","Como sabes que realmente aprendeste algo (e não só memorizaste)?","Qual conceito que nunca entendeste queres compreender de vez?"],
+  ["Quando foi a última vez que uma conversa te mudou genuinamente?","Qual relação investes pouco mas devias investir mais?","Quem na tua vida te faz ser melhor só por estar perto?","O que as tuas relações dizem sobre quem és?","Que pessoa queres ser para as pessoas que mais amas?","Como seria a tua vida sem as tuas relações mais importantes?","O que nunca disseste a alguém próximo que devias dizer?"]
+];
+
+// ── DAILY BOSS by weekday
+const BOSSES=[
+  {d:'Dom',b:'🌟 Descanso Total',t:'Faz 1 coisa que ames sem telemóvel por 1h',xp:60},
+  {d:'Seg',b:'💪 Segunda Guerreira',t:'Completa todos os exercícios do treino hoje',xp:80},
+  {d:'Ter',b:'📚 Maratona Mental',t:'Estuda 3 matérias diferentes por 30min cada',xp:70},
+  {d:'Qua',b:'💧 Dia Azul',t:'Bebe 10 copos de água e regista todos',xp:50},
+  {d:'Qui',b:'🧘 Profundidade',t:'Faz 1 sessão de Foco Profundo de 90min completa',xp:90},
+  {d:'Sex',b:'⚡ Sprint Final',t:'Completa 5 Pomodoros antes das 18h',xp:75},
+  {d:'Sáb',b:'🔬 Exploração',t:'Aprende 3 coisas novas e regista no app',xp:65}
+];
+
+// ── MISSION POOL
+const MISSION_POOL=[
+  {id:'m1',t:'Regista humor 3x hoje',xp:30,check:S=>{const t=tkey();const l=S.moodLog?.[t]||[];return l.length>=3}},
+  {id:'m2',t:'Bebe 8+ copos de água',xp:25,check:S=>(S.water?.[tkey()]||0)>=8},
+  {id:'m3',t:'Completa 3 Pomodoros',xp:40,check:S=>(S.pomSessions?.[tkey()]||0)>=3},
+  {id:'m4',t:'Escreve no diário',xp:30,check:S=>!!S.journal?.[tkey()]},
+  {id:'m5',t:'Dorme 7+ horas',xp:35,check:S=>(S.sleep?.[tkey()]?.h||0)>=7},
+  {id:'m6',t:'Faz o treino do dia',xp:50,check:S=>!!(S.exercise?.[tkey()]?.logged)},
+  {id:'m7',t:'Completa agenda 80%+',xp:45,check:S=>{const sc=S.schChecks?.[tkey()]||{};const all=Object.values(getSch()).flat().filter(i=>!i.isSep&&i.id);return all.filter(i=>sc[i.id]).length/all.length>=0.8}},
+  {id:'m8',t:'Regista 3 gratidões',xp:20,check:S=>(S.gratitude?.[tkey()]||[]).filter(x=>x.trim()).length>=3},
+  {id:'m9',t:'Faz 1 sessão de respiração',xp:25,check:S=>(S.breathT||0)>0},
+  {id:'m10',t:'Medita por 5+ minutos',xp:35,check:S=>!!(S.medLastDate===tkey())},
+  {id:'m11',t:'Joga 1 jogo cognitivo',xp:20,check:S=>(S.stroopR||0)+(S.wmRight||0)>0},
+  {id:'m12',t:'Regista brain food 6+',xp:30,check:S=>Object.values(S.brainFood?.[tkey()]||{}).filter(Boolean).length>=6},
+  {id:'m13',t:'Adiciona 1 aprendizado',xp:25,check:S=>S.learnings?.some(l=>l.date===tkey())},
+  {id:'m14',t:'Completa foco profundo',xp:50,check:S=>!!(S.flowSessions?.some(f=>f.date===tkey()))},
+  {id:'m15',t:'Escreve intenção do dia',xp:15,check:S=>!!(S.intentions?.[tkey()])}
+];
+const WMISSION_POOL=[
+  {id:'w1',t:'3 Pomodoros de 50min esta semana',xp:100,check:S=>(S.pomT||0)>=3},
+  {id:'w2',t:'Treina 4 dias esta semana',xp:120,check:S=>(S.workoutDays||0)>=4},
+  {id:'w3',t:'Streak 7 dias',xp:150,check:S=>S.streak>=7},
+  {id:'w4',t:'Medita 5 dias esta semana',xp:100,check:S=>(S.nsdrCount||0)+(S.pomT>0?1:0)>=5},
+  {id:'w5',t:'10+ aprendizados registados',xp:130,check:S=>(S.learnings||[]).length>=10},
+  {id:'w6',t:'Brain Score 70+ por 5 dias',xp:200,check:S=>Object.values(S.brainscore||{}).slice(-7).filter(v=>v>=70).length>=5}
+];
 
 const DEF_WO={
 Seg:{focus:"💪 PEITO + PERNAS + CORE",exercises:[{name:"Flexões",sets:3,reps:"8",unit:"rep",restSec:60},{name:"Agachamentos",sets:3,reps:"12",unit:"rep",restSec:60},{name:"Prancha",sets:3,reps:"25",unit:"seg",isTimer:true,timerSec:25,restSec:45},{name:"Alongamento leve",sets:1,reps:"5",unit:"min",isTimer:true,timerSec:300,restSec:0}]},
@@ -474,6 +537,17 @@ D('focusMin',0);D('intentions',{});D('workoutSets',{});D('workoutDays',0);
 D('schChecks',{});D('schDays',0);D('xp',0);D('level',1);D('exercise',{});
 D('freezes',3);D('brainscore',{});D('sleepGoal',8);D('workoutPlan',null);
 D('schPlan',null);D('reactBest',9999);D('wmRight',0);
+// NEW STATE v12
+D('sleepLogs',{});D('sleepDebt',0);D('moodLog',{});D('waterMeta',8);D('waterTypes',{});
+D('readingLog',{});D('sunLog',{});D('nbackLevel',1);D('nbackScore',0);
+D('medStreak',0);D('medTotal',0);D('medLastDate',null);
+D('dailyMissions',[]);D('weeklyMissions',[]);D('lastMissionDate',null);D('lastWeekMission',null);
+D('comboCount',0);D('comboMult',1);D('lastActionDate',null);
+D('userTitle','Iniciante');D('titles_earned',[]);D('hallOfFame',[]);
+D('aiMode','coach');D('aiMemory',[]);D('lastBriefing',null);D('flowSessions',[]);
+D('powernapCount',0);D('nsdrCount',0);D('soundTimers',{});D('soundPreset',null);
+D('compoundDays',0);D('dailyBoss',null);D('dailyBossDate',null);
+D('reportCard',{});D('brainForecast',null);D('lastForecastDate',null);
 // NEW STATE
 D('aiProvider','anthropic');D('apiKeys',{anthropic:'',gemini:'',openai:''});
 D('focusTasks',[]);D('focusNotes','');D('energy',{});D('goals_data',[]);
@@ -487,7 +561,7 @@ const save=()=>localStorage.setItem('cb10',JSON.stringify(S));
 const totalT=()=>WKS.reduce((a,w)=>a+w.days.reduce((b,d)=>b+d.tasks.length,0),0);
 const doneT=(s)=>{s=s||S;return Object.values(s.tasks).filter(Boolean).length};
 const wDn=(s,wi)=>{s=s||S;const w=WKS[wi];const t=w.days.reduce((a,d)=>a+d.tasks.length,0);const d=w.days.reduce((a,d2,di)=>a+d2.tasks.filter((_,ti)=>s.tasks[`${wi}-${di}-${ti}`]).length,0);return{t,d,p:t?Math.round(d/t*100):0}};
-const tkey=()=>new Date().toISOString().split('T')[0];
+const tkey=()=>{const n=new Date();return`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`};
 const dayN=()=>['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'][new Date().getDay()];
 const getWO=()=>S.workoutPlan||DEF_WO;
 const getSch=()=>S.schPlan||DEF_SCH;
@@ -495,7 +569,7 @@ const fmt=s=>`${String(~~(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')
 const fmtSw=ms=>{const t=Math.floor(ms/10),s=Math.floor(t/100),m=Math.floor(s/60);return`${String(m).padStart(2,'0')}:${String(s%60).padStart(2,'0')}.${String(t%100).padStart(2,'0')}`};
 
 // XP
-function addXP(n){S.xp=(S.xp||0)+n;const nl=Math.floor(S.xp/200)+1;if(nl>S.level){S.level=nl;save();toast(`🎉 Nível ${nl}!`);confetti()}save();updateUI()}
+function addXP(n){const actual=addXPCombo(n);S.xp=(S.xp||0)+actual;const nl=Math.floor(S.xp/200)+1;if(nl>S.level){S.level=nl;save();toast(`🎉 Nível ${nl}! ${getTitle(nl)}`);confetti()}save();updateUI()}
 
 // SCORE
 function calcScore(){const tk=tkey();let sc=0,mx=0;const sl=S.sleep[tk];if(sl?.h){mx+=25;sc+=Math.min(25,Math.round((sl.h/S.sleepGoal)*20+(sl.q/5)*5))}const wt=S.water[tk]||0;mx+=15;sc+=Math.min(15,Math.round((wt/8)*15));if(S.mood[tk]!==undefined){mx+=15;sc+=Math.round((S.mood[tk]/4)*15)}const td=WKS.reduce((a,w,wi)=>a+w.days.reduce((b,d,di)=>b+d.tasks.filter((_,ti)=>S.tasks[`${wi}-${di}-${ti}`]).length,0),0);mx+=20;sc+=Math.min(20,td*3);if(S.journal[tk]){mx+=10;sc+=10}const bf=S.brainFood[tk];if(bf){mx+=15;sc+=Math.min(15,Math.round((Object.values(bf).filter(Boolean).length/6)*15))}return mx?Math.round((sc/mx)*100):0}
@@ -511,6 +585,14 @@ function updateUI(){
   const lv=document.getElementById('lvlEl');if(lv)lv.textContent=`Nível ${S.level}`;
   const xl=document.getElementById('xpLbl');if(xl)xl.textContent=`${S.xp%200}/200 XP`;
   const sk=document.getElementById('stkEl');if(sk)sk.textContent='🔥 '+S.streak;
+  // Update title
+  const newTitle=getTitle(S.level||1);
+  if(newTitle!==S.userTitle){S.userTitle=newTitle;save();if(!S.titles_earned.includes(newTitle)){S.titles_earned.push(newTitle);toast('🏷️ Novo título: '+newTitle);}}
+  const tl=document.getElementById('titleEl');if(tl)tl.textContent=S.userTitle;
+  // Check daily missions
+  checkDailyMissions();
+  // Update report card
+  genReportCard();
 }
 
 function updateSunset(){const bar=document.getElementById('sunsetBar');if(!bar)return;if(!S.sunsetOn){bar.style.display='none';return}bar.style.display='flex';const[h,m]=S.sunsetTime.split(':').map(Number);const now=new Date(),tgt=new Date();tgt.setHours(h,m,0,0);if(tgt<now){document.getElementById('sunsetTxt').textContent='🌙 Hora de desligar';document.getElementById('sunsetTimer').textContent='Passou!';bar.className='sunset over';return}const diff=tgt-now;document.getElementById('sunsetTxt').textContent=`🌅 Sunset às ${S.sunsetTime}`;document.getElementById('sunsetTimer').textContent=`${Math.floor(diff/3600000)}h ${Math.floor((diff%3600000)/60000)}m`;bar.className=`sunset ${diff<3600000?'over':diff<7200000?'warn':''}`}
@@ -526,6 +608,104 @@ function obFinish(){S.challenges=_ch;S.goals=_go;S.startDate=tkey();save();docum
 document.getElementById('obName').addEventListener('keydown',e=>{if(e.key==='Enter')obNext(1)});
 
 function updateStreak(){const today=new Date().toDateString();if(S.lastActive!==today){const yest=new Date(Date.now()-86400000).toDateString();if(S.lastActive===yest)S.streak++;else if(S.lastActive&&S.lastActive!==today){if(S.freezes>0){S.freezes--;S.streak++;toast('❄️ Freeze usado! Restam '+S.freezes)}else{if(S.streak>0)toast('💔 Sequência de '+S.streak+' perdida');S.streak=0}}if(S.streak>S.bestStreak)S.bestStreak=S.streak;S.lastActive=today;save()}}
+
+// ══ MISSIONS ══
+function initMissions(){
+  const today=tkey(),week=today.slice(0,7);
+  if(S.lastMissionDate!==today){
+    S.lastMissionDate=today;
+    const pool=[...MISSION_POOL].sort(()=>Math.random()-.5).slice(0,3);
+    S.dailyMissions=pool.map(m=>({...m,done:false}));
+    // Daily boss
+    S.dailyBoss={...BOSSES[new Date().getDay()],done:false};
+    S.dailyBossDate=today;save()
+  }
+  if(S.lastWeekMission!==week){
+    S.lastWeekMission=week;
+    const pool=[...WMISSION_POOL].sort(()=>Math.random()-.5).slice(0,2);
+    S.weeklyMissions=pool.map(m=>({...m,done:false}));save()
+  }
+}
+function checkDailyMissions(){
+  if(!S.dailyMissions?.length)return;
+  let changed=false;
+  S.dailyMissions.forEach((m,i)=>{
+    if(!m.done&&m.check&&m.check(S)){S.dailyMissions[i].done=true;changed=true;addXP(m.xp);setTimeout(()=>{confetti();toast('✅ Missão: '+m.t+' +'+m.xp+' XP')},300)}
+  });
+  if(S.dailyBoss&&!S.dailyBoss.done&&S.dailyBoss.check&&S.dailyBoss.check(S)){S.dailyBoss.done=true;changed=true;addXP(S.dailyBoss.xp);setTimeout(()=>{confetti();toast('👑 Boss derrotado! '+S.dailyBoss.b+' +'+S.dailyBoss.xp+' XP')},500)}
+  S.weeklyMissions?.forEach((m,i)=>{if(!m.done&&m.check&&m.check(S)){S.weeklyMissions[i].done=true;changed=true;addXP(m.xp);setTimeout(()=>{confetti();toast('🏆 Missão semanal! +'+m.xp+' XP')},700)}});
+  if(changed)save()
+}
+
+// ══ COMBO ══
+function addXPCombo(base){
+  const today=tkey();
+  if(S.lastActionDate!==today){S.comboCount=0;S.comboMult=1;S.lastActionDate=today}
+  S.comboCount=(S.comboCount||0)+1;
+  const mult=S.comboCount>=20?2:S.comboCount>=10?1.5:1;
+  if(mult!==S.comboMult&&mult>1){S.comboMult=mult;toast('🔥 Combo ×'+mult+'! XP aumentado!')}
+  S.comboMult=mult;
+  return Math.round(base*mult)
+}
+
+// ══ HALL OF FAME ══
+function updateHoF(){
+  const score=calcScore(),today=tkey();
+  S.hallOfFame=S.hallOfFame||[];
+  const existing=S.hallOfFame.findIndex(d=>d.date===today);
+  if(existing>=0)S.hallOfFame[existing].score=Math.max(S.hallOfFame[existing].score,score);
+  else S.hallOfFame.push({date:today,score,streak:S.streak});
+  S.hallOfFame.sort((a,b)=>b.score-a.score);
+  if(S.hallOfFame.length>10)S.hallOfFame=S.hallOfFame.slice(0,10);
+  save()
+}
+
+// ══ DAILY REPORT CARD ══
+function genReportCard(){
+  const tk=tkey(),sl=S.sleep[tk]||{},wt=S.water[tk]||0,md=S.mood[tk];
+  const tasks=doneT();const total=totalT();
+  let pts=0,max=0;
+  max+=25;if((sl.h||0)>=7)pts+=25;else if((sl.h||0)>=6)pts+=15;else if((sl.h||0)>=5)pts+=8;
+  max+=20;pts+=Math.min(20,Math.round((wt/8)*20));
+  max+=15;if(md!==undefined)pts+=Math.round((md/4)*15);
+  max+=20;if(S.journal[tk])pts+=10;if(Object.values(S.gratitude[tk]||[]).some(g=>g.trim()))pts+=10;
+  max+=20;pts+=Math.min(20,Math.round(tasks/total*20));
+  const pct=max?Math.round(pts/max*100):0;
+  const grade=pct>=95?'A+':pct>=85?'A':pct>=75?'B':pct>=65?'C':pct>=50?'D':'F';
+  S.reportCard[tk]={grade,pct,pts,max};save();
+  const rce=document.getElementById('rcEl');if(rce)rce.textContent=grade;
+}
+
+// ══ BRAIN FORECAST ══
+function genForecast(){
+  const today=tkey();
+  if(S.lastForecastDate===today)return S.brainForecast;
+  const days=Object.keys(S.brainscore||{}).sort().slice(-14);
+  if(days.length<3)return null;
+  const scores=days.map(d=>S.brainscore[d]);
+  const avg=scores.reduce((a,v)=>a+v,0)/scores.length;
+  const last3=scores.slice(-3).reduce((a,v)=>a+v,0)/3;
+  const trend=last3-avg;
+  const sleepAvg=Object.values(S.sleep||{}).slice(-7).reduce((a,v)=>a+(v.h||0),0)/7;
+  let forecast=Math.round(last3+(trend*0.5));
+  if(sleepAvg<6)forecast=Math.max(0,forecast-8);
+  if((S.water[today]||0)>=8)forecast=Math.min(100,forecast+4);
+  forecast=Math.max(10,Math.min(100,forecast));
+  S.brainForecast=forecast;S.lastForecastDate=today;save();
+  return forecast
+}
+
+// ══ PT-PT DATES ══
+function ptDate(d){const dt=d?new Date(d):new Date();return dt.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'})}
+function ptTime(d){return(d?new Date(d):new Date()).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}
+
+// ══ MOOD LOG (multiple per day) ══
+function logMoodNow(val,slot){const tk=tkey();S.moodLog=S.moodLog||{};S.moodLog[tk]=S.moodLog[tk]||{};S.moodLog[tk][slot]=val;S.mood[tk]=val;save();checkAch();updateUI();snd(400+val*60,500+val*80,.2);if(navigator.vibrate)navigator.vibrate(20);toast(`${MOODS[val]} Humor ${slot}: ${MLBL[val]}`);addXP(5)}
+
+// ══ SLEEP CALC ══
+function calcREM(wakeTimeStr){if(!wakeTimeStr)return[];const[wh,wm]=wakeTimeStr.split(':').map(Number);const wt=wh*60+wm;const targets=[];for(let c=6;c>=3;c--){let bt=wt-c*90-15;if(bt<0)bt+=24*60;targets.push({cycles:c,sleep:`${String(Math.floor(bt/60)).padStart(2,'0')}:${String(bt%60).padStart(2,'0')}`})}return targets}
+function calcSleepDebt(){const days=Object.keys(S.sleep||{}).slice(-7);const goal=S.sleepGoal||8;const debt=days.reduce((a,k)=>a+Math.max(0,goal-(S.sleep[k]?.h||0)),0);S.sleepDebt=debt;save();return debt}
+
 function checkAch(){ACH.forEach(a=>{if(!S.unlocked.includes(a.id)&&a.c(S)){S.unlocked.push(a.id);save();addXP(100);setTimeout(()=>{confetti();toast('🏅 '+a.n)},400)}})}
 
 function confetti(){const c=['#4FC3A1','#5B8DEF','#F0C040','#F07EB0','#B07FE8','#E07B54'];for(let i=0;i<44;i++)setTimeout(()=>{const el=document.createElement('div');el.className='cp';el.style.cssText=`left:${Math.random()*100}vw;background:${c[~~(Math.random()*c.length)]};animation-duration:${.7+Math.random()*1}s`;document.body.appendChild(el);setTimeout(()=>el.remove(),2200)},i*16)}
@@ -539,7 +719,23 @@ function doSearch(q){if(q.length<2){document.getElementById('sr').innerHTML='';r
 
 function toggle(key,color){S.tasks[key]=!S.tasks[key];save();if(navigator.vibrate)navigator.vibrate(8);const cb=document.getElementById('cb-'+key),tt=document.getElementById('tt-'+key);if(!cb)return;if(S.tasks[key]){cb.style.cssText=`background:${color};border-color:transparent`;cb.textContent='✓';tt.classList.add('dn');cb.classList.add('pop');setTimeout(()=>cb.classList.remove('pop'),200);snd(700,900,.15);addXP(5);const wi=parseInt(key.split('-')[0]);if(wi>=0&&wi<6&&wDn(S,wi).p===100)setTimeout(()=>{confetti();toast('🎉 Semana '+WKS[wi].n+' completa!');addXP(200)},300)}else{cb.style.cssText='';cb.textContent='';tt.classList.remove('dn');snd(500,350,.12)}updateUI();checkAch()}
 
-function go(p){S.page=p;save();document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));const ni=document.getElementById('n-'+p);if(ni)ni.classList.add('on');document.getElementById('tabs').style.display=p==='home'?'flex':'none';if(p==='home'){renderTabs();S.view===6?renderMaint():renderWeek()}else if(p==='rotina')renderRotina();else if(p==='tools')renderTools();else if(p==='health')renderHealth();else if(p==='coach')renderCoach();else if(p==='stats')renderStats();else if(p==='settings')renderSettings();updateUI();updateStreak()}
+function go(p){
+  // Stop exercise timer when leaving rotina
+  if(S.page==='rotina'&&p!=='rotina'&&exInt){clearInterval(exInt);exInt=null}
+  // Stop stopwatch UIs (don't stop the timers themselves)
+  S.page=p;save();
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
+  const ni=document.getElementById('n-'+p);if(ni)ni.classList.add('on');
+  document.getElementById('tabs').style.display=p==='home'?'flex':'none';
+  if(p==='home'){renderTabs();S.view===6?renderMaint():renderWeek()}
+  else if(p==='rotina')renderRotina();
+  else if(p==='tools')renderTools();
+  else if(p==='health')renderHealth();
+  else if(p==='coach')renderCoach();
+  else if(p==='stats'){updateHoF();renderStats()}
+  else if(p==='settings')renderSettings();
+  updateUI();updateStreak();checkDailyMissions()
+}
 
 // ════ TABS ════
 function renderTabs(){const tabs=document.getElementById('tabs');tabs.innerHTML='';WKS.forEach((w,i)=>{const b=document.createElement('button');b.className='tbtn'+(S.view===i?' on':'');const{p}=wDn(S,i);b.innerHTML=`${w.i} S${w.n}${p===100?' ✓':''}`;b.style.borderColor=S.view===i?w.c:'';b.style.color=S.view===i?w.c:'';b.style.background=S.view===i?w.c+'20':'';b.onclick=()=>{S.view=i;save();renderTabs();renderWeek()};tabs.appendChild(b)});const mb=document.createElement('button');mb.className='tbtn'+(S.view===6?' on':'');mb.textContent='♾';mb.style.borderColor=S.view===6?'#aaa':'';mb.style.color=S.view===6?'#ddd':'';mb.style.background=S.view===6?'#ffffff15':'';mb.onclick=()=>{S.view=6;save();renderTabs();renderMaint()};tabs.appendChild(mb)}
@@ -574,19 +770,32 @@ if(S.customHabits?.length){h+=`<div class="card fu"><div class="ct2">Hábitos pe
 if(S.goals_data?.filter(g=>!g.done).length>0){h+=`<div class="card fu"><div class="ct2">🎯 Objetivos ativos</div>`;S.goals_data.filter(g=>!g.done).slice(0,3).forEach((g,i)=>{const prog=Math.min(100,Math.round((g.current||0)/g.target*100));h+=`<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:.82em;margin-bottom:3px"><span>${g.name}</span><span style="color:var(--tx3)">${g.current||0}/${g.target} ${g.unit}</span></div><div class="goal-bar-bg"><div class="goal-bar-fill" style="width:${prog}%;background:var(--ac)"></div></div></div>`});h+=`<button class="btn" style="font-size:.7em" onclick="go('stats')">Ver todos →</button></div>`}
 
 const moodFbHtml=dm!==undefined?`<div class="ibox tip" style="margin-top:8px"><strong>${['😩 Dia difícil...','😕 Não está fácil.','😐 Dia neutro.','🙂 Que bom!','😄 Excelente!'][dm]}</strong></div>`:'';
-h+=`<div class="card fu"><div class="ct2">Como estás hoje?</div><div class="moods">${MOODS.map((m,i)=>`<span class="mbtn ${dm===i?'sel':''}" onclick="setMood(${i})">${m}</span>`).join('')}</div>${dm!==undefined?`<div style="text-align:center;font-size:.75em;color:var(--tx3);margin-top:3px">${MLBL[dm]}</div>`:''}${moodFbHtml}<div id="mood-fb" style="display:none"></div>${dm!==undefined?`<input placeholder="Nota sobre o humor (opcional)..." value="${S.moodNotes?.[tk]||''}" style="margin-top:7px;font-size:.8em" oninput="S.moodNotes['${tk}']=this.value;save()"/>`:''}
-</div>`;
+// BRAIN FORECAST
+const fc=genForecast();if(fc){const fcColor=fc>=70?'var(--ac)':fc>=50?'var(--gold)':'var(--rose)';h+=`<div class="card fu" style="border-left:3px solid ${fcColor}"><div style="display:flex;align-items:center;gap:10px"><div style="font-size:1.6em;font-family:Fraunces,serif;color:${fcColor}">${fc}</div><div><div style="font-size:.7em;font-weight:500">🔮 Brain Forecast</div><div style="font-size:.65em;color:var(--tx3)">Previsão para amanhã · baseada em 14 dias</div></div></div></div>`}
 
-// Study subject tracker
-h+=`<div class="card fu"><div class="ct2">📚 Matéria estudada hoje</div>
-<div style="display:flex;gap:6px;margin-bottom:8px">
-<select id="subjSel" style="margin:0;font-size:.8em"><option value="">Selecionar...</option>${['Matemática','Português','Física','Química','Biologia','História','Geografia','Inglês','Outra'].map(s=>`<option>${s}</option>`).join('')}</select>
-<input id="subjPages" type="number" min="1" placeholder="pgs" style="width:70px;margin:0;font-size:.8em"/>
-<button class="btn ac" style="padding:6px 10px;font-size:.72em;white-space:nowrap;flex-shrink:0" onclick="addSubject()">+</button>
-</div>
-<div id="subjList">${renderSubjects(tk)}</div></div>`;
+// MISSIONS
+initMissions();
+const ms=S.dailyMissions||[],boss=S.dailyBoss;
+if(ms.length){h+=`<div class="card fu"><div class="ct2">🎯 Missões do dia</div>`;
+ms.forEach(m=>{h+=`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd)"><div style="width:16px;height:16px;border-radius:50%;border:2px solid var(--bd);background:${m.done?'var(--ac)':'transparent'};display:flex;align-items:center;justify-content:center;font-size:.5em;color:#000;flex-shrink:0">${m.done?'✓':''}</div><span style="flex:1;font-size:.78em;${m.done?'text-decoration:line-through;color:var(--tx3)':''}">${m.t}</span><span style="font-size:.65em;color:var(--gold)">+${m.xp}</span></div>`});
+if(boss)h+=`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;background:var(--gold)12;border-radius:8px;margin-top:5px;padding-left:8px"><div style="font-size:.9em">👑</div><div style="flex:1"><div style="font-size:.78em;font-weight:600;color:var(--gold)">${boss.b}</div><div style="font-size:.68em;color:var(--tx3)">${boss.t}</div></div><span style="font-size:.65em;color:var(--gold)">+${boss.xp}</span></div>`;
+h+=`</div>`}
 
-h+=`<div class="card fu"><div class="ct2">📝 Diário</div><textarea class="jarea" id="jarea" placeholder="Como foi o dia? Reflexões...">${S.journal[tk]||''}</textarea><button class="sav" onclick="saveJ()">Salvar</button></div>`;
+// MOOD MULTI (manhã/tarde/noite)
+const moodSlots=[['m','☀️ Manhã'],['t','🌤 Tarde'],['n','🌙 Noite']];const mLog=S.moodLog?.[tk]||{};
+h+=`<div class="card fu"><div class="ct2">Como estás?</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:4px">${moodSlots.map(([sl,lb])=>`<div style="background:var(--bg3);border-radius:10px;padding:8px 4px;text-align:center;border:1px solid var(--bd)"><div style="font-size:.58em;color:var(--tx3);margin-bottom:5px">${lb}</div><div style="display:flex;justify-content:center;gap:3px">${MOODS.map((em,i)=>`<span style="font-size:.9em;cursor:pointer;opacity:${mLog[sl]===i?1:.2};transition:opacity .15s" onclick="logMoodNow(${i},'${sl}')">${em}</span>`).join('')}</div>${mLog[sl]!==undefined?`<div style="font-size:.55em;color:var(--tx3);margin-top:3px">${MLBL[mLog[sl]]}</div>`:''}</div>`).join('')}</div>`;
+
+// Mood history emojis (last 7 days)
+const mhist=Object.keys(S.mood||{}).sort().slice(-7);if(mhist.length)h+=`<div style="display:flex;gap:4px;justify-content:center;margin-top:5px">${mhist.map(d=>`<div style="text-align:center"><div style="font-size:.9em">${MOODS[S.mood[d]]||'—'}</div><div style="font-size:.45em;color:var(--tx3)">${d.slice(5)}</div></div>`).join('')}</div>`;
+h+=`<div id="mood-fb" style="display:none"></div></div>`;
+
+// OLD MOOD: replace what was there
+// mood note
+if(S.mood[tk]!==undefined){h+=`<div class="card fu"><input placeholder="Nota de humor (opcional)..." value="${S.moodNotes?.[tk]||''}" style="font-size:.8em" oninput="S.moodNotes['${tk}']=this.value;save()"/></div>`}
+h+=`<div class="card fu"><div class="ct2">📝 Diário <span style="font-size:.65em;color:var(--tx3)">— Prompt do dia</span></div><div class="ibox tip" style="font-size:.78em;font-style:italic;margin-bottom:8px">"${prompt}"</div><textarea class="jarea" id="jarea" placeholder="Responde ao prompt ou escreve livremente...">${S.journal[tk]||''}</textarea>`;
+// Show entry from 7 days ago
+const ago7=new Date(Date.now()-7*86400000).toISOString().split('T')[0];if(S.journal[ago7])h+=`<div class="ibox" style="margin-top:8px;font-size:.72em;cursor:pointer" onclick="this.style.display='none';document.getElementById('ago7full').style.display='block'">📅 Há 7 dias: "${S.journal[ago7].slice(0,80)}..." <span style="color:var(--ac)">Ver</span></div><div id="ago7full" style="display:none;background:var(--bg3);border-radius:8px;padding:9px;font-size:.78em;color:var(--tx2);margin-top:5px;line-height:1.6">${S.journal[ago7]}</div>`;
+h+=`<button class="sav" onclick="saveJ()">Salvar</button></div>`;
 h+=`<div class="card fu" style="background:var(--bg3);border:none"><p style="font-size:.85em;color:var(--tx2);line-height:1.7;font-style:italic;font-family:Fraunces,serif">"${QUOTES[(new Date().getDay()+wi)%QUOTES.length]}"</p></div>`;
 document.getElementById('ct').innerHTML=h}
 
@@ -702,11 +911,11 @@ let focusTasks_local=[];
 const SCOLS=['#e05050','#5B8DEF','#4FC3A1','#F0C040'],SNAMES=['VERMELHO','AZUL','VERDE','AMARELO'];
 const MEM_E=['🔴','🔵','🟢','🟡','🟠','🟣'];
 
-function renderTools(){document.getElementById('ct').innerHTML=`<div style="overflow-x:auto;display:flex;gap:6px;padding-bottom:2px;margin-bottom:12px;scrollbar-width:none">${[['pom','⏱ Pomodoro'],['sw','🕐 Cronómetros'],['breath','🌬 Respiração'],['deep','🌊 Foco Profundo'],['tasks','✅ Sessão'],['energy','⚡ Energia'],['notes','📝 Notas Rápidas'],['games','🎮 Jogos']].map(([k,lb])=>`<button class="btn ${_tt===k?'ac':''}" style="font-size:.7em;white-space:nowrap;flex-shrink:0" onclick="_tt='${k}';renderTools()">${lb}</button>`).join('')}</div><div id="tb"></div>`;
-if(_tt==='pom')renderPom();else if(_tt==='sw')renderSWs();else if(_tt==='breath')renderBreath();else if(_tt==='deep')renderDeep();else if(_tt==='tasks')renderFocusTasks();else if(_tt==='energy')renderEnergy();else if(_tt==='notes')renderFocusNotes();else if(_tt==='games')renderGames()}
+function renderTools(){document.getElementById('ct').innerHTML=`<div style="overflow-x:auto;display:flex;gap:6px;padding-bottom:2px;margin-bottom:12px;scrollbar-width:none">${[['pom','⏱ Pomodoro'],['sw','🕐 Cronómetros'],['breath','🌬 Respiração'],['deep','🌊 Foco Profundo'],['flow','🌊 Flowtime'],['tasks','✅ Sessão'],['energy','⚡ Energia'],['notes','📝 Notas Rápidas'],['nsdr','💫 NSDR'],['games','🎮 Jogos']].map(([k,lb])=>`<button class="btn ${_tt===k?'ac':''}" style="font-size:.7em;white-space:nowrap;flex-shrink:0" onclick="_tt='${k}';renderTools()">${lb}</button>`).join('')}</div><div id="tb"></div>`;
+if(_tt==='pom')renderPom();else if(_tt==='sw')renderSWs();else if(_tt==='breath')renderBreath();else if(_tt==='deep')renderDeep();else if(_tt==='flow')renderFlowtime();else if(_tt==='tasks')renderFocusTasks();else if(_tt==='energy')renderEnergy();else if(_tt==='notes')renderFocusNotes();else if(_tt==='nsdr')renderNSDR();else if(_tt==='games')renderGames()}
 
 // POMODORO
-function renderPom(){document.getElementById('tb').innerHTML=`<div class="card fu"><div class="ct2">⏱ POMODORO — ${S.pomT} sessões · ${Math.floor((S.focusMin||0)/60)}h foco</div><div style="display:flex;gap:5px;justify-content:center;margin-bottom:10px">${[15,25,50,90].map(m=>`<button class="btn ${pomDur===m?'ac':''}" style="font-size:.68em;padding:5px 9px" onclick="setPomDur(${m})">${m}min</button>`).join('')}</div><div class="dots4">${[...Array(4)].map((_,i)=>`<div class="dot4 ${i<pomSess?'on':''}" id="pd${i}"></div>`).join('')}</div><div class="bigring ${pomInt?(pomMode==='focus'?'run':'brk'):''}" id="pomRing"><div style="font-family:Fraunces,serif;font-size:1.75em;font-weight:300;letter-spacing:-1px" id="ptm">${fmt(pomLeft||pomDur*60)}</div><div style="font-size:.6em;color:var(--tx3);letter-spacing:2px;text-transform:uppercase;margin-top:2px" id="plb">${pomMode==='focus'?'FOCO':'PAUSA'}</div></div><div class="btns"><button class="btn" onclick="pomReset()">↺</button><button class="btn ac" id="pplay" onclick="pomToggle()">${pomInt?'⏸':'▶'}</button><button class="btn" onclick="pomSkip()">⏭</button></div></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px"><div class="focus-stat"><div class="fs-num">${S.pomT}</div><div class="fs-lbl">Pomodoros</div></div><div class="focus-stat"><div class="fs-num">${Math.floor((S.focusMin||0)/60)}h${Math.floor((S.focusMin||0)%60)}m</div><div class="fs-lbl">Foco total</div></div><div class="focus-stat"><div class="fs-num">${(S.distractions||[]).filter(d=>d.date===tkey()).length}</div><div class="fs-lbl">Distrações hoje</div></div></div><div class="card fu"><div class="ct2">🏺 Pote de Distrações</div><div class="cd">Regista em vez de ceder ao impulso</div><div style="display:flex;gap:6px"><input id="disIn" placeholder="O que te distraiu?" style="margin:0"/><button class="btn ac" style="padding:7px 11px;white-space:nowrap;flex-shrink:0" onclick="addDis()">+</button></div><div id="disList" style="margin-top:8px">${renderDis()}</div></div>`; if(pomInt)updPom()}
+function renderPom(){document.getElementById('tb').innerHTML=`<div class="card fu"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div class="ct2" style="margin-bottom:0">⏱ POMODORO — ${S.pomT} sessões · ${Math.floor((S.focusMin||0)/60)}h foco</div><button class="btn" style="font-size:.65em" onclick="toggleMonkMode()">🧘 Modo Monge</button></div><div style="display:flex;gap:5px;justify-content:center;margin-bottom:10px">${[15,25,50,90].map(m=>`<button class="btn ${pomDur===m?'ac':''}" style="font-size:.68em;padding:5px 9px" onclick="setPomDur(${m})">${m}min</button>`).join('')}</div><div class="dots4">${[...Array(4)].map((_,i)=>`<div class="dot4 ${i<pomSess?'on':''}" id="pd${i}"></div>`).join('')}</div><div class="bigring ${pomInt?(pomMode==='focus'?'run':'brk'):''}" id="pomRing"><div style="font-family:Fraunces,serif;font-size:1.75em;font-weight:300;letter-spacing:-1px" id="ptm">${fmt(pomLeft||pomDur*60)}</div><div style="font-size:.6em;color:var(--tx3);letter-spacing:2px;text-transform:uppercase;margin-top:2px" id="plb">${pomMode==='focus'?'FOCO':'PAUSA'}</div></div><div class="btns"><button class="btn" onclick="pomReset()">↺</button><button class="btn ac" id="pplay" onclick="pomToggle()">${pomInt?'⏸':'▶'}</button><button class="btn" onclick="pomSkip()">⏭</button></div></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px"><div class="focus-stat"><div class="fs-num">${S.pomT}</div><div class="fs-lbl">Pomodoros</div></div><div class="focus-stat"><div class="fs-num">${Math.floor((S.focusMin||0)/60)}h${Math.floor((S.focusMin||0)%60)}m</div><div class="fs-lbl">Foco total</div></div><div class="focus-stat"><div class="fs-num">${(S.distractions||[]).filter(d=>d.date===tkey()).length}</div><div class="fs-lbl">Distrações hoje</div></div></div><div class="card fu"><div class="ct2">🏺 Pote de Distrações</div><div class="cd">Regista em vez de ceder ao impulso</div><div style="display:flex;gap:6px"><input id="disIn" placeholder="O que te distraiu?" style="margin:0"/><button class="btn ac" style="padding:7px 11px;white-space:nowrap;flex-shrink:0" onclick="addDis()">+</button></div><div id="disList" style="margin-top:8px">${renderDis()}</div></div>`; if(pomInt)updPom()}
 const fmt2=s=>`${String(~~(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
 function setPomDur(m){pomDur=m;pomLeft=0;pomMode='focus';clearInterval(pomInt);pomInt=null;updPom();renderPom()}
 function pomToggle(){if(pomInt){clearInterval(pomInt);pomInt=null}else{if(!pomLeft)pomLeft=(pomMode==='focus'?pomDur:pomDur>=50?10:5)*60;pomInt=setInterval(()=>{pomLeft--;if(pomMode==='focus')S.focusMin=(S.focusMin||0)+1;save();updPom();if(pomLeft<=0){clearInterval(pomInt);pomInt=null;snd(660,880,.3);if(navigator.vibrate)navigator.vibrate([100,50,100]);if(pomMode==='focus'){S.pomT++;save();checkAch();addXP(25);pomSess=(pomSess+1)%4;pomMode='break';pomLeft=0;toast('✅ Foco completo!')}else{pomMode='focus';pomLeft=0;toast('▶ Pronto!')}updPom()}},1000)}updPom()}
@@ -715,6 +924,27 @@ function pomSkip(){clearInterval(pomInt);pomInt=null;pomMode=pomMode==='focus'?'
 function updPom(){const pt=document.getElementById('ptm'),pl=document.getElementById('plb'),pp=document.getElementById('pplay'),pr=document.getElementById('pomRing');if(pt)pt.textContent=fmt(pomLeft||(pomMode==='focus'?pomDur:pomDur>=50?10:5)*60);if(pl)pl.textContent=pomMode==='focus'?'FOCO':'PAUSA';if(pp)pp.textContent=pomInt?'⏸':'▶';if(pr){pr.classList.toggle('run',!!pomInt&&pomMode==='focus');pr.classList.toggle('brk',!!pomInt&&pomMode==='break')}for(let i=0;i<4;i++){const d=document.getElementById('pd'+i);if(d)d.classList.toggle('on',i<pomSess)}}
 function addDis(){const v=document.getElementById('disIn')?.value?.trim();if(!v)return;S.distractions.push({text:v,time:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),date:tkey()});save();document.getElementById('disIn').value='';const dl=document.getElementById('disList');if(dl)dl.innerHTML=renderDis();toast('📌 Registado!')}
 function renderDis(){const t=(S.distractions||[]).filter(d=>d.date===tkey()).slice(-5).reverse();if(!t.length)return`<div style="font-size:.72em;color:var(--tx3)">Nenhuma distração hoje 🎯</div>`;return t.map(d=>`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--bd);font-size:.78em;color:var(--tx2)">${d.text}<span style="font-size:.75em;color:var(--tx3)">${d.time}</span></div>`).join('')}
+
+// ══ MONK MODE ══
+let _monkMode=false;
+function toggleMonkMode(){_monkMode=!_monkMode;if(_monkMode){openModal('🧘 Modo Monge','<p style="font-size:.85em;color:var(--tx2);line-height:1.7;text-align:center;padding:12px">O Modo Monge esconde tudo.<br>Só o timer e o botão de distração ficam visíveis.<br>Saiu automaticamente ao fim da sessão.</p><button class="sav full" onclick="activateMonk()">🧘 Activar</button>')}else toast('Modo Monge desactivado')}
+function activateMonk(){closeModal();document.querySelector('.hdr').style.display='none';document.querySelector('.score-bar').style.display='none';document.querySelector('.nav').style.display='none';document.querySelector('.sunset').style.display='none';document.querySelector('.tabs').style.display='none';document.getElementById('ct').style.padding='20px 16px';toast('🧘 Modo Monge activo. Toca fora do timer para sair');document.getElementById('ct').addEventListener('click',function h(e){if(!e.target.closest('.card')){document.querySelector('.hdr').style.display='';document.querySelector('.score-bar').style.display='';document.querySelector('.nav').style.display='';document.getElementById('ct').style.padding='';go(S.page);document.getElementById('ct').removeEventListener('click',h);}},true)}
+
+// ══ FLOWTIME ══
+let ftRunning=false,ftStart=0,ftTotal=0,ftInt=null,ftDistracts=0;
+function renderFlowtime(){document.getElementById('tb').innerHTML=`<div class="card fu"><div class="ct2">🌊 FLOWTIME — Trabalha sem parar até sentir cansaço</div><div class="ibox sci" style="margin-bottom:12px;font-size:.75em">Alternativa ao Pomodoro. Começas quando quiseres e paras quando sentes que o foco diminuiu. Registas o tempo. Pausa = 20% do tempo trabalhado.</div><div style="font-family:Fraunces,serif;font-size:2.2em;text-align:center;color:var(--ac);margin:10px 0" id="ftDisp">00:00</div><div style="text-align:center;font-size:.7em;color:var(--tx3);margin-bottom:10px">Total hoje: ${Math.floor(ftTotal/60)}min · Distrações: ${ftDistracts}</div><div class="btns"><button class="btn ${ftRunning?'':'ac'}" onclick="ftToggle()">${ftRunning?'⏸ Pausar':'▶ Iniciar'}</button><button class="btn" onclick="ftStop()">⏹ Terminar sessão</button></div></div><div class="card fu"><div class="ct2">⏱ 52/17 — Ritmo de Top Performers</div><div class="cd">52min de foco + 17min de pausa. Padrão identificado pela DeskTime como o dos trabalhadores mais produtivos.</div><div class="btns"><button class="btn ac" onclick="start5217(52,'foco')" id="5217btn">▶ Iniciar 52min</button></div><div style="text-align:center;font-family:Fraunces,serif;font-size:1.8em;color:var(--ac);margin:10px 0;height:40px" id="5217tm"></div></div>`; if(ftRunning)updFT()}
+let ftTimer=0,ftInt2=null;
+function ftToggle(){if(ftRunning){clearInterval(ftInt);ftRunning=false;ftTotal+=Math.floor((Date.now()-ftStart)/1000);renderFlowtime()}else{ftStart=Date.now();ftRunning=true;ftInt=setInterval(updFT,1000);renderFlowtime()}}
+function updFT(){const el=document.getElementById('ftDisp');if(!el)return;const elapsed=Math.floor((Date.now()-ftStart)/1000);el.textContent=fmt(elapsed)}
+function ftStop(){clearInterval(ftInt);const elapsed=Math.floor((Date.now()-ftStart)/1000);ftTotal+=elapsed;ftRunning=false;const pause=Math.round(elapsed/60*0.2);S.flowSessions=S.flowSessions||[];S.flowSessions.push({date:tkey(),dur:elapsed});save();addXP(Math.round(elapsed/60*2));toast(`✅ ${Math.floor(elapsed/60)}min de flow! Pausa sugerida: ${pause}min`);renderFlowtime()}
+let int5217=null;
+function start5217(sec,mode){clearInterval(int5217);let t=sec*60;const b=document.getElementById('5217btn'),d=document.getElementById('5217tm');if(b)b.textContent='Em curso...';int5217=setInterval(()=>{t--;if(d)d.textContent=fmt(t);if(t<=0){clearInterval(int5217);snd(660,880,.3);if(navigator.vibrate)navigator.vibrate([100,50,100]);if(mode==='foco'){addXP(30);toast('✅ 52min! Pausa de 17min');start5217(17,'pausa')}else{toast('▶ Pausa terminou! Iniciar foco.');const b2=document.getElementById('5217btn');if(b2)b2.textContent='▶ Iniciar 52min'}}},1000)}
+
+// ══ NSDR ══
+let nsdrInt=null,nsdrLeft=0;
+function renderNSDR(){document.getElementById('tb').innerHTML=`<div class="card fu"><div class="ct2">💫 NSDR — Non-Sleep Deep Rest</div><div class="ibox sci" style="margin-bottom:12px">Protocolo de Andrew Huberman. 20min de estado entre vigília e sono restaura dopamina, consolida aprendizagem e recupera o sistema nervoso. Melhor após treino ou estudo intenso.</div><div style="text-align:center;font-family:Fraunces,serif;font-size:2.2em;color:var(--pu);margin:10px 0;height:44px" id="nsdrTm">${nsdrLeft?fmt(nsdrLeft):''}</div><div class="cd" id="nsdrLbl">${nsdrLeft?'Em curso...':'Deita-te, fecha os olhos. Concentra-te no corpo. Não forces o sono.'}</div><div class="btns">${[10,20,30].map(m=>`<button class="btn ${nsdrLeft?'':'ac'}" onclick="startNSDR(${m})">${m}min</button>`).join('')}${nsdrLeft?`<button class="btn red" onclick="stopNSDR()">⏹</button>`:''}</div></div>`}
+function startNSDR(min){if(nsdrInt)clearInterval(nsdrInt);nsdrLeft=min*60;snd(196,196,.8);S.nsdrCount=(S.nsdrCount||0)+1;S.medLastDate=tkey();S.medTotal=(S.medTotal||0)+min;save();nsdrInt=setInterval(()=>{nsdrLeft--;const el=document.getElementById('nsdrTm');if(el)el.textContent=fmt(nsdrLeft);if(nsdrLeft<=0){clearInterval(nsdrInt);nsdrInt=null;snd(392,392,1);if(navigator.vibrate)navigator.vibrate([300,100,300,100,300]);addXP(25);toast('💫 NSDR completo! +25 XP');renderNSDR()}},1000);renderNSDR()}
+function stopNSDR(){clearInterval(nsdrInt);nsdrInt=null;nsdrLeft=0;renderNSDR()}
 
 // STOPWATCHES
 function renderSWs(){let h=`<button class="btn ac" style="width:100%;text-align:center;margin-bottom:10px" onclick="addSW()">+ Adicionar cronómetro</button>`;if(!sws.length)h+=`<div class="card" style="text-align:center;color:var(--tx3);font-size:.82em;padding:20px">Podes ter vários cronómetros simultâneos!</div>`;sws.forEach((sw,idx)=>{h+=`<div class="sw-box fu"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div class="sw-time" id="swt${idx}">${fmtSw(sw.ms)}</div><div style="display:flex;gap:5px"><button class="btn" style="font-size:.65em;padding:5px 7px" onclick="swLap(${idx})" ${!sw.running?'disabled style="opacity:.4"':''}>Volta</button><button class="btn ${sw.running?'ac':''}" style="font-size:.65em;padding:5px 9px" onclick="swToggle(${idx})">${sw.running?'⏸':'▶'}</button><button class="btn" style="font-size:.65em;padding:5px 7px" onclick="swReset(${idx})">↺</button><button class="btn red" style="font-size:.65em;padding:5px 7px" onclick="swRemove(${idx})">✕</button></div></div>${sw.laps.length?`<div style="max-height:90px;overflow-y:auto">${sw.laps.map((l,i)=>`<div class="lap-item"><span>Volta ${i+1}</span><span>${fmtSw(l)}</span></div>`).join('')}</div>`:''}</div>`});document.getElementById('tb').innerHTML=h}
@@ -729,7 +959,7 @@ function renderBreath(){document.getElementById('tb').innerHTML=`<div class="car
 function startBreath(durs,label){bDurs=durs;if(breathOn){clearInterval(breathInt);breathInt=null;breathOn=false}breathOn=true;bPhIdx=0;bPhTime=0;runBreath();const bb=document.getElementById('bbtn');if(bb)bb.textContent='⏹ Parar'}
 function breathToggle(){if(breathOn){clearInterval(breathInt);breathInt=null;breathOn=false;const bc=document.getElementById('bcirc');if(bc){bc.textContent='Escolhe';bc.style.transform='scale(1)'}const p=document.getElementById('bph'),ct=document.getElementById('bct');if(p)p.textContent='';if(ct)ct.textContent='';const bb=document.getElementById('bbtn');if(bb)bb.textContent='▶ Iniciar';return}breathOn=true;runBreath();const bb=document.getElementById('bbtn');if(bb)bb.textContent='⏹ Parar'}
 function runBreath(){const N=['Inspire','Segure','Expire','Pause'];clearInterval(breathInt);breathInt=setInterval(()=>{bPhTime++;const dur=bDurs[bPhIdx]||0;if(dur===0){bPhTime=0;bPhIdx=(bPhIdx+1)%4;if(bPhIdx===0){S.breathT++;save()}return}const rem=dur-bPhTime+1;const bc=document.getElementById('bcirc'),bph=document.getElementById('bph'),bct=document.getElementById('bct');if(bph)bph.textContent=N[bPhIdx].toUpperCase();if(bct)bct.textContent=rem>0?rem:'';if(bc){const prog=bPhTime/dur;const sc=bPhIdx===0?1+prog*.28:1.28-prog*.28;bc.style.transform=`scale(${sc})`;bc.textContent=N[bPhIdx]}if(bPhTime>=dur){bPhTime=0;bPhIdx=(bPhIdx+1)%4;if(bPhIdx===0){S.breathT++;save()}}},1000)}
-function startMed(min){if(medInt){clearInterval(medInt);medInt=null}medLeft=min*60;const d=document.getElementById('medD'),lbl=document.getElementById('medLbl');if(d)d.textContent=fmt(medLeft);if(lbl)lbl.textContent='Meditando...';snd(528,528,.5);medInt=setInterval(()=>{medLeft--;if(d)d.textContent=fmt(medLeft);if(medLeft<=0){clearInterval(medInt);medInt=null;if(d)d.textContent='🙏';if(lbl)lbl.textContent='Concluído! +20 XP';snd(528,440,.8);if(navigator.vibrate)navigator.vibrate([200]);addXP(20);toast('🧘 Meditação concluída!')}},1000)}
+function startMed(min){if(medInt){clearInterval(medInt);medInt=null}medLeft=min*60;const d=document.getElementById('medD'),lbl=document.getElementById('medLbl');if(d)d.textContent=fmt(medLeft);if(lbl)lbl.textContent='Meditando...';snd(528,528,.5);medInt=setInterval(()=>{medLeft--;if(d)d.textContent=fmt(medLeft);if(medLeft<=0){clearInterval(medInt);medInt=null;if(d)d.textContent='🙏';if(lbl)lbl.textContent='Concluído! +20 XP';snd(528,440,.8);if(navigator.vibrate)navigator.vibrate([200]);S.medTotal=(S.medTotal||0)+min;S.medLastDate=tkey();save();addXP(20);checkAch();toast('🧘 Meditação concluída!')}},1000)}
 
 // DEEP WORK TIMER (90min blocks)
 function renderDeep(){document.getElementById('tb').innerHTML=`<div class="card fu"><div class="ct2">🌊 FOCO PROFUNDO — Blocos de 90min</div><div class="ibox sci" style="margin-bottom:12px">Blocos de 90 minutos seguem o ritmo ultradiano natural do cérebro. É o estado de "flow" — onde a produtividade máxima acontece.</div><div class="bigring ${deepMode?'run':''}" id="deepRing" style="${deepMode?'border-color:var(--pu);box-shadow:0 0 22px #a07fe830':''}"><div style="font-family:Fraunces,serif;font-size:1.75em;font-weight:300;letter-spacing:-1px" id="deepTm">${fmt(deepLeft||90*60)}</div><div style="font-size:.6em;color:var(--tx3);letter-spacing:2px;text-transform:uppercase;margin-top:2px">FOCO PROFUNDO</div></div><div class="btns">${deepMode?`<button class="btn" onclick="stopDeep()">⏹ Parar</button>`:`<button class="btn ac" onclick="startDeep(90)">▶ 90min</button><button class="btn" onclick="startDeep(60)">60min</button><button class="btn" onclick="startDeep(45)">45min</button>`}</div></div><div class="ibox tip"><strong>Regras do foco profundo:</strong><br>· Celular desligado ou modo avião<br>· Porta fechada / headphones<br>· Uma única tarefa<br>· Sem pausas — só ao fim do bloco<br>· Água na mesa antes de começar</div>`}
@@ -759,7 +989,7 @@ function saveFN(){const v=document.getElementById('fnArea')?.value||'';S.focusNo
 function clearFN(){if(confirm('Limpar notas atuais?')){S.focusNotes='';save();renderFocusNotes()}}
 
 // GAMES
-function renderGames(){document.getElementById('tb').innerHTML=`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">${[['stroop','🎨 Stroop'],['mem','🧩 Memória'],['react','⚡ Reação'],['wm','🔤 Palavras']].map(([k,lb])=>`<button class="btn ${_gt===k?'ac':''}" style="font-size:.7em" onclick="_gt='${k}';renderGames()">${lb}</button>`).join('')}</div><div id="gb"></div>`;if(_gt==='stroop')renderStroop();else if(_gt==='mem')renderMem();else if(_gt==='react')renderReact();else if(_gt==='wm')renderWM()}
+function renderGames(){document.getElementById('tb').innerHTML=`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">${[['stroop','🎨 Stroop'],['mem','🧩 Memória'],['react','⚡ Reação'],['wm','🔤 Palavras'],['nback','🔢 N-Back'],['arith','➕ Aritmética'],['spatial','📐 Espacial']].map(([k,lb])=>`<button class="btn ${_gt===k?'ac':''}" style="font-size:.7em;white-space:nowrap;flex-shrink:0" onclick="_gt='${k}';renderGames()">${lb}</button>`).join('')}</div><div id="gb"></div>`;if(_gt==='stroop')renderStroop();else if(_gt==='mem')renderMem();else if(_gt==='react')renderReact();else if(_gt==='wm')renderWM();else if(_gt==='nback')renderNBack();else if(_gt==='arith')renderArith();else if(_gt==='spatial')renderSpatial()}
 
 function renderStroop(){document.getElementById('gb').innerHTML=`<div class="card"><div class="ct2">🎨 STROOP — Recorde: ${S.stroopR}</div><div class="cd">Seleciona a <strong>COR em que a palavra está escrita</strong>, não o que ela diz. Testa o córtex pré-frontal.</div><div id="sa">${sIdle()}</div></div><div class="ibox tip"><strong>Como jogar:</strong> Vês "AZUL" escrito em <span style="color:#e05050">VERMELHO</span>? Toca em VERMELHO. Ignora o texto — isso activa e treina o CPF!</div>`}
 function sIdle(){return`<div class="btns"><button class="btn ac" onclick="startStroop()">▶ Iniciar (30s)</button></div>${S.stroopR>0?`<div style="text-align:center;font-size:.78em;color:var(--tx3);margin-top:8px">Recorde: ${S.stroopR}</div>`:''}`}
@@ -962,7 +1192,97 @@ function toggleAmb(id){
   const btn=document.getElementById('ab-'+id);if(btn)btn.classList.toggle('on',!!ambNodes[id]);
 }
 function setVol(v){ambVol=parseFloat(v);const ctx2=ambCtx;if(!ctx2)return;Object.values(ambNodes).forEach(nd=>{try{nd.gain.gain.setTargetAtTime(ambVol,ctx2.currentTime,.1)}catch(e){}})}
+// NEW SOUNDS
+AMB.river=(ctx,vol)=>{
+  const n={srcs:[],oscs:[],gain:null,_ivs:[]};
+  const masterG=ctx.createGain();masterG.gain.value=vol*0.55;masterG.connect(ctx.destination);
+  const src=ctx.createBufferSource();src.buffer=mkWhite(ctx,4);src.loop=true;
+  const bp=ctx.createBiquadFilter();bp.type='bandpass';bp.frequency.value=1800;bp.Q.value=0.6;
+  const g=ctx.createGain();g.gain.value=0.6;src.connect(bp);bp.connect(g);g.connect(masterG);src.start();
+  n.srcs=[src];n.oscs=[];n.gain=masterG;
+  // Bubbles: short random pops at 200-600Hz
+  const bubble=()=>{if(!ambNodes.river)return;try{
+    const o=ctx.createOscillator(),og=ctx.createGain();o.type='sine';
+    const f=200+Math.random()*400;o.frequency.setValueAtTime(f,ctx.currentTime);o.frequency.exponentialRampToValueAtTime(f*0.5,ctx.currentTime+0.08);
+    og.gain.setValueAtTime(vol*0.04,ctx.currentTime);og.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.08);
+    o.connect(og);og.connect(ctx.destination);o.start();o.stop(ctx.currentTime+0.08);
+  }catch(e){}setTimeout(bubble,80+Math.random()*200)};
+  setTimeout(bubble,200);n._ivs=[];return n;
+};
+AMB.wind=(ctx,vol)=>{
+  const n={srcs:[],oscs:[],gain:null,_ivs:[]};
+  const masterG=ctx.createGain();masterG.gain.value=vol*0.5;masterG.connect(ctx.destination);
+  const src=ctx.createBufferSource();src.buffer=mkPink(ctx,4);src.loop=true;
+  const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=600;
+  const hp=ctx.createBiquadFilter();hp.type='highpass';hp.frequency.value=80;
+  const g=ctx.createGain();g.gain.value=0.5;src.connect(lp);lp.connect(hp);hp.connect(g);g.connect(masterG);src.start();
+  // LFO for wind gusts
+  const lfo=ctx.createOscillator();lfo.frequency.value=0.15;lfo.type='sine';
+  const lg=ctx.createGain();lg.gain.value=vol*0.4;lfo.connect(lg);lg.connect(masterG.gain);lfo.start();
+  n.srcs=[src];n.oscs=[lfo];n.gain=masterG;n._ivs=[];return n;
+};
+AMB.bowl=(ctx,vol)=>{
+  const n={srcs:[],oscs:[],gain:null,_ivs:[]};
+  const masterG=ctx.createGain();masterG.gain.value=vol*0.35;masterG.connect(ctx.destination);
+  const strike=()=>{if(!ambNodes.bowl)return;try{
+    const freqs=[196,392,588,784];// G3 harmonics
+    freqs.forEach((f,i)=>{
+      const o=ctx.createOscillator(),og=ctx.createGain();o.type='sine';o.frequency.value=f;
+      const dur=4+Math.random()*3;
+      og.gain.setValueAtTime(vol*(0.3/(i+1)),ctx.currentTime);og.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+dur);
+      const vib=ctx.createOscillator();vib.frequency.value=5.5;const vg=ctx.createGain();vg.gain.value=1.5;vib.connect(vg);vg.connect(o.frequency);vib.start();
+      o.connect(og);og.connect(masterG);o.start();o.stop(ctx.currentTime+dur);vib.stop(ctx.currentTime+dur);
+    });
+  }catch(e){}setTimeout(strike,8000+Math.random()*12000)};
+  strike();n.srcs=[];n.oscs=[];n.gain=masterG;n._ivs=[];return n;
+};
+AMB.binaural40=(ctx,vol)=>{
+  const n={srcs:[],oscs:[],gain:null,_ivs:[]};
+  // Gamma 40Hz binaural: left 200Hz, right 240Hz
+  const masterG=ctx.createGain();masterG.gain.value=vol*0.25;masterG.connect(ctx.destination);
+  const merger=ctx.createChannelMerger(2);merger.connect(masterG);
+  const oL=ctx.createOscillator();oL.frequency.value=200;oL.type='sine';
+  const oR=ctx.createOscillator();oR.frequency.value=240;oR.type='sine';
+  const gL=ctx.createGain();gL.gain.value=0.8;const gR=ctx.createGain();gR.gain.value=0.8;
+  oL.connect(gL);gL.connect(merger,0,0);oR.connect(gR);gR.connect(merger,0,1);
+  oL.start();oR.start();n.srcs=[];n.oscs=[oL,oR];n.gain=masterG;n._ivs=[];return n;
+};
+
+let sndTimerInt=null;
+function setPreset(ids){stopAllAmb();ids.forEach(id=>setTimeout(()=>toggleAmb(id),100));toast('🎵 Preset ativado')}
+function startSndTimer(){const v=parseInt(document.getElementById('sndTimer')?.value)||0;if(!v){toast('Seleciona um tempo!');return}if(sndTimerInt)clearInterval(sndTimerInt);let t=v;const lbl=document.getElementById('sndTmLbl');sndTimerInt=setInterval(()=>{t--;if(lbl)lbl.textContent=fmt(t);if(t<=0){clearInterval(sndTimerInt);sndTimerInt=null;stopAllAmb();if(lbl)lbl.textContent='';toast('🔇 Sons pausados')}},1000);toast('⏱ Sons param em '+fmt(v))}
+
 function stopAllAmb(){Object.keys(ambNodes).forEach(id=>{const nd=ambNodes[id];nd?._ivs?.forEach(iv=>clearInterval(iv));try{nd?.srcs?.forEach(s=>s.stop());nd?.oscs?.forEach(o=>o.stop())}catch(e){}delete ambNodes[id]});document.querySelectorAll('[id^=ab-]').forEach(b=>b.classList.remove('on'))}
+
+// ════ N-BACK TASK ════
+let nbSeq=[],nbPos=0,nbN=2,nbPhase='idle',nbScore=0,nbTotal=0,nbInt=null;
+const NBACKL='ABCDEFHKLMNPQRST'.split('');
+function renderNBack(){document.getElementById('gb').innerHTML=`<div class="card"><div class="ct2">🔢 N-BACK — Nível: ${S.nbackLevel||1}-Back · Recorde: ${S.nbackScore||0}</div><div class="ibox sci" style="margin-bottom:10px;font-size:.75em">Quando a letra atual = a de ${nbN} posições atrás, toca Sim. O jogo cognitivo mais validado para memória de trabalho e QI fluido.</div><div id="nba">${nbIdle()}</div></div>`}
+function nbIdle(){nbN=S.nbackLevel||2;return`<div style="text-align:center;margin:12px 0"><div style="font-size:.72em;color:var(--tx3);margin-bottom:6px">N = ${nbN}</div><div style="font-family:Fraunces,serif;font-size:2.5em;color:var(--tx3)">—</div></div><div class="btns"><button class="btn" onclick="nbN=Math.max(1,nbN-1);S.nbackLevel=nbN;save();document.getElementById('nba').innerHTML=nbIdle()">N-</button><button class="btn ac" onclick="startNBack()">▶ Iniciar (20 trials)</button><button class="btn" onclick="nbN=Math.min(7,nbN+1);S.nbackLevel=nbN;save();document.getElementById('nba').innerHTML=nbIdle()">N+</button></div>`}
+function startNBack(){nbSeq=[];nbPos=0;nbScore=0;nbTotal=0;nbPhase='running';for(let i=0;i<20+nbN;i++)nbSeq.push(NBACKL[~~(Math.random()*NBACKL.length)]);runNBack()}
+function runNBack(){if(nbPos>=nbSeq.length){const pct=Math.round(nbScore/nbTotal*100);if(nbScore>S.nbackScore){S.nbackScore=nbScore;save();checkAch()}addXP(nbScore*3);const na=document.getElementById('nba');if(na)na.innerHTML=`<div style="text-align:center;padding:14px"><div style="font-size:1.5em;font-family:Fraunces,serif;color:var(--ac)">${pct}%</div><div style="font-size:.82em;color:var(--tx2);margin-top:4px">${nbScore}/${nbTotal} corretos · +${nbScore*3} XP</div><button class="btn ac" style="margin-top:8px" onclick="startNBack()">Jogar de novo</button></div>`;return}
+const na=document.getElementById('nba');if(!na)return;const let2=nbSeq[nbPos];const isTarget=nbPos>=nbN&&nbSeq[nbPos]===nbSeq[nbPos-nbN];if(nbPos>=nbN)nbTotal++;
+na.innerHTML=`<div style="text-align:center;margin-bottom:10px"><div style="font-size:.65em;color:var(--tx3)">Trial ${Math.max(0,nbPos-nbN+1)}/${nbTotal+Math.max(0,nbN-nbPos)} · Score: ${nbScore}</div><div style="font-family:Fraunces,serif;font-size:3em;color:var(--ac);margin:10px 0">${let2}</div></div><div class="btns"><button class="btn red" style="flex:1;padding:12px" onclick="nbAns(false,${isTarget})">✕ Não</button><button class="btn ac" style="flex:1;padding:12px" onclick="nbAns(true,${isTarget})">✓ Sim (${nbN}-back)</button></div>`;
+nbInt=setTimeout(()=>{nbPos++;runNBack()},3000)}
+function nbAns(said,actual){clearTimeout(nbInt);if(nbPos>=nbN){if(said===actual){nbScore++;snd(700,900,.1)}else snd(300,200,.1)}nbPos++;runNBack()}
+
+// ════ ARITHMETIC SPRINT ════
+let arInt=null,arTime=0,arScore=0,arQ=null;
+function renderArith(){document.getElementById('gb').innerHTML=`<div class="card"><div class="ct2">➕ SPRINT ARITMÉTICO</div><div class="cd">Responde o máximo de cálculos em 60 segundos. Treina velocidade de processamento.</div><div id="ara">${arIdle()}</div></div>`}
+function arIdle(){return`<div class="btns"><button class="btn" onclick="startArith('easy')">Fácil</button><button class="btn ac" onclick="startArith('med')">Médio</button><button class="btn" onclick="startArith('hard')">Difícil</button></div>`}
+function genQ(diff){let a,b,op,ans;const ops=['+','-','×'];op=ops[diff==='easy'?~~(Math.random()*2):diff==='med'?~~(Math.random()*3):~~(Math.random()*3)];if(diff==='easy'){a=~~(Math.random()*20)+1;b=~~(Math.random()*20)+1}else if(diff==='med'){a=~~(Math.random()*50)+1;b=~~(Math.random()*50)+1}else{a=~~(Math.random()*100)+1;b=~~(Math.random()*100)+1};if(op==='+')ans=a+b;else if(op==='-'){ans=a-b}else{a=~~(Math.random()*12)+1;b=~~(Math.random()*12)+1;ans=a*b;op='×'};return{q:`${a} ${op} ${b} = ?`,ans,diff}}
+function startArith(diff){arTime=60;arScore=0;arQ=genQ(diff);const aa=document.getElementById('ara');if(!aa)return;const render=()=>{if(!document.getElementById('ara'))return;document.getElementById('ara').innerHTML=`<div style="text-align:center;font-size:.7em;color:var(--tx3);margin-bottom:6px">⏱ ${arTime}s · Score: ${arScore}</div><div style="font-family:Fraunces,serif;font-size:1.8em;text-align:center;margin:10px 0;color:var(--ac)">${arQ.q}</div><input id="arAns" type="number" placeholder="Resposta..." style="text-align:center;font-size:1.1em;margin-bottom:7px" onkeydown="if(event.key==='Enter')checkArith('${diff}')"/><button class="sav full" onclick="checkArith('${diff}')">Confirmar</button>`};render();arInt=setInterval(()=>{arTime--;const tEl=document.getElementById('arAns');if(!tEl||arTime<=0){clearInterval(arInt);arInt=null;addXP(arScore*4);const aa2=document.getElementById('ara');if(aa2)aa2.innerHTML=`<div style="text-align:center;padding:14px"><div style="font-size:1.5em;font-family:Fraunces,serif;color:var(--ac)">${arScore} pts</div><div style="font-size:.78em;color:var(--tx2);margin-top:4px">+${arScore*4} XP</div><button class="btn ac" style="margin-top:8px" onclick="startArith('${diff}')">Jogar de novo</button></div>`}else{// update timer display
+const tm=document.querySelector('#ara .\sm');if(tm){}const el=document.getElementById('ara');if(el){const d=el.querySelector('div');if(d)d.textContent=`⏱ ${arTime}s · Score: ${arScore}`}}},1000)}
+function checkArith(diff){const v=parseInt(document.getElementById('arAns')?.value);if(isNaN(v))return;if(v===arQ.ans){arScore++;snd(700,900,.1)}else{snd(300,200,.1);const aa=document.getElementById('ara');if(aa){const txt=aa.querySelector('.font-fraunces');if(txt)txt.style.color='var(--rose)'}}arQ=genQ(diff);const aa=document.getElementById('ara');if(aa){aa.querySelector('div').textContent=`⏱ ${arTime}s · Score: ${arScore}`;const fnt=aa.querySelector('[style*="Fraunces"]');if(fnt){fnt.textContent=arQ.q;fnt.style.color='var(--ac)'}const inp=aa.querySelector('input');if(inp){inp.value='';inp.focus()}}}
+
+// ════ SPATIAL MEMORY ════
+let spGrid=[],spSel=[],spN=4,spPhase='idle';
+function renderSpatial(){document.getElementById('gb').innerHTML=`<div class="card"><div class="ct2">📐 MEMÓRIA ESPACIAL</div><div class="cd">Memoriza as posições coloridas, depois toca nas células corretas. Treina o hipocampo.</div><div id="spa">${spIdle()}</div></div>`}
+function spIdle(){return`<div class="btns"><button class="btn ac" onclick="startSpatial()">▶ Começar (${spN} células)</button></div>`}
+function startSpatial(){spPhase='show';spGrid=[];spSel=[];const total=16;const idxs=[];while(idxs.length<spN){const r=~~(Math.random()*total);if(!idxs.includes(r))idxs.push(r)}spGrid=idxs;renderSpGrid('show')}
+function renderSpGrid(phase){const sa=document.getElementById('spa');if(!sa)return;const cells=[...Array(16)].map((_,i)=>{const isTarget=spGrid.includes(i);const hit=spSel.includes(i);const show=(phase==='show'&&isTarget)||(phase==='check'&&hit&&isTarget)||(phase==='fail'&&hit&&!isTarget);const clr=phase==='check'&&hit&&isTarget?'#4FC3A140':phase==='fail'&&hit&&!isTarget?'#e0707040':phase==='show'&&isTarget?'#4FC3A140':'transparent';return`<div style="aspect-ratio:1;border-radius:8px;border:2px solid var(--bd);background:${clr||'var(--bg3)'};cursor:${phase==='input'?'pointer':'default'};transition:background .2s" onclick="${phase==='input'?`spTap(${i})`:''}"></div>`}).join('');sa.innerHTML=`<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;max-width:220px;margin:0 auto 10px">${cells}</div><div style="text-align:center;font-size:.78em;color:var(--tx3)">${phase==='show'?'Memoriza...':phase==='input'?`Seleciona ${spN} células (${spSel.length}/${spN})`:phase==='check'?'✅ Correto!':phase==='fail'?'❌ Errado!':''}</div>`;
+if(phase==='show')setTimeout(()=>{spPhase='input';renderSpGrid('input')},2000)}
+function spTap(i){if(spPhase!=='input')return;if(spSel.includes(i)){spSel=spSel.filter(x=>x!==i)}else spSel.push(i);if(spSel.length===spN){const correct=spSel.every(i=>spGrid.includes(i));if(correct){spPhase='check';snd(700,900,.2);addXP(spN*5);spN=Math.min(10,spN+1);renderSpGrid('check');setTimeout(()=>{const sa=document.getElementById('spa');if(sa){sa.innerHTML=`<div style="text-align:center;font-size:.82em;color:var(--ac);margin:8px 0">+${spN*5} XP · Nível ${spN-1}!</div>`;const btn=document.createElement('button');btn.className='btn ac';btn.textContent='Próximo nível';btn.onclick=startSpatial;sa.appendChild(btn)}},600)}else{spPhase='fail';snd(300,200,.2);renderSpGrid('fail');setTimeout(()=>{spN=Math.max(4,spN-1);const sa=document.getElementById('spa');if(sa)sa.innerHTML=spIdle()},1500)}}else renderSpGrid('input')}
 
 // ════ HEALTH ════
 let convIdx=Math.floor(Math.random()*CONV.length);
@@ -970,10 +1290,19 @@ function renderHealth(){const tk=tkey(),sl=S.sleep[tk]||{h:0,q:0},wt=S.water[tk]
 document.getElementById('ct').innerHTML=`
 <div class="card fu"><div class="ct2">😴 Sono</div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0">
-<div><label style="font-size:.68em;color:var(--tx3);display:block;margin-bottom:4px">Horas dormidas</label><input type="number" min="0" max="12" step=".5" value="${sl.h}" oninput="setSleep('h',parseFloat(this.value)||0,'${tk}')"/></div>
+<div><label style="font-size:.68em;color:var(--tx3);display:block;margin-bottom:4px">Hora de deitar</label><input type="time" value="${sl.bedtime||''}" oninput="setSleepTime('bedtime',this.value,'${tk}')"/></div>
+<div><label style="font-size:.68em;color:var(--tx3);display:block;margin-bottom:4px">Hora de acordar</label><input type="time" value="${sl.waketime||''}" oninput="setSleepTime('waketime',this.value,'${tk}')"/></div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px">
+<div><label style="font-size:.68em;color:var(--tx3);display:block;margin-bottom:4px">Ou horas direto</label><input type="number" min="0" max="12" step=".5" value="${sl.h}" oninput="setSleep('h',parseFloat(this.value)||0,'${tk}')"/></div>
 <div><label style="font-size:.68em;color:var(--tx3);display:block;margin-bottom:4px">Qualidade (1-5 ⭐)</label><div style="display:flex;gap:3px;margin-top:7px">${[1,2,3,4,5].map(i=>`<span id="star-${i}" style="font-size:1.2em;cursor:pointer;opacity:${sl.q>=i?1:.22};transition:opacity .2s" onclick="setSleep('q',${i},'${tk}')">⭐</span>`).join('')}</div></div>
 </div>
-<div style="font-size:.72em;color:${sl.h>=7?'var(--ac)':'var(--tx3)'}">${sl.h>0?sl.h+'h · '+(sl.h>=7?'✓ Na meta':'⚠️ Abaixo das 7h'):''}</div></div>
+<div style="font-size:.72em;color:${sl.h>=7?'var(--ac)':'var(--tx3)'}">
+  ${sl.h>0?sl.h+'h · '+(sl.h>=(S.sleepGoal||8)?'✓ Na meta':'⚠️ '+Math.round(((S.sleepGoal||8)-(sl.h||0))*10)/10+'h abaixo'):''}
+  ${(()=>{const debt=calcSleepDebt();return debt>0?`<span style="color:var(--rose)"> · Dívida 7d: ${debt.toFixed(1)}h</span>`:'';})()}
+</div>
+${(()=>{if(!sl.waketime)return'';const rem=calcREM(sl.waketime);if(!rem.length)return'';return`<div class="ibox sci" style="margin-top:8px;font-size:.72em"><strong>⏰ Calculadora REM</strong> — Para acordar às ${sl.waketime}:<br>${rem.map(r=>`${r.sleep} → ${r.cycles} ciclos`).join(' · ')}</div>`})()}
+<button class="btn" style="margin-top:8px;font-size:.72em;width:100%" onclick="openPowernap()">💤 Powernap 20min</button></div>
 
 <div class="card fu"><div class="ct2">💧 Hidratação — ${wt}/8 copos</div>
 <div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin:10px 0">${[...Array(10)].map((_,i)=>`<span style="font-size:1.3em;cursor:pointer;opacity:${wt>i?1:.2};transition:opacity .15s" onclick="setWater(${i+1},'${tk}')">💧</span>`).join('')}</div>
@@ -984,12 +1313,13 @@ document.getElementById('ct').innerHTML=`
 <div style="font-size:.72em;color:var(--tx3);margin-top:8px;text-align:center">${Object.values(bf).filter(Boolean).length} alimentos hoje${Object.values(bf).filter(Boolean).length>=6?' 🌟':''}</div></div>
 
 <div class="card fu"><div class="ct2">🎵 Som Ambiente</div>
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px">
-${[['🌧','Chuva','rain'],['🌊','Oceano','ocean'],['🌲','Floresta','forest'],['☕','Café','cafe'],['🔥','Fogueira','fire'],['💪','Workout','workout'],['🎶','432Hz','hz432'],['🌌','Cosmos','cosmos']].map(([ic,lb,id])=>`<div id="ab-${id}" class="snd-btn ${ambNodes[id]?'on':''}" onclick="toggleAmb('${id}')"><div style="font-size:1.2em">${ic}</div><div style="font-size:.54em;color:var(--tx3);margin-top:2px">${lb}</div></div>`).join('')}
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:10px">
+${[['🌧','Chuva','rain'],['🌊','Oceano','ocean'],['🌲','Floresta','forest'],['☕','Café','cafe'],['🔥','Fogueira','fire'],['💪','Workout','workout'],['🎶','432Hz','hz432'],['🌌','Cosmos','cosmos'],['💧','Ribeiro','river'],['🌬','Vento','wind'],['🔔','Tibet Bowl','bowl'],['🧠','Binaural 40Hz','binaural40']].map(([ic,lb,id])=>`<div id="ab-${id}" class="snd-btn ${ambNodes[id]?'on':''}" onclick="toggleAmb('${id}')"><div style="font-size:1.2em">${ic}</div><div style="font-size:.54em;color:var(--tx3);margin-top:2px">${lb}</div></div>`).join('')}
 </div>
 <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span style="font-size:.7em">🔈</span><input type="range" style="flex:1;accent-color:var(--ac)" min="0" max="1" step=".05" value="${ambVol}" oninput="setVol(this.value)"/><span style="font-size:.7em">🔊</span></div>
 <button class="btn" style="width:100%;text-align:center;font-size:.72em" onclick="stopAllAmb()">⏹ Parar todos</button>
-<div class="ibox tip" style="margin-top:8px;font-size:.7em">💪 <strong>Workout:</strong> Batidas rítmicas a 128 BPM para treino. 🌌 <strong>Cosmos:</strong> Acorde etéreo para relaxamento profundo.</div></div>
+<div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:7px">${[['🎯 Foco',['rain','binaural40']],['🧘 Meditação',['bowl','cosmos']],['😴 Sono',['rain','hz432']],['💪 Treino',['workout']]].map(([lb,ids])=>`<button class="btn" style="font-size:.65em" onclick="setPreset(${JSON.stringify(ids)})">${lb}</button>`).join('')}</div>
+<div style="display:flex;align-items:center;gap:8px;margin-top:7px"><span style="font-size:.72em;color:var(--tx3)">⏱ Parar após:</span><select id="sndTimer" style="margin:0;font-size:.75em;width:90px"><option value="0">—</option><option value="1800">30min</option><option value="3600">1h</option><option value="5400">1h30</option></select><button class="btn" style="font-size:.68em;padding:5px 9px" onclick="startSndTimer()">Iniciar</button><span id="sndTmLbl" style="font-size:.68em;color:var(--ac)"></span></div></div>
 
 <div class="card fu"><div class="ct2">💬 Carta de Conversa</div>
 <div style="border-radius:var(--r);padding:16px;cursor:pointer;border:1px solid var(--bd);background:${CONV[convIdx].bg};min-height:90px" onclick="nextConv()">
@@ -998,9 +1328,34 @@ ${[['🌧','Chuva','rain'],['🌊','Oceano','ocean'],['🌲','Floresta','forest'
 <div style="font-size:.65em;color:var(--tx3);margin-top:6px">Toca para outra carta</div></div>
 <button class="sav full" onclick="logConv()">✓ Usei numa conversa real (+10 XP)</button></div>
 
+<div class="card fu"><div class="ct2">🧘 Meditação — ${S.medTotal||0}min total · ${S.nsdrCount||0} NSDR</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+${[3,5,10,15,20,30].map(m=>`<button class="btn" onclick="startMed(${m})">${m}min</button>`).join('')}
+<button class="btn" style="color:var(--pu)" onclick="_tt='nsdr';go('tools')">💫 NSDR →</button>
+</div>
+<div id="medD" style="text-align:center;font-size:2em;color:var(--ac);min-height:38px"></div>
+<div id="medLbl" style="text-align:center;font-size:.72em;color:var(--tx3)"></div></div>
+
 <div class="card fu"><div class="ct2">🌙 Wind-Down — ${wd.length}/${WIND.length}</div>
 <div class="ibox warn" style="margin-bottom:10px;font-size:.72em">📱 Nota: Para PDFs, deixa o celular em modo avião + brilho baixo + modo leitura. O problema são notificações e luz azul.</div>
 ${WIND.map((item,i)=>{const done=wd.includes(i);return`<div class="wdi" onclick="toggleWD(${i},'${tk}')"><div class="wdcb ${done?'on':''}">${done?'✓':''}</div><span style="font-size:.82em;color:${done?'var(--tx3)':'var(--tx2)'};${done?'text-decoration:line-through':''}">${item}</span></div>`}).join('')}</div>
+
+<div class="card fu"><div class="ct2">📚 Registo de Leitura</div>
+<div style="display:flex;gap:6px;margin-bottom:8px">
+  <input id="bookIn" placeholder="Título do livro..." style="margin:0;flex:2"/>
+  <input id="pagesIn" type="number" min="1" placeholder="pgs" style="width:65px;margin:0"/>
+  <button class="btn ac" style="padding:7px 10px;font-size:.72em;white-space:nowrap;flex-shrink:0" onclick="addReading()">+</button>
+</div>
+<div id="readList">${renderReadings()}</div></div>
+
+<div class="card fu"><div class="ct2">☀️ Exposição Solar</div>
+<div class="cd" style="font-size:.72em">Luz solar matinal regula o ritmo circadiano e produz vitamina D. Meta: 10-20min/dia.</div>
+<div style="display:flex;align-items:center;gap:10px;margin:8px 0">
+  <input type="range" min="0" max="60" step="5" value="${S.sunLog?.[tkey()]||0}" oninput="setSun(this.value,'${tkey()}')" style="flex:1;accent-color:var(--gold)"/>
+  <span style="font-size:.82em;color:var(--gold);min-width:40px">${S.sunLog?.[tkey()]||0}min</span>
+</div>
+${(S.sunLog?.[tkey()]||0)>=10?`<div style="font-size:.72em;color:var(--ac)">✓ Meta de sol atingida!</div>`:''}
+<div style="font-size:.68em;color:var(--tx3);margin-top:4px">Total esta semana: ${Object.keys(S.sunLog||{}).filter(k=>new Date(k)>new Date(Date.now()-7*86400000)).reduce((a,k)=>a+(S.sunLog[k]||0),0)}min</div></div>
 
 <div class="card fu"><div class="ct2">🌱 Log de Aprendizado — Revisão Espaçada</div>
 <div style="display:flex;gap:6px;margin-bottom:10px"><input id="learnIn" placeholder="Aprendi que..." style="margin:0"/><button class="btn ac" style="padding:7px 11px;white-space:nowrap;flex-shrink:0" onclick="addLearn()">+</button></div>
@@ -1013,6 +1368,25 @@ ${[0,1,2].map(i=>`<input placeholder="${i+1}. Sou grato por..." value="${gr[i]||
 <div class="card fu"><div class="ct2">➕ Hábitos Personalizados</div>
 ${(S.customHabits||[]).map((h,i)=>{const streak=S.habitStreak?.[h]||0;return`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd)"><span style="flex:1;font-size:.82em">${h}</span>${streak>0?`<span style="font-size:.68em;color:var(--gold)">🔥${streak}</span>`:''}<button onclick="delHabit(${i})" style="color:var(--rose);font-size:.9em;cursor:pointer;background:none">✕</button></div>`}).join('')}
 <div style="display:flex;gap:6px;margin-top:9px"><input id="habIn" placeholder="Nome do hábito" style="margin:0"/><button class="btn ac" style="padding:7px 11px;white-space:nowrap;flex-shrink:0" onclick="addHabit()">+</button></div></div>`}
+
+function setSleepTime(f,v,tk){
+  S.sleep[tk]=S.sleep[tk]||{h:0,q:0};
+  S.sleep[tk][f]=v;
+  // Auto-calculate hours from bedtime + waketime
+  if(S.sleep[tk].bedtime&&S.sleep[tk].waketime){
+    const[bh,bm]=S.sleep[tk].bedtime.split(':').map(Number);
+    const[wh,wm]=S.sleep[tk].waketime.split(':').map(Number);
+    let mins=(wh*60+wm)-(bh*60+bm);if(mins<0)mins+=24*60;
+    S.sleep[tk].h=Math.round(mins/6)/10; // round to .1h
+  }
+  save();updateUI();addXP(3);
+  const el=document.getElementById('renderHealthBtn');if(el)el.click();
+  renderHealth();
+}
+function openPowernap(){
+  let t=20*60;openModal('💤 Powernap — 20 minutos',`<div class="ibox sci" style="margin-bottom:10px;font-size:.78em">O powernap de 20min mantém-se no estágio N2 — descanso sem inércia (evita o estágio N3 profundo). Aprovado pela NASA (↑34% performance, ↑100% alerta).</div><div style="text-align:center;font-size:2.5em;font-family:Fraunces,serif;color:var(--ac);margin:14px 0" id="pnTm">20:00</div><div class="btns"><button class="btn ac" onclick="startPNTimer()">▶ Começar</button></div>`)}
+let pnInt=null;
+function startPNTimer(){pnInt&&clearInterval(pnInt);let t=20*60;S.powernapCount=(S.powernapCount||0)+1;save();pnInt=setInterval(()=>{t--;const el=document.getElementById('pnTm');if(el)el.textContent=fmt(t);if(t<=0){clearInterval(pnInt);snd(528,528,.8);if(navigator.vibrate)navigator.vibrate([300,100,300]);closeModal();addXP(20);toast('✅ Powernap completo! +20 XP')}},1000)}
 
 function setSleep(f,v,tk){
   S.sleep[tk]=S.sleep[tk]||{h:0,q:0};
@@ -1038,8 +1412,20 @@ function setGrat(i,v,tk){const g=S.gratitude[tk]||['','',''];g[i]=v;S.gratitude[
 function saveGrat(tk){if(!(S.gratitude[tk]||[]).some(x=>x.trim())){toast('⚠️ Preenche!');return}save();checkAch();addXP(10);toast('🙏 Salvo!')}
 function addHabit(){const v=document.getElementById('habIn')?.value?.trim();if(!v)return;S.customHabits=S.customHabits||[];S.customHabits.push(v);save();renderHealth();toast('✅ Adicionado!')}
 function delHabit(i){S.customHabits.splice(i,1);save();renderHealth()}
+function renderReadings(){const tk=tkey();const r=S.readingLog?.[tk]||[];if(!r.length)return`<div style="font-size:.72em;color:var(--tx3)">Nenhuma leitura hoje</div>`;const tot=r.reduce((a,x)=>a+x.pages,0);return`<div style="font-size:.68em;color:var(--tx3);margin-bottom:4px">Hoje: ${tot} páginas</div>`+r.map(x=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bd);font-size:.78em;color:var(--tx2)"><span>${x.book}</span><span>${x.pages}p</span></div>`).join('')}
+function addReading(){const b=document.getElementById('bookIn')?.value?.trim(),p=parseInt(document.getElementById('pagesIn')?.value)||0;if(!b||!p)return;const tk=tkey();S.readingLog=S.readingLog||{};S.readingLog[tk]=S.readingLog[tk]||[];S.readingLog[tk].push({book:b,pages:p,time:ptTime()});save();addXP(p>=10?15:5);document.getElementById('bookIn').value='';document.getElementById('pagesIn').value='';const rl=document.getElementById('readList');if(rl)rl.innerHTML=renderReadings();toast('📚 +'+p+' páginas!')}
+function setSun(v,tk){S.sunLog=S.sunLog||{};S.sunLog[tk]=parseInt(v)||0;save();if(S.sunLog[tk]>=10)addXP(10);renderHealth()}
 
 // ════ AI COACH — Multi-provider ════
+// AI MODES
+const AI_MODES={
+  coach:{name:'Coach',icon:'💪',sys:'Você é um Coach de alto desempenho, direto e motivador. Foca em acção, estratégia e resultados. Usa dados do utilizador. Responde em PT-BR/PT-MZ.'},
+  terapeuta:{name:'Terapeuta',icon:'🧠',sys:'Você é um terapeuta cognitivo-comportamental empático e calmo. Explora pensamentos, emoções e padrões. Faz perguntas reflexivas. Responde em PT-BR/PT-MZ.'},
+  cientista:{name:'Cientista',icon:'🔬',sys:'Você é um neurocientista que explica mecanismos cerebrais de forma clara e fundamentada. Cita estudos, usa analogias. Responde em PT-BR/PT-MZ.'},
+  trainer:{name:'Trainer',icon:'🏋️',sys:'Você é um personal trainer especialista em calistenia e neurofitness. Foca em progressão, forma correcta e recuperação. Responde em PT-BR/PT-MZ.'},
+  filosofo:{name:'Filósofo',icon:'🏛️',sys:'Você é um filósofo estóico e existencialista que ajuda a reflectir sobre propósito, disciplina e vida boa. Usa Epicteto, Marcus Aurelius, Nietzsche. Responde em PT-BR/PT-MZ.'}
+};
+
 const PROVIDERS={
   anthropic:{name:'Anthropic Claude',model:'claude-sonnet-4-20250514',url:'https://api.anthropic.com/v1/messages',color:'#d4a853'},
   gemini:{name:'Google Gemini',model:'gemini-2.0-flash',url:'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',color:'#4FC3A1'},
@@ -1057,6 +1443,9 @@ document.getElementById('ct').innerHTML=`
   <div style="display:flex;gap:6px"><input id="apiKeyIn" type="password" placeholder="Cole aqui a tua chave..." value="${keys[p]||''}" style="margin:0;font-size:.8em"/><button class="btn ac" style="padding:7px 10px;font-size:.7em;white-space:nowrap;flex-shrink:0" onclick="saveApiKey()">💾</button></div>
   ${keys[p]?`<div style="font-size:.65em;color:var(--ac);margin-top:5px">✓ Chave guardada · ${p==='anthropic'?'console.anthropic.com':p==='gemini'?'aistudio.google.com':'platform.openai.com'}</div>`:``}
 </div>
+<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">
+  ${Object.entries(AI_MODES).map(([k,m])=>`<button class="btn ${(S.aiMode||'coach')===k?'ac':''}" style="font-size:.68em" onclick="S.aiMode='${k}';save();renderCoach()">${m.icon} ${m.name}</button>`).join('')}
+</div>
 <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:10px">
   ${[['📊 Análise semanal','Analisa o meu progresso desta semana e dá-me 3 recomendações específicas.'],['😴 Sono','Como posso melhorar a qualidade do meu sono com base nos meus dados?'],['💪 Treino','Avalia o meu plano de treino e sugere progressões realistas para a minha fase.'],['📚 Estudo','Como posso melhorar a minha forma de estudar? Quero aprender mais em menos tempo.'],['🎯 Foco','Estou com dificuldade de manter o foco. O que devo fazer baseado nos meus dados?'],['🔥 Motivação','Preciso de motivação para continuar. O que me dizes?']].map(([lb,q])=>`<button class="btn" style="font-size:.7em;padding:8px;text-align:left;height:auto;white-space:normal" onclick="quickAI('${q.replace(/'/g,"\\'")}'')">${lb}</button>`).join('')}
 </div>
@@ -1070,8 +1459,11 @@ function setProvider(id){S.aiProvider=id;save();renderCoach();toast('Provider: '
 function saveApiKey(){const k=document.getElementById('apiKeyIn')?.value?.trim();if(!k){toast('⚠️ Cola a chave!');return}S.apiKeys=S.apiKeys||{};S.apiKeys[S.aiProvider||'anthropic']=k;save();renderCoach();toast('✅ Chave guardada!')}
 function quickAI(q){const el=document.getElementById('aiIn');if(el)el.value=q;sendAI()}
 function renderChat(){if(!S.aiHistory?.length)return`<div style="text-align:center;color:var(--tx3);font-size:.78em;padding:20px 10px">Olá ${S.name||'amigo'}! Sou o teu Coach IA. Faz-me uma pergunta ou usa os atalhos acima.</div>`;return S.aiHistory.map(m=>m.role==='user'?`<div style="display:flex;justify-content:flex-end"><div class="user-bub">${m.content}</div></div>`:`<div style="display:flex;gap:7px;align-items:flex-start"><div class="ai-av">🧠</div><div class="ai-bub">${m.content.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>')}</div></div>`).join('')}
-function buildCtx(){const tk=tkey(),sl=S.sleep[tk]||{},wt=S.water[tk]||0,md=S.mood[tk],bf=S.brainFood[tk]||{};return`Utilizador: ${S.name||'Anónimo'} | Semana: ${S.view+1} | Streak: ${S.streak} dias | Brain Score: ${calcScore()} | Sono hoje: ${sl.h||'N/A'}h Q${sl.q||'N/A'}/5 | Água: ${wt}/8 | Humor: ${md!==undefined?MOODS[md]+' ('+MLBL[md]+')':'N/A'} | Brain food: ${Object.values(bf).filter(Boolean).length}/12 | Pomodoros: ${S.pomT} | Nível: ${S.level} | Desafios: ${(S.challenges||[]).join(', ')||'N/A'} | Objetivos: ${(S.goals||[]).join(', ')||'N/A'} | XP: ${S.xp} | Conquistas: ${S.unlocked?.length||0}/${ACH.length} | Hoje: ${new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'})}`}
-function getSysPr(){return`Você é o Coach IA do app Cérebro Saudável — um coach de desenvolvimento pessoal rigoroso, empático e baseado em ciência. Responda SEMPRE em Português de Moçambique/Brasil. Seja direto, prático e motivador. Use dados do utilizador para personalizar. Máx 280 palavras por resposta. Formato: texto natural com **negrito** para pontos-chave. Contexto do utilizador:\n${buildCtx()}`}
+function buildCtx(){const tk=tkey(),sl=S.sleep[tk]||{},wt=S.water[tk]||0,md=S.mood[tk],bf=S.brainFood[tk]||{};
+  const mode=AI_MODES[S.aiMode||'coach'];
+  const last7sleep=Object.keys(S.sleep||{}).sort().slice(-7).map(k=>`${k}: ${S.sleep[k].h||0}h`).join(', ');
+  const aiMem=(S.aiMemory||[]).slice(-5).map(m=>m.fact).join('; ');return`Utilizador: ${S.name||'Anónimo'} | Semana: ${S.view+1} | Streak: ${S.streak} dias | Brain Score: ${calcScore()} | Sono hoje: ${sl.h||'N/A'}h Q${sl.q||'N/A'}/5 | Água: ${wt}/8 | Humor: ${md!==undefined?MOODS[md]+' ('+MLBL[md]+')':'N/A'} | Brain food: ${Object.values(bf).filter(Boolean).length}/12 | Pomodoros: ${S.pomT} | Nível: ${S.level} | Desafios: ${(S.challenges||[]).join(', ')||'N/A'} | Objetivos: ${(S.goals||[]).join(', ')||'N/A'} | XP: ${S.xp} | Conquistas: ${S.unlocked?.length||0}/${ACH.length} | Hoje: ${new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'})}`}
+function getSysPr(){const mode=AI_MODES[S.aiMode||'coach'];const mem=buildCtx();return`${mode.sys}\n\nMáx 280 palavras. Formato natural com **negrito** para pontos-chave.\n\nMemória de longo prazo do utilizador: ${(S.aiMemory||[]).map(m=>m.fact).join('; ')||'Nenhuma ainda.'}\n\nContexto actual: ${buildCtx()}`}
 
 async function sendAI(){const msg=document.getElementById('aiIn')?.value?.trim();if(!msg)return;const p=S.aiProvider||'anthropic',key=(S.apiKeys||{})[p];if(!key){toast('⚠️ Cola a API Key acima!');return}const btn=document.getElementById('aiBtn');if(btn){btn.textContent='⏳';btn.disabled=true}S.aiHistory=S.aiHistory||[];S.aiHistory.push({role:'user',content:msg});const box=document.getElementById('chatBox');if(box){box.innerHTML=renderChat();const wait=document.createElement('div');wait.className='fu';wait.innerHTML=`<div style="display:flex;gap:7px;align-items:flex-start"><div class="ai-av">🧠</div><div class="ai-bub" style="display:flex;gap:4px;padding:12px"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div></div>`;box.appendChild(wait);box.scrollTop=box.scrollHeight}if(document.getElementById('aiIn'))document.getElementById('aiIn').value='';
 try{let reply='';
@@ -1086,7 +1478,18 @@ if(p==='anthropic'){
   const resp=await fetch(PROVIDERS.openai.url,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:PROVIDERS.openai.model,max_tokens:600,messages:[{role:'system',content:getSysPr()},...S.aiHistory.map(m=>({role:m.role,content:m.content}))]})});const d=await resp.json();if(d.error)throw new Error(d.error.message);reply=d.choices?.[0]?.message?.content||'Sem resposta.'
 }
 S.aiHistory.push({role:'assistant',content:reply});S.aiChats=(S.aiChats||0)+1;save();checkAch();addXP(5);
-}catch(err){S.aiHistory.push({role:'assistant',content:'⚠️ Erro: '+err.message+'. Verifica a API Key e a ligação à internet.'});save()}
+// Extract memory facts from reply
+if(reply.includes('**')){const facts=reply.match(/\*\*([^*]{5,60})\*\*/g)?.slice(0,2)||[];facts.forEach(f=>{const fact=f.replace(/\*/g,'');if(!S.aiMemory.some(m=>m.fact===fact)){S.aiMemory.push({fact,date:tkey()});if(S.aiMemory.length>20)S.aiMemory.shift();save()}})}
+}catch(err){
+  // retry once
+  try{
+    await new Promise(r=>setTimeout(r,1500));
+    let reply2='';
+    if(p==='anthropic'){const r2=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:PROVIDERS.anthropic.model,max_tokens:600,system:getSysPr(),messages:S.aiHistory.map(m=>({role:m.role,content:m.content}))})});const d2=await r2.json();reply2=d2.content?.[0]?.text||''}
+    if(reply2){S.aiHistory.push({role:'assistant',content:reply2});S.aiChats=(S.aiChats||0)+1;save()}
+    else throw err;
+  }catch(err2){S.aiHistory.push({role:'assistant',content:'⚠️ Erro: '+err2.message+'. Verifica a API Key e a ligação.'});save()}
+}
 if(btn){btn.textContent='↑';btn.disabled=false}const box2=document.getElementById('chatBox');if(box2){box2.innerHTML=renderChat();box2.scrollTop=box2.scrollHeight}}
 
 function renderInsights(){const tk=tkey(),sl=S.sleep||{},wt=S.water||{};const days=Object.keys(sl).slice(-7);const avgSl=days.length?days.reduce((a,k)=>a+(sl[k]?.h||0),0)/days.length:0;const avgWt=days.length?days.reduce((a,k)=>a+(wt[k]||0),0)/days.length:0;const its=[];if(avgSl<7&&avgSl>0)its.push({i:'😴',t:'Sono abaixo da meta',d:`Média ${avgSl.toFixed(1)}h (meta: 7h+). Impacto directo na memória e foco.`,c:'var(--rose)'});if(avgWt<5&&avgWt>0)its.push({i:'💧',t:'Pouca hidratação',d:`Média ${avgWt.toFixed(1)} copos/dia. Desidratação reduz performance cognitiva em 10%.`,c:'var(--blue)'});if(S.streak>=7)its.push({i:'🔥',t:'Sequência forte!',d:`${S.streak} dias consecutivos. Hábitos com 66+ dias tornam-se automáticos.`,c:'var(--gold)'});if(S.pomT>=5)its.push({i:'⏱',t:'Bom foco',d:`${S.pomT} Pomodoros completados. ${Math.floor(S.focusMin/60)}h de foco real.`,c:'var(--ac)'});if(!its.length)return'';return`<div class="card fu"><div class="ct2">💡 Insights automáticos</div>${its.map(it=>`<div style="display:flex;gap:9px;padding:9px 0;border-bottom:1px solid var(--bd)"><div style="font-size:1.2em">${it.i}</div><div><div style="font-size:.82em;font-weight:500;color:${it.c}">${it.t}</div><div style="font-size:.72em;color:var(--tx3);line-height:1.5;margin-top:2px">${it.d}</div></div></div>`).join('')}</div>`}
@@ -1125,6 +1528,18 @@ ${WKS.map((w,i)=>{const{d,t,p}=wDn(S,i);return`<div class="wbar"><div class="wbl
 
 <div class="card fu"><div class="ct2">📖 Relatório semanal</div>
 <button class="sav full" onclick="openWeekReport()">📊 Ver relatório completo</button></div>
+
+<div class="card fu"><div class="ct2">🎯 Missões ativas</div>
+<div style="margin-bottom:8px">${(S.dailyMissions||[]).map(m=>`<div style="display:flex;align-items:center;gap:7px;padding:6px 0;border-bottom:1px solid var(--bd);font-size:.78em"><span style="color:${m.done?'var(--ac)':'var(--tx3)'}">${m.done?'✅':'⭕'}</span><span style="flex:1;${m.done?'text-decoration:line-through;color:var(--tx3)':''}">${m.t}</span><span style="font-size:.65em;color:var(--gold)">+${m.xp}</span></div>`).join('')}</div>
+${S.dailyBoss?`<div style="background:var(--gold)12;border-radius:8px;padding:8px;font-size:.78em"><span style="font-weight:500;color:var(--gold)">👑 Boss: ${S.dailyBoss.b}</span><br><span style="color:var(--tx3)">${S.dailyBoss.t}</span></div>`:''}</div>
+
+<div class="card fu"><div class="ct2">🏆 Hall of Fame — Top 10 dias</div>
+${(S.hallOfFame||[]).length?`<div>${(S.hallOfFame||[]).map((d,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd)"><span style="font-size:.72em;color:var(--gold);width:20px">#${i+1}</span><span style="flex:1;font-size:.78em">${d.date}</span><div style="font-family:Fraunces,serif;font-size:1.1em;color:var(--ac)">${d.score}</div><span style="font-size:.65em;color:var(--tx3)">🔥${d.streak}</span></div>`).join('')}</div>`:'<div style="font-size:.72em;color:var(--tx3)">Ainda não há dados suficientes.</div>'}</div>
+
+<div class="card fu"><div class="ct2">📈 1% Melhor a cada dia</div>
+<div style="font-size:.75em;color:var(--tx2);margin-bottom:8px">Crescimento composto baseado nos teus dias activos</div>
+${(()=>{const days=Math.max(1,S.streak||1);const r=Math.pow(1.01,days);return`<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><div style="text-align:center;background:var(--bg3);border-radius:9px;padding:10px"><div style="font-family:Fraunces,serif;font-size:1.2em;color:var(--ac)">${days}</div><div style="font-size:.6em;color:var(--tx3)">dias activos</div></div><div style="text-align:center;background:var(--bg3);border-radius:9px;padding:10px"><div style="font-family:Fraunces,serif;font-size:1.2em;color:var(--gold)">${r.toFixed(2)}×</div><div style="font-size:.6em;color:var(--tx3)">multiplicador</div></div><div style="text-align:center;background:var(--bg3);border-radius:9px;padding:10px"><div style="font-family:Fraunces,serif;font-size:1.2em;color:var(--pu)">${Math.round((r-1)*100)}%</div><div style="font-size:.6em;color:var(--tx3)">crescimento</div></div></div>`;})()}
+<div class="ibox tip" style="margin-top:8px;font-size:.72em">Se melhorares 1% por dia durante 1 ano → <strong>37× melhor</strong>.</div></div>
 
 <div class="card fu"><div class="ct2">🏅 Conquistas (${S.unlocked?.length||0}/${ACH.length})</div>
 <div class="ach-grid">${ACH.map(a=>{const ul=S.unlocked?.includes(a.id);return`<div class="ach-item ${ul?'ul':''}" title="${a.n}"><div style="font-size:1.3em">${a.i}</div><div style="font-size:.55em;color:var(--tx3);margin-top:2px;line-height:1.2;text-align:center">${a.n}</div></div>`}).join('')}</div></div>
@@ -1271,7 +1686,13 @@ ${TUTORIAL_PAGES.map((_,i)=>`<div style="width:6px;height:6px;border-radius:50%;
 </div>`)}
 
 // ════ GREETING ════
-function updateGreeting(){const h=new Date().getHours();const g=h<5?'Boa madrugada':h<12?'Bom dia':h<18?'Boa tarde':'Boa noite';const d=document.getElementById('greetLbl');if(d)d.textContent=(S.name?g+', '+S.name:g)}
+function updateGreeting(){
+  const h=new Date().getHours();const g=h<5?'Boa madrugada':h<12?'Bom dia':h<18?'Boa tarde':'Boa noite';
+  const d=document.getElementById('greetLbl');
+  const today=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});
+  const wn=S.view<6?'S'+(S.view+1)+'/6':'♾';
+  if(d)d.textContent=(S.name?g+', '+S.name:g)+' · '+today;
+}
 
 // ════ BOOT ════
 let _deferredPrompt=null;
@@ -1302,7 +1723,7 @@ window.addEventListener('pagehide',()=>save());
 window.addEventListener('beforeunload',()=>save());
 function applyUpd(){_newWorker?.postMessage('skipWaiting');navigator.serviceWorker.addEventListener('controllerchange',()=>location.reload())}
 
-function boot(){applyTheme();updateGreeting();updateStreak();checkAch();updateUI();updateSunset();setInterval(updateSunset,30000);setInterval(updateGreeting,60000);scheduleNotif();reqWakeLock();
+function boot(){applyTheme();updateGreeting();updateStreak();checkAch();updateUI();updateSunset();setInterval(updateSunset,30000);setInterval(updateGreeting,60000);scheduleNotif();reqWakeLock();initMissions();updateHoF();genForecast();
 // Show tutorial on first boot
 if(!S.tutorialSeen){S.tutorialSeen=true;save();setTimeout(openTutorial,800)}
 go(S.page||'home')}
