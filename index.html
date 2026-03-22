@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#4FC3A1"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Cérebro Saudável"/>
+  <title>Cérebro Saudável — 6 Semanas</title>
+  <link rel="manifest" href="manifest.json"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html { font-size: 16px; }
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background: #0f0f13;
+      color: #e8e4d9;
+      min-height: 100vh;
+      min-height: 100dvh;
+      overscroll-behavior: none;
+    }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg, #1a1a22 0%, #0f0f13 100%);
+      border-bottom: 1px solid #2a2a35;
+      padding: env(safe-area-inset-top, 20px) 20px 20px;
+      padding-top: calc(env(safe-area-inset-top, 0px) + 24px);
+    }
+    .header-label {
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: #555;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      font-family: sans-serif;
+    }
+    .header h1 {
+      font-size: clamp(20px, 6vw, 34px);
+      font-weight: normal;
+      letter-spacing: -0.5px;
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+    .header h1 em { font-style: italic; color: #4FC3A1; }
+    .header-sub { font-size: 13px; color: #666; font-family: sans-serif; }
+
+    /* PROGRESS BAR */
+    .progress-wrap {
+      padding: 14px 20px;
+      background: #1a1a22;
+      border-bottom: 1px solid #2a2a35;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .progress-bar-bg {
+      flex: 1;
+      height: 5px;
+      background: #2a2a35;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: #4FC3A1;
+      border-radius: 10px;
+      transition: width 0.4s ease;
+    }
+    .progress-label {
+      font-size: 11px;
+      color: #4FC3A1;
+      font-family: sans-serif;
+      white-space: nowrap;
+    }
+
+    /* WEEK TABS */
+    .tabs-scroll {
+      overflow-x: auto;
+      padding: 16px 20px 0;
+      display: flex;
+      gap: 8px;
+      scrollbar-width: none;
+    }
+    .tabs-scroll::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      flex-shrink: 0;
+      border: 2px solid #2a2a35;
+      background: transparent;
+      color: #555;
+      padding: 7px 14px;
+      border-radius: 40px;
+      font-size: 13px;
+      font-family: Georgia, serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .tab-btn.active {
+      font-weight: bold;
+    }
+
+    /* CONTENT */
+    .content { padding: 20px; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); }
+
+    /* WEEK HEADER CARD */
+    .week-card {
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .week-icon { font-size: 36px; line-height: 1; }
+    .week-info { flex: 1; min-width: 140px; }
+    .week-focus {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      font-family: sans-serif;
+    }
+    .week-title { font-size: 20px; font-weight: normal; }
+    .week-meta-wrap { text-align: right; }
+    .week-meta-label { font-size: 10px; color: #666; font-family: sans-serif; margin-bottom: 4px; }
+    .week-meta-badge {
+      font-size: 12px;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-family: sans-serif;
+      display: inline-block;
+    }
+
+    /* DAYS */
+    .days-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    @media (min-width: 480px) {
+      .days-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (min-width: 680px) {
+      .days-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .day-card {
+      background: #1a1a22;
+      border-radius: 12px;
+      padding: 14px;
+      border-left: 3px solid;
+    }
+    .day-label {
+      font-size: 10px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      font-family: sans-serif;
+    }
+    .task-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      padding: 5px 0;
+      cursor: pointer;
+      user-select: none;
+    }
+    .checkbox {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #444;
+      flex-shrink: 0;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.18s;
+      font-size: 10px;
+    }
+    .checkbox.done { border-color: transparent; }
+    .task-text {
+      font-size: 12px;
+      line-height: 1.5;
+      color: #bbb;
+      transition: all 0.18s;
+      font-family: sans-serif;
+    }
+    .task-text.done { color: #444; text-decoration: line-through; }
+
+    /* TIP BOX */
+    .tip-box {
+      background: #1a1a22;
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 13px;
+      color: #666;
+      line-height: 1.7;
+      font-family: sans-serif;
+    }
+    .tip-box strong { color: #888; }
+    .tip-box em { font-style: italic; }
+
+    /* MAINTENANCE */
+    .maint-header {
+      background: #1a1a22;
+      border: 1px solid #2a2a35;
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+    }
+    .maint-header-label {
+      font-size: 10px;
+      color: #aaa;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-family: sans-serif;
+      margin-bottom: 4px;
+    }
+    .maint-header-title { font-size: 20px; font-weight: normal; margin-bottom: 8px; }
+    .maint-header-desc { font-size: 13px; color: #666; line-height: 1.7; font-family: sans-serif; }
+    .maint-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    @media (min-width: 480px) { .maint-grid { grid-template-columns: repeat(3, 1fr); } }
+    .maint-card {
+      background: #1a1a22;
+      border-radius: 10px;
+      padding: 14px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .maint-card-icon { font-size: 24px; }
+    .maint-card-name { font-size: 13px; margin-bottom: 5px; font-family: sans-serif; }
+    .maint-badge {
+      font-size: 11px;
+      border-radius: 20px;
+      padding: 2px 10px;
+      background: #4FC3A120;
+      color: #4FC3A1;
+      display: inline-block;
+      font-family: sans-serif;
+    }
+    .final-quote {
+      background: #1a1a22;
+      border-left: 3px solid #4FC3A1;
+      border-radius: 10px;
+      padding: 16px 18px;
+      font-size: 14px;
+      color: #777;
+      line-height: 1.8;
+      font-family: sans-serif;
+    }
+    .final-quote strong { color: #ccc; }
+
+    /* RESET BTN */
+    .reset-wrap { padding: 0 20px 16px; }
+    .reset-btn {
+      background: none;
+      border: 1px solid #2a2a35;
+      color: #444;
+      font-size: 11px;
+      font-family: sans-serif;
+      padding: 6px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      letter-spacing: 1px;
+    }
+    .reset-btn:active { color: #e05050; border-color: #e05050; }
+
+    /* INSTALL BANNER */
+    .install-banner {
+      position: fixed;
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+      left: 16px;
+      right: 16px;
+      background: #1e2a28;
+      border: 1px solid #4FC3A140;
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 32px #00000060;
+      z-index: 100;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .install-banner.show { transform: translateY(0); opacity: 1; }
+    .install-banner-text { flex: 1; font-size: 13px; color: #aaa; font-family: sans-serif; line-height: 1.4; }
+    .install-banner-text strong { color: #e8e4d9; display: block; margin-bottom: 2px; }
+    .install-btn {
+      background: #4FC3A1;
+      color: #0f0f13;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: bold;
+      font-family: sans-serif;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .close-banner {
+      background: none;
+      border: none;
+      color: #444;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 0 4px;
+      line-height: 1;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.3s ease forwards; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-label">Protocolo de Saúde Cerebral</div>
+  <h1>6 Semanas para um<br><em>Cérebro mais Saudável</em></h1>
+  <div class="header-sub">Um hábito por vez. Uma semana de cada vez.</div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label" id="progressLabel">0%</div>
+</div>
+
+<div class="tabs-scroll" id="tabs"></div>
+
+<div class="reset-wrap" style="padding-top:12px;">
+  <button class="reset-btn" onclick="confirmReset()">↺ Resetar progresso</button>
+</div>
+
+<div class="content" id="content"></div>
+
+<div class="install-banner" id="installBanner">
+  <div class="install-banner-text">
+    <strong>Instalar como app</strong>
+    Acesse offline, salvo na tela inicial
+  </div>
+  <button class="install-btn" id="installBtn">Instalar</button>
+  <button class="close-banner" id="closeBanner">×</button>
+</div>
+
+<script>
+const DATA = {
+  weeks: [
+    {
+      n:1, title:"Sono Primeiro", color:"#4FC3A1", icon:"🌙", focus:"Base fisiológica",
+      meta:"7 noites com horário fixo",
+      days:[
+        {day:"Seg", tasks:["Definir horário fixo de dormir","Celular fora do quarto 30min antes"]},
+        {day:"Ter", tasks:["Manter horário","Substituir scroll por leitura física"]},
+        {day:"Qua", tasks:["Modo avião ao deitar","Observar qualidade do sono"]},
+        {day:"Qui", tasks:["Manter rotina","Anotar: dormiu bem?"]},
+        {day:"Sex", tasks:["Mesmos hábitos","Sem exceção no fim de semana"]},
+        {day:"Sáb", tasks:["Mesmo horário de acordar","Ócio físico: caminhar, conversar"]},
+        {day:"Dom", tasks:["Revisar semana","Preparar ambiente para semana 2"]},
+      ]
+    },
+    {
+      n:2, title:"Blocos de Foco", color:"#5B8DEF", icon:"🎯", focus:"Córtex pré-frontal",
+      meta:"5 dias com mínimo 3 blocos",
+      days:[
+        {day:"Seg", tasks:["3 blocos Pomodoro (25min)","Notificações desligadas"]},
+        {day:"Ter", tasks:["4 blocos","Cronometrar sem pausas"]},
+        {day:"Qua", tasks:["Identificar horário de maior foco","Proteger esse período"]},
+        {day:"Qui", tasks:["5 blocos","Anotar produtividade"]},
+        {day:"Sex", tasks:["Manter 5 blocos","Sem multitarefa"]},
+        {day:"Sáb", tasks:["Aplicar foco em hobbie ou leitura longa"]},
+        {day:"Dom", tasks:["Revisar dificuldades","Planejar semana 3"]},
+      ]
+    },
+    {
+      n:3, title:"Desintox. de Dopamina", color:"#E07B54", icon:"📵", focus:"Sistema de recompensa",
+      meta:"5 dias dentro do limite de tempo",
+      days:[
+        {day:"Seg", tasks:["Redes sociais só 12h e 19h (20min cada)"]},
+        {day:"Ter", tasks:["Substituir 1 scroll por leitura ou escrita"]},
+        {day:"Qua", tasks:["Desinstalar o app mais viciante por 24h"]},
+        {day:"Qui", tasks:["Manter horários fixos","Anotar como se sentiu"]},
+        {day:"Sex", tasks:["Tempo de tela de lazer: < 2h"]},
+        {day:"Sáb", tasks:["Dia analógico: sem redes sociais"]},
+        {day:"Dom", tasks:["Avaliar: ansiedade diminuiu? Foco melhorou?"]},
+      ]
+    },
+    {
+      n:4, title:"Resgatar o Ócio", color:"#B07FE8", icon:"🌿", focus:"Default Mode Network",
+      meta:"7 dias com ao menos 1 momento de ócio",
+      days:[
+        {day:"Seg", tasks:["Refeições sem celular","Observar os pensamentos"]},
+        {day:"Ter", tasks:["Deslocamento sem fone","Mente vagar"]},
+        {day:"Qua", tasks:["10min de ócio antes de dormir"]},
+        {day:"Qui", tasks:["Fila, elevador: celular no bolso"]},
+        {day:"Sex", tasks:["Banho sem música ou podcast"]},
+        {day:"Sáb", tasks:["1h ao ar livre sem tecnologia"]},
+        {day:"Dom", tasks:["Registrar: que ideias surgiram no ócio?"]},
+      ]
+    },
+    {
+      n:5, title:"Exercício Cognitivo", color:"#F0C040", icon:"🧩", focus:"Neuroplasticidade",
+      meta:"5 dias com desafio cognitivo ativo",
+      days:[
+        {day:"Seg", tasks:["Conta simples mentalmente","15 páginas de livro"]},
+        {day:"Ter", tasks:["Memorizar lista sem anotar","Leitura 15p"]},
+        {day:"Qua", tasks:["Navegar sem GPS em rota conhecida"]},
+        {day:"Qui", tasks:["Aprender algo novo (palavra, conceito)"]},
+        {day:"Sex", tasks:["Escrever à mão por 10min"]},
+        {day:"Sáb", tasks:["Jogo de estratégia ou leitura longa (1h)"]},
+        {day:"Dom", tasks:["Revisão: o que memorizou sem tecnologia?"]},
+      ]
+    },
+    {
+      n:6, title:"Investimento Social", color:"#F07EB0", icon:"🤝", focus:"Redes neurais sociais",
+      meta:"1–2 interações presenciais de qualidade",
+      days:[
+        {day:"Seg", tasks:["Substituir 1 mensagem por ligação"]},
+        {day:"Ter", tasks:["Conversa real sem celular na mesa"]},
+        {day:"Qua", tasks:["Agendar encontro presencial"]},
+        {day:"Qui", tasks:["Fazer pergunta genuína a alguém","Ouvir de verdade"]},
+        {day:"Sex", tasks:["Realizar encontro presencial"]},
+        {day:"Sáb", tasks:["Atividade social em grupo"]},
+        {day:"Dom", tasks:["Reflexão: como está o cérebro vs semana 1?"]},
+      ]
+    }
+  ],
+  maintenance: [
+    {icon:"🌙", habit:"Sono regular", meta:"7 noites/semana"},
+    {icon:"🎯", habit:"Blocos de foco", meta:"5 dias/semana"},
+    {icon:"📵", habit:"Limite de redes sociais", meta:"5 dias/semana"},
+    {icon:"🌿", habit:"Momento sem celular", meta:"Diário"},
+    {icon:"📖", habit:"Leitura", meta:"5 dias/semana"},
+    {icon:"🤝", habit:"Interação presencial", meta:"1–2x/semana"},
+  ]
+};
+
+let state = JSON.parse(localStorage.getItem('cerebro-state') || '{}');
+let currentView = state.currentView || 0;
+
+function save() {
+  state.currentView = currentView;
+  localStorage.setItem('cerebro-state', JSON.stringify(state));
+}
+
+function totalTasks() {
+  return DATA.weeks.reduce((a, w) => a + w.days.reduce((b, d) => b + d.tasks.length, 0), 0);
+}
+function doneTasks() {
+  return Object.values(state).filter(v => v === true).length;
+}
+function updateProgress() {
+  const pct = Math.round(doneTasks() / totalTasks() * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = pct + '%';
+}
+
+function renderTabs() {
+  const tabs = document.getElementById('tabs');
+  tabs.innerHTML = '';
+  DATA.weeks.forEach((w, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (currentView === i ? ' active' : '');
+    btn.textContent = w.icon + ' Sem. ' + w.n;
+    btn.style.borderColor = currentView === i ? w.color : '#2a2a35';
+    btn.style.color = currentView === i ? w.color : '#555';
+    btn.style.background = currentView === i ? w.color + '20' : 'transparent';
+    btn.onclick = () => { currentView = i; save(); render(); };
+    tabs.appendChild(btn);
+  });
+  const mBtn = document.createElement('button');
+  mBtn.className = 'tab-btn' + (currentView === 6 ? ' active' : '');
+  mBtn.textContent = '♾ Manutenção';
+  mBtn.style.borderColor = currentView === 6 ? '#aaa' : '#2a2a35';
+  mBtn.style.color = currentView === 6 ? '#ddd' : '#555';
+  mBtn.style.background = currentView === 6 ? '#ffffff15' : 'transparent';
+  mBtn.onclick = () => { currentView = 6; save(); render(); };
+  tabs.appendChild(mBtn);
+}
+
+function renderWeek(w, wi) {
+  const content = document.getElementById('content');
+  let html = `
+    <div class="week-card fade-up" style="background:${w.color}18;border:1px solid ${w.color}40">
+      <div class="week-icon">${w.icon}</div>
+      <div class="week-info">
+        <div class="week-focus" style="color:${w.color}">Semana ${w.n} · ${w.focus}</div>
+        <div class="week-title">${w.title}</div>
+      </div>
+      <div class="week-meta-wrap">
+        <div class="week-meta-label">Meta da semana</div>
+        <div class="week-meta-badge" style="color:${w.color};background:${w.color}20">${w.meta}</div>
+      </div>
+    </div>
+    <div class="days-grid fade-up">
+  `;
+  w.days.forEach((d, di) => {
+    html += `<div class="day-card" style="border-left-color:${w.color}">
+      <div class="day-label" style="color:${w.color}">${d.day}</div>`;
+    d.tasks.forEach((task, ti) => {
+      const key = `${wi}-${di}-${ti}`;
+      const done = state[key] === true;
+      html += `<div class="task-row" onclick="toggle('${key}')">
+        <div class="checkbox ${done ? 'done' : ''}" id="cb-${key}" style="${done ? 'background:'+w.color : ''}">
+          ${done ? '<span style="color:#000">✓</span>' : ''}
+        </div>
+        <span class="task-text ${done ? 'done' : ''}" id="tt-${key}">${task}</span>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  html += `</div>`;
+  const nextWeek = DATA.weeks[wi + 1];
+  html += `<div class="tip-box fade-up">
+    💡 <strong>Dica:</strong> Marque as tarefas ao longo do dia. O objetivo não é perfeição — é consistência.
+    ${nextWeek ? `Na semana ${wi+2}: <em style="color:${nextWeek.color}">${nextWeek.title}</em>.` : 'Você está na última semana — incrível! Próximo: Manutenção.'}
+  </div>`;
+  content.innerHTML = html;
+}
+
+function renderMaintenance() {
+  const content = document.getElementById('content');
+  let html = `
+    <div class="maint-header fade-up">
+      <div class="maint-header-label">A partir da semana 7</div>
+      <div class="maint-header-title">Fase de Manutenção</div>
+      <div class="maint-header-desc">Você não está mais seguindo uma lista de regras — está com novos padrões instalados. O objetivo agora é consistência, não perfeição.</div>
+    </div>
+    <div class="maint-grid fade-up">
+  `;
+  DATA.maintenance.forEach(m => {
+    html += `<div class="maint-card">
+      <div class="maint-card-icon">${m.icon}</div>
+      <div>
+        <div class="maint-card-name">${m.habit}</div>
+        <div class="maint-badge">${m.meta}</div>
+      </div>
+    </div>`;
+  });
+  html += `</div>
+    <div class="final-quote fade-up">
+      <strong>Lembre-se:</strong> O cérebro é plástico. Ele responde a mudanças em semanas.
+      Saúde cerebral não é sorte — é escolha diária.
+    </div>`;
+  content.innerHTML = html;
+}
+
+function toggle(key) {
+  state[key] = !state[key];
+  save();
+  const cb = document.getElementById('cb-' + key);
+  const tt = document.getElementById('tt-' + key);
+  const wi = parseInt(key.split('-')[0]);
+  const color = DATA.weeks[wi].color;
+  if (state[key]) {
+    cb.className = 'checkbox done';
+    cb.style.background = color;
+    cb.style.borderColor = 'transparent';
+    cb.innerHTML = '<span style="color:#000">✓</span>';
+    tt.className = 'task-text done';
+  } else {
+    cb.className = 'checkbox';
+    cb.style.background = '';
+    cb.style.borderColor = '#444';
+    cb.innerHTML = '';
+    tt.className = 'task-text';
+  }
+  updateProgress();
+}
+
+function render() {
+  renderTabs();
+  if (currentView === 6) renderMaintenance();
+  else renderWeek(DATA.weeks[currentView], currentView);
+  updateProgress();
+}
+
+function confirmReset() {
+  if (confirm('Resetar todo o progresso?')) {
+    const view = state.currentView || 0;
+    state = { currentView: view };
+    save();
+    render();
+  }
+}
+
+// Service Worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js');
+}
+
+// PWA Install
+let deferredPrompt;
+const banner = document.getElementById('installBanner');
+const installBtn = document.getElementById('installBtn');
+const closeBanner = document.getElementById('closeBanner');
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (!localStorage.getItem('install-dismissed')) {
+    setTimeout(() => banner.classList.add('show'), 1500);
+  }
+});
+
+installBtn.onclick = async () => {
+  banner.classList.remove('show');
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    if (outcome === 'accepted') localStorage.setItem('install-dismissed', '1');
+  }
+};
+
+closeBanner.onclick = () => {
+  banner.classList.remove('show');
+  localStorage.setItem('install-dismissed', '1');
+};
+
+// iOS hint
+const isIos = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+if (isIos && !isStandalone && !localStorage.getItem('ios-hint')) {
+  setTimeout(() => {
+    banner.querySelector('.install-banner-text').innerHTML = `
+      <strong>Instalar no iPhone</strong>
+      Toque em <b>Compartilhar</b> → <b>"Adicionar à Tela de Início"</b>
+    `;
+    banner.classList.add('show');
+    localStorage.setItem('ios-hint', '1');
+  }, 2000);
+}
+
+render();
+</script>
+</body>
+</html>
