@@ -1,10 +1,10 @@
 {
   "name": "Cérebro Saudável — 6 Semanas",
   "short_name": "Cérebro Saudável",
-  "description": "Protocolo de 6 semanas com Coach IA para saúde cerebral",
+  "description": "Cronograma interativo de saúde cerebral",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0c0c10",
+  "background_color": "#0f0f13",
   "theme_color": "#4FC3A1",
   "orientation": "portrait-primary",
   "icons": [
