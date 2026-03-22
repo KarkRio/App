@@ -940,7 +940,7 @@ function toggleAmb(id){
   }
   const btn=document.getElementById('ab-'+id);if(btn)btn.classList.toggle('on',!!ambNodes[id]);
 }
-function setVol(v){ambVol=parseFloat(v);const ctx2=ambCtx;if(!ctx2)return;Object.values(ambNodes).forEach(nd=>{try{nd.gain.gain.setTargetAtTime(ambVol*(nd.isWorkout?.0.65:1),ctx2.currentTime,.1)}catch(e){}})}
+function setVol(v){ambVol=parseFloat(v);const ctx2=ambCtx;if(!ctx2)return;Object.values(ambNodes).forEach(nd=>{try{nd.gain.gain.setTargetAtTime(ambVol,ctx2.currentTime,.1)}catch(e){}})}
 function stopAllAmb(){Object.keys(ambNodes).forEach(id=>{const nd=ambNodes[id];nd?._ivs?.forEach(iv=>clearInterval(iv));try{nd?.srcs?.forEach(s=>s.stop());nd?.oscs?.forEach(o=>o.stop())}catch(e){}delete ambNodes[id]});document.querySelectorAll('[id^=ab-]').forEach(b=>b.classList.remove('on'))}
 
 // ════ HEALTH ════
